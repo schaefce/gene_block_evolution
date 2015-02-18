@@ -1,13 +1,14 @@
 In this document I will explain how to use the software contained in this project. 
 
 The easiest way to run the project is to execute the script named 'main.py'.  The defaults
-that are provided are sufficient to run the project with the inputs provided.  
+that are provided are sufficient to run the project with the inputs provided.
 Each accompanying script can be run on its own as well.  main.py does not allow for the intermediate
 files or folders to be renamed by the user.  Currently the user cannot select the point that analysis
 begins at through main.py, but this functionality will be added later.
 
-main.py [-h] [-i FILE] [-I FOLDER] [-o FOLDER] [-f FILE] [-n INT]
-               [-m INT]
+./main.py -h
+usage: main.py [-h] [-i FILE] [-I FOLDER] [-o FOLDER] [-f FILE] [-n INT]
+               [-m INT] [-g INT] [-e FLOAT]
 
 The purpose of this script is to run the full software suite that we have
 developed to study operons using as few inputs as possible. This will
@@ -34,3 +35,9 @@ optional arguments:
                         before it can be considered for further analysis. The
                         default is 5 because that is what we are currently
                         using in the study.
+  -g INT, --max_gap INT
+                        Size in nucleotides of the maximum gap allowed between
+                        genes to be considered neighboring. The default is
+                        500.
+  -e FLOAT, --eval FLOAT
+                        eval for the BLAST search.
