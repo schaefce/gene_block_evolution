@@ -17,7 +17,7 @@ class Clade(Label, Newick.Clade):
     """Newick Clade (sub-tree) object."""
 
     def __init__(self, branch_length=None, name=None, clades=None,
-                 confidence=None, comment=None):
+                 confidence=None, comment=None, groups=None, finalLabel=None):
         Newick.Clade.__init__(self, branch_length=branch_length,
-                                name=name, clades=clades, confidence=confidence, comment)
-        self.label =
+                                name=name, clades=clades, confidence=confidence, comment=comment)
+        self.label = Label(groups=groups, finalLabel=finalLabel, confidence=confidence)

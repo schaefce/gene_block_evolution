@@ -4,6 +4,33 @@ from make_event_distance_matrix import *
 from Bio import Phylo
 from Bio.Phylo import *
 
+class Label():
+    def __init__(self, groups=None, final_groups=None):
+        self.groups = groups or []
+        self.final_groups = final_groups or []
+        if final_groups:
+            self.set_final()
+        else:
+            self.is_final = False
+            self.final_label = None
+
+    def add_groups(self, labels):
+        for label in labels:
+            grp = []
+            for l in label:
+                grp.append(l)
+            self.groups.append(grp)
+
+    def set_final_label(self, label):
+        self.final_label = label
+        self.is_final = True
+
+    def set_final(self):
+        self.set_final_label('(' + ','.join('(' + ','.join(l for l in label) + ')' for label in self.final_groups) + ')')
+
+
+
+
 def get_label_map(gene_block_fname, max_gap=500):
     """ Use gene_block result from file to determine the homologs for each organism
     and group them according to homolog_list_grouping_function. Returns a mapping
@@ -46,16 +73,19 @@ def get_identifiers(fname):
     return {k:v for v,k in csv.reader(open(fname,'r'))}
 
 
-def rewrite_leaves(tree, id_map, label_map, prune_unlabeled=True):
+def add_leaf_labels(tree, id_map, label_map, prune_unlabeled=True):
     terminals = tree.get_terminals()
     prune_list = []
     for i in range(len(terminals)):
+        leaf = tree.get_terminals()[i]
         curr_name = terminals[i].name
         if curr_name in id_map.keys():
             ident = id_map[curr_name]
             if ident in label_map.keys():
-                new_name = '(' + ','.join('(' + ','.join(l for l in label) + ')' for label in label_map[ident]) + ')'
-                tree.get_terminals()[i].name = new_name
+                leaf.label = Label(groups=label_map[ident], final_groups=label_map[ident])
+                if leaf.label.is_final:
+                    leaf.comment = leaf.label.final_label
+
             else:
                 prune_list.append(curr_name)
         else:
@@ -69,7 +99,7 @@ def read_tree(fname, treeformat='newick'):
     tree = Phylo.read(fname, treeformat)
     return tree
 
-def reformat_tree(gene_block, map_fname, tree_fname, infolder=None, max_gap = 500, prune_unlabeled=True):
+def format_tree(gene_block, map_fname, tree_fname, infolder=None, max_gap = 500, prune_unlabeled=True):
     """ Use gene_block_organism_data for this gene_block, mapping of common names
     IDs, and existing tree file to create tree labeled with list of homologs.
 
@@ -81,5 +111,9 @@ def reformat_tree(gene_block, map_fname, tree_fname, infolder=None, max_gap = 50
     label_map = get_label_map(gblock_fname, max_gap)#get_labelings(gene_block, infolder, filter)
     id_map = get_identifiers(map_fname)
     tree = read_tree(tree_fname)
-    rewrite_leaves(tree, id_map, label_map, prune_unlabeled)
+    add_leaf_labels(tree, id_map, label_map, prune_unlabeled)
     return tree
+
+
+def set_possible_labels(tree):
+    path = tree.find_elements(order='postorder')
