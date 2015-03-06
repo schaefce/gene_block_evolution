@@ -3,32 +3,8 @@ import csv
 from make_event_distance_matrix import *
 from Bio import Phylo
 from Bio.Phylo import *
-
-class Label():
-    def __init__(self, groups=None, final_groups=None):
-        self.groups = groups or []
-        self.final_groups = final_groups or []
-        if final_groups:
-            self.set_final()
-        else:
-            self.is_final = False
-            self.final_label = None
-
-    def add_groups(self, labels):
-        for label in labels:
-            grp = []
-            for l in label:
-                grp.append(l)
-            self.groups.append(grp)
-
-    def set_final_label(self, label):
-        self.final_label = label
-        self.is_final = True
-
-    def set_final(self):
-        self.set_final_label('(' + ','.join('(' + ','.join(l for l in label) + ')' for label in self.final_groups) + ')')
-
-
+from difflib_geneblock import LabelMatcher
+from Labeled_Tree import Label, Choice, Labeled_Tree, Labeled_Clade
 
 
 def get_label_map(gene_block_fname, max_gap=500):
@@ -82,10 +58,12 @@ def add_leaf_labels(tree, id_map, label_map, prune_unlabeled=True):
         if curr_name in id_map.keys():
             ident = id_map[curr_name]
             if ident in label_map.keys():
-                leaf.label = Label(groups=label_map[ident], final_groups=label_map[ident])
-                if leaf.label.is_final:
-                    leaf.comment = leaf.label.final_label
-
+                leaf.ident = ident
+                #only_choice = Choice(label_map[ident])
+                leaf.label = Label.for_leaf(label_map[ident])#(choices=[only_choice])
+                #leaf.label.set_final_choice(choice=only_choice)
+                #if leaf.label.is_final:
+                #    leaf.comment = leaf.label.final_label
             else:
                 prune_list.append(curr_name)
         else:
@@ -93,6 +71,7 @@ def add_leaf_labels(tree, id_map, label_map, prune_unlabeled=True):
     if prune_unlabeled:
         for node in prune_list:
             tree.prune(node)
+    tree.ladderize(reverse=True)
 
 
 def read_tree(fname, treeformat='newick'):
@@ -111,9 +90,53 @@ def format_tree(gene_block, map_fname, tree_fname, infolder=None, max_gap = 500,
     label_map = get_label_map(gblock_fname, max_gap)#get_labelings(gene_block, infolder, filter)
     id_map = get_identifiers(map_fname)
     tree = read_tree(tree_fname)
-    add_leaf_labels(tree, id_map, label_map, prune_unlabeled)
+    tree = Labeled_Tree.from_tree_and_maps(tree, id_map, label_map)
     return tree
 
 
 def set_possible_labels(tree):
-    path = tree.find_elements(order='postorder')
+    #tree.ladderize(reverse=True)
+    tree.ladderize()
+    #print tree
+    child_prs = get_child_pairs(tree)
+    while child_prs:
+        pr = child_prs.pop()
+        A = pr[0]
+        B = pr[1]
+        #print A.ident, B.ident
+        assert(get_parent(tree, A) == get_parent(tree, B))
+        parent = get_parent(tree, A)
+        lm = LabelMatcher(A.label, B.label)
+        ancestor_label = lm.get_ancestor_label()
+        parent.add_label(ancestor_label)
+        print(ancestor_label)
+        #A.label.set_final_choice(ancestor_label.children[0])
+        #A.comment = A.label.get_final_label()
+        #B.label.set_final_choice(ancestor_label.children[1])
+        #B.comment = B.label.get_final_label()
+        #print '([{A}],[{B}])'.format(A=str(A.label), B=str(B.label))
+
+
+
+
+
+
+def get_parent(tree, child_clade):
+    node_path = tree.get_path(child_clade)
+    return node_path[-2]
+
+
+def get_child_pairs(tree):
+    child_pairs = []
+
+    def dfs(elem, get_children, stack):
+        pair=get_children(elem)
+        if pair:
+            stack.append(pair)
+            for v in pair:
+                dfs(v,get_children,stack)
+        return stack
+
+    get_children = lambda elem: elem.clades
+    #child_pairs.append(tree.root)
+    return dfs(tree.root, get_children, child_pairs)
