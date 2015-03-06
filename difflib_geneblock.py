@@ -283,5 +283,5 @@ def test():
     l2 = Label(choice_groups = [g2])
     lm = LabelMatcher(l1, l2)
     al = lm.get_ancestor_label()
-    print('made it here')
-    print(al)
+    #print('made it here')
+    #print(al)

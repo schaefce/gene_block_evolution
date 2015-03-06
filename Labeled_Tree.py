@@ -5,13 +5,24 @@ from Bio.Phylo.BaseTree import TreeElement
 
 MAX_SCORE = float("inf")
 
+
 class Choice():
-    def __init__(self, groups=None, score=MAX_SCORE):
+    def __init__(self, choice_group=None, groups=None, score=MAX_SCORE):
         self.groups = groups
         self.score = score
+        self.choice_group = choice_group
 
     def set_groups(self, grps):
         self.groups = grps
+
+    def get_children(self):
+        if self.choice_group:
+            return self.choice_group.children
+        else:
+            return None
+
+    def get_label(self):
+        return self.choice_group.label
 
     def with_str_groups(self):
         return [','.join(group) if type(group) is list else group for group in self.groups]
@@ -27,10 +38,11 @@ class Choice():
         return self.__str__()
 
 class Choice_Group():
-    def __init__(self, choices=None, children=None,  overall_score=MAX_SCORE):
+    def __init__(self, label=None, choices=None, children=None,  overall_score=MAX_SCORE):
         self.set_choices(choices)
         self.children = children
         self.overall_score = overall_score
+        self.label = label
 
     def set_choices_from_dict(cls, choice_dict=None):
         self.choices = []
@@ -54,7 +66,6 @@ class Choice_Group():
         return '\n'.join('\t{}. {}'.format(i, str(k)) for i,k in enumerate(self.choices))
 
     def __str__(self):
-        #print('called str on group')
         return 'Choice Group: (overall score: {})\n{}'.format(self.overall_score, self.get_choices_string())
 
     #def __repr__(self):
@@ -62,17 +73,20 @@ class Choice_Group():
 
 
 class Label():
-    def __init__(self, choice_groups=None, final_choice=None, final_score=MAX_SCORE):
+    def __init__(self, clade=None, choice_groups=None, final_choice=None, final_score=MAX_SCORE):
+        self.clade = clade
         self.set_choice_groups(choice_groups)
         self.is_final = False
         self.set_final_choice(final_choice)
         self.final_score = final_score
 
     @classmethod
-    def for_leaf(cls, group_list=None):
+    def for_leaf(cls, clade, group_list=None):
         c = Choice(groups=group_list, score=0)
         g = Choice_Group(choices=c, overall_score=0)
-        l = Label(choice_groups=g, final_choice=c)
+        #c.choice_group = g
+        l = Label(clade=clade, choice_groups=g, final_choice=c)
+        #g.label = l
         return l
 
     def set_choice_groups(self, choice_groups):
@@ -90,6 +104,20 @@ class Label():
         else:
             self.choice_groups.append(choice_group)
 
+    def get_best_choice(self):
+        min_score = float("inf")
+        best_choice=None
+        for cg in self.choice_groups:
+            for c in cg.choices:
+                if c.score < min_score:
+                    min_score = c.score
+                    best_choice = c
+        return best_choice
+
+    #def set_best_choice_as_final(self):
+    #    best = self.get_best_choice()
+        
+
     def set_final_choice(self, choice):
         if choice:
             self.final_choice = choice
@@ -103,6 +131,7 @@ class Label():
 
     def set_final_label(self):
         self.final_label = str(self.final_choice)
+        self.clade.comment = self.final_label
 
     def get_final_label(self):
         if self.is_final:
@@ -113,6 +142,20 @@ class Label():
             return 'Final Label:{lab},{score}'.format(lab=self.get_final_label(), score=self.score)
         else:
             return 'Label:\n' + '\t\n'.join('{}. {}'.format(i, str(k)) for i,k in enumerate(self.choice_groups))
+
+class Final_Label(TreeElement):
+    def __init__(self, choice):
+        self.choice=choice
+
+    @classmethod
+    def from_label(cls, label):
+        if label is None or not label.is_final:
+            return None
+        flabel = cls(choice=label.final_choice)
+        return flabel
+
+    def __str__(self):
+        return str(self.choice)
 
 
 class Labeled_Tree(Newick.Tree):
@@ -161,26 +204,46 @@ class Labeled_Tree(Newick.Tree):
         return Labeled_Clade.from_clade(clade).to_tree(**kwargs)
 
     def add_leaf_ids(self, id_map=None, prune_unidentified=False):
+        prune_list = []
         if id_map:
             terminals = self.get_terminals()
             for leaf in terminals:
-                if leaf.name in id_map.keys():
+                if id_map.has_key(leaf.name):
                     leaf.ident = id_map[leaf.name]
                 elif prune_unidentified:
-                    self.prune(leaf)
+                    prune_list.append(leaf)
+        for leaf in prune_list:
+            self.prune(leaf)
 
 
     def add_leaf_labels(self, label_map=None, prune_unlabeled=False):
+        prune_list = []
         if label_map:
             terminals = self.get_terminals()
             for leaf in terminals:
                 if leaf.ident in label_map.keys():
-                    #only_choice = Choice(groups=label_map[leaf.ident], score=0)
-                    leaf.label = Label.for_leaf(group_list=label_map[leaf.ident])
-                    #leaf.label = Label(choices=only_choice)
-                    #leaf.label.set_final_choice(choice=only_choice)
+                    leaf.label = Label.for_leaf(clade=leaf, group_list=label_map[leaf.ident])
                 elif prune_unlabeled:
-                    self.prune(leaf)
+                    prune_list.append(leaf)
+        for leaf in prune_list:
+            self.prune(leaf)
+
+    def set_labels_from_root(self):
+        root_choice = root.label.get_best_choice()
+        self.set_labels_from_choice(root_choice)
+
+    def set_labels_from_choice(self, choice=None):
+        if choice is None:
+            return
+        l = choice.get_label()
+        if l:
+            l.set_final_choice(choice)
+        for c in choice.get_children():
+            self.set_labels_from_choice(c)
+    
+    def __str__(self):
+        return Newick.Tree.__str__(self) 
+        
 
 class Labeled_Clade(Label, Newick.Clade):
     """Labeled Tree Clade (sub-tree) object."""
@@ -189,21 +252,19 @@ class Labeled_Clade(Label, Newick.Clade):
                  confidence=None, comment=None, ident=None, choice_groups=None):
         Newick.Clade.__init__(self, branch_length=branch_length,
                                 name=name, clades=clades, confidence=confidence, comment=comment)
-        self.label = Label(choice_groups=choice_groups)
+        self.label = Label(clade=self, choice_groups=choice_groups)
+        #self.label.clade = self
         self.ident = ident
 
     @classmethod
     def from_clade(cls, clade, **kwargs):
         """Create a new Labeled Tree Clade from a Newick or BaseTree Clade object.
         """
-        #print(cls)
-        #print(type(clade))
         new_clade = cls(branch_length=clade.branch_length,
                         name=clade.name)
         new_clade.clades = [cls.from_clade(c) for c in clade]
         new_clade.confidence = clade.confidence
         new_clade.comment = clade.comment
-        #new_clade.label = Label(clade.label.choices) if clade.label else None
         new_clade.__dict__.update(kwargs)
         return new_clade
 
@@ -215,3 +276,6 @@ class Labeled_Clade(Label, Newick.Clade):
 
     def add_label(self, label=None):
         self.label = label
+
+    def __str__(self):
+        return Newick.Clade.__str__(self)

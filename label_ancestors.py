@@ -1,11 +1,25 @@
 #!/usr/bin/python
+import argparse
 import csv
-from make_event_distance_matrix import *
+from make_event_distance_matrix import homolog_list_grouping_function
+import sys
+from homolog4 import *
 from Bio import Phylo
 from Bio.Phylo import *
 from difflib_geneblock import LabelMatcher
 from Labeled_Tree import Label, Choice, Labeled_Tree, Labeled_Clade
 
+
+def parse_params(args):
+    """Parse command line arguments using the argparse library"""
+    parser = argparse.ArgumentParser(description = "Evaluate RAIDER against RepeatScout")
+    parser.add_argument('gene_block', help='Path to file with data about geneblock')
+    parser.add_argument('tree', help='Path to file with tree data')
+    parser.add_argument('id_map', help='Path to file mapping IDs to labels')
+    parser.add_argument('--no_prune', dest='prune', action='store_false', help='Do not prune unlabeled leaves', default=True)
+    parser.add_argument('--max_gap', dest='max_gap', type=int, help='Max gap', default=500)
+
+    return parser.parse_args(args)
 
 def get_label_map(gene_block_fname, max_gap=500):
     """ Use gene_block result from file to determine the homologs for each organism
@@ -22,11 +36,11 @@ def get_label_map(gene_block_fname, max_gap=500):
         try:
             hlog = Homolog.from_blast(line)
         except:
-            print "ERROR", line
+            print("ERROR " +  line)
         try:
             accession = hlog.accession()
         except:
-            print line
+            print(line)
         predicted_gene = hlog.blast_annatation()
 
         # store the homolog where it belongs
@@ -46,6 +60,10 @@ def get_label_map(gene_block_fname, max_gap=500):
 
 
 def get_identifiers(fname):
+    #idmap = {}
+    #for v, k in csv.reader(open(fname, 'r')):
+    #    idmap[k] = v
+    #return idmap
     return {k:v for v,k in csv.reader(open(fname,'r'))}
 
 
@@ -78,7 +96,7 @@ def read_tree(fname, treeformat='newick'):
     tree = Phylo.read(fname, treeformat)
     return tree
 
-def format_tree(gene_block, map_fname, tree_fname, infolder=None, max_gap = 500, prune_unlabeled=True):
+def format_tree(gene_block, map_fname, tree_fname, max_gap = 500, prune_unlabeled=True):
     """ Use gene_block_organism_data for this gene_block, mapping of common names
     IDs, and existing tree file to create tree labeled with list of homologs.
 
@@ -86,10 +104,12 @@ def format_tree(gene_block, map_fname, tree_fname, infolder=None, max_gap = 500,
         gene_block : string
 
     """
-    gblock_fname = gene_block if infolder is None else '{folder}/{block}.txt'.format(folder=infolder, block=gene_block)
-    label_map = get_label_map(gblock_fname, max_gap)#get_labelings(gene_block, infolder, filter)
+    #gblock_fname = gene_block if infolder is None else '{folder}/{block}.txt'.format(folder=infolder, block=gene_block)
+    label_map = get_label_map(gene_block, max_gap)#get_labelings(gene_block, infolder, filter)
     id_map = get_identifiers(map_fname)
+    #print(id_map)
     tree = read_tree(tree_fname)
+    #print(tree)
     tree = Labeled_Tree.from_tree_and_maps(tree, id_map, label_map)
     return tree
 
@@ -99,6 +119,7 @@ def set_possible_labels(tree):
     tree.ladderize()
     #print tree
     child_prs = get_child_pairs(tree)
+    parent = None
     while child_prs:
         pr = child_prs.pop()
         A = pr[0]
@@ -109,14 +130,7 @@ def set_possible_labels(tree):
         lm = LabelMatcher(A.label, B.label)
         ancestor_label = lm.get_ancestor_label()
         parent.add_label(ancestor_label)
-        print(ancestor_label)
-        #A.label.set_final_choice(ancestor_label.children[0])
-        #A.comment = A.label.get_final_label()
-        #B.label.set_final_choice(ancestor_label.children[1])
-        #B.comment = B.label.get_final_label()
-        #print '([{A}],[{B}])'.format(A=str(A.label), B=str(B.label))
-
-
+        #print(ancestor_label)
 
 
 
@@ -140,3 +154,12 @@ def get_child_pairs(tree):
     get_children = lambda elem: elem.clades
     #child_pairs.append(tree.root)
     return dfs(tree.root, get_children, child_pairs)
+
+
+if __name__ == "__main__":
+    args = parse_params(sys.argv[1:])
+    tree = format_tree(args.gene_block,args.id_map, args.tree, args.max_gap, args.prune)
+    #set_possible_labels(tree)
+    #tree.set_labels_from_root()
+    print(tree)
+
