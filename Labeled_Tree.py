@@ -1,3 +1,4 @@
+import logging
 from Bio import Phylo
 from Bio.Phylo import Newick
 from Bio.Phylo import BaseTree
@@ -229,13 +230,15 @@ class Labeled_Tree(Newick.Tree):
             self.prune(leaf)
 
     def set_labels_from_root(self):
-        root_choice = root.label.get_best_choice()
+        root_choice = self.root.label.get_best_choice()
         self.set_labels_from_choice(root_choice)
 
     def set_labels_from_choice(self, choice=None):
         if choice is None:
             return
         l = choice.get_label()
+        print(l.clade.name)
+        print(str(choice))
         if l:
             l.set_final_choice(choice)
         for c in choice.get_children():

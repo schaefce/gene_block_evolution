@@ -2,20 +2,20 @@
 #PBS -N ancestor_tree
 #PBS -m abe
 #PBS -M "schaefce@miamioh.edu"
-#PBS -l nodes=1:ppn=8
+#PBS -l nodes=1:ppn=2
 #PBS -l walltime=2:0:0
 
 
 cd ~/karro/gene_block_evolution
 
-module load python-2.7.6
+module load python-2.7.8
 
 if [ -z $gb ]; then
     gb="optimized_operon/paaABCDEFGHIJK.txt"
 fi
 
 if [ -z $tree ]; then
-    tree="reorder.nwk"
+    tree="test.nwk" #"reorder.nwk" #"test.nwk"
 fi
 
 if [ -z $ids ]; then
@@ -36,5 +36,5 @@ fi
 
 echo "${MG} ${PR} ${gb} ${tree} ${ids}" 
 
-python2.7 label_ancestors2.py ${MG} ${PR} ${gb} ${tree} ${ids} #${MG} ${PR} #optimized_operon/paaABCDEFGHIJK.txt reorder.nwk mapping.csv 
+python2.7 label_ancestors.py ${MG} ${PR} ${gb} ${tree} ${ids} #${MG} ${PR} #optimized_operon/paaABCDEFGHIJK.txt reorder.nwk mapping.csv 
 
