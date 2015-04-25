@@ -47,24 +47,43 @@ class Choice_Group():
         self.label = label
 
     def set_choices_from_dict(cls, choice_dict=None):
-        self.choices = []
+        self.choices = {}#[]
         for c in choice_dict:
-            self.choices.append(Choice(groups=c, choice_group=self, score=choice_dict[c]))
+            c2 = Choice(groups=c, choice_group=self, score=choice_dict[c])
+            self.add_choice(c2)
+            #self.choices.append(Choice(groups=c, choice_group=self, score=choice_dict[c]))
 
     def set_choices(self, choices):
         if choices:
-            self.choices = []
+            self.choices = {}#[]
             if type(choices) is list:
                 for c in choices:
-                    self.choices.append(c)
+                    #self.choices.append(c)
+                    self.add_choice(c)
                     c.choice_group = self
             else:
-                self.choices.append(choices)
+                #self.choices.append(choices)
+                self.add_choice(choices)
                 choices.choice_group = self
+    
+    def add_choice(self, choice):
+        choice_str = choice.with_str_groups()
+        if choice_str in self.choices:
+            curr = self.choices[choice_str]
+            if choice.score < curr.score:
+                self.choices[choice_str] = choice
+        else:
+            self.choices[choice_str] = choice
+
 
     def set_score(self, score):
         if score:
             self.overall_score = score
+
+    def remove_choice_by_str(self, choice_str):
+        if choice_str in self.choices:
+            del self.choices[choice_str]
+        
 
     def get_choices_string(self):
         return '\n'.join('\t{}. {}'.format(i, str(k)) for i,k in enumerate(self.choices))
@@ -103,7 +122,6 @@ class Label():
             else:
                 self.choice_groups.append(choice_groups)
                 choice_groups.label = self
-
 
     def add_choice_group(self, choice_group):
         if type(choice_group) is list:

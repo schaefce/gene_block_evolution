@@ -330,6 +330,7 @@ class LabelMatcher:
         #best_intermediates = []
         return curr_min, best_combo, best_intermediates, best_scores
 
+    
 
 
     def get_ancestor_label(self):
@@ -338,6 +339,8 @@ class LabelMatcher:
         #best_choice_children = None
         #logger = logging.getLogger('gblock.labeling')
         choice_grps = []
+        choice_map = {}
+        i = 0
         for grp1 in self.L1.choice_groups:
             for grp2 in self.L2.choice_groups:
                 for choice1 in grp1.choices:
@@ -352,9 +355,17 @@ class LabelMatcher:
                         curr_choices = [Choice(groups=inter,score=(prescore+s)) for inter,s in zip(intermediates, scores)]
                         for c in curr_choices:
                             c3 = c.with_str_groups()
+                            if c3 in choice_map:
+                                curr = choice_map[c3]
+                                if curr[0] > c.score:
+                                    choice_groups[curr[1]].remove_by_str(c3)
+                                    choice_map[c3] = (c.score, i)
+                            else:
+                                choice_map[c3] = (c.score, i)
                             #self.logger.debug("\t\t\tPrevious score: " +  str(prescore + self.get_min_edit_distance(c3, c1, backtrace=False)[0] + self.get_min_edit_distance(c3, c2, backtrace=False)[0]))
                             self.logger.debug("\t\t\t" + str(c))
                         choice_grps.append(Choice_Group(choices=curr_choices, children=[choice1, choice2], overall_score=score + prescore))
+                        i += 1
         return Label(choice_groups = choice_grps)
 
 
