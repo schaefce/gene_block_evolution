@@ -16,18 +16,18 @@ class LabelMatcher:
     """ Matches two choices as best as possible, where a choice is a list of
         lists, the outer list's order doesn't matter but the inner list's order matters."""
 
-    def __init__(self, L1=None, L2=None):
+    def __init__(self, L1=None, L2=None, logname="geneblock.new.labeling"):
         self.L1 = self.L2 = None
         self.set_labels(L1, L2)
-        self.DUP_PENALTY = 2.0
+        self.DUP_PENALTY = 5.0
         self.DEL_DUP_PENALTY = self.DUP_PENALTY
-        self.SPLIT_PENALTY = 5.0
+        self.SPLIT_PENALTY = 7.0
         self.DEL_SPLIT_PENALTY = self.SPLIT_PENALTY
-        self.DEL_PENALTY = 6.0
+        self.DEL_PENALTY = 3.0
         self.INS_PENALTY = self.DEL_PENALTY
-        self.MISMATCH_PENALTY = float("inf")
-        self.MATCH_PENALTY = 0.0
-        self.logger = logging.getLogger("geneblock.new.labeling")
+        self.MISMATCH_PENALTY = 100000#float("inf")
+        self.MATCH_PENALTY = -1.0
+        self.logger = logging.getLogger(logname)
 
     def set_labels(self, L1, L2):
         self.set_label1(L1)
@@ -74,14 +74,16 @@ class LabelMatcher:
         else:
             return self.MISMATCH_PENALTY
 
+
     def get_edit_distance(self, A, B, allow_insertions=False, backtrace=True):
-        self.logger.debug("\t\t\t\t\tGetting edit distance between {c1} and {c2}".format(c1=str(A),c2=str(B)))
+        self.logger.debug("\t\t\t\t\tGetting edit distance between {c1} and {c2}".format(c1=str(''.join(A)),c2=str(''.join(B))))
         #print(A)
+        #self.logger.debug("\t\t\t\t\tBacktrace:\t" + str(backtrace)) #Getting edit distance between {c1} and {c2}".format(c1=str(A),c2=str(B)))
         #print(B)
         n = len(A)
         m = len(B)
 
-        # subproblems[i][j] will represent
+        # subproblems[i][j] will represent the edit distance from B[...i] to A[...j]
         subproblems = [[0 for x in range(n+1)] for x in range(m+1)]
 
         for j in range(n+1):
@@ -104,9 +106,9 @@ class LabelMatcher:
                 else:
                     case4 = float("inf")
                 subproblems[i][j] = min([case1, case2, case3, case4])
-        self.logger.debug("\t\t\t\t\tHere is the matrix:")
-        for i in range(m):
-            self.logger.debug("\t\t\t\t\t\t" + str(subproblems[i]))
+        #self.logger.debug("\t\t\t\t\tHere is the matrix:")
+        #for i in range(m):
+        #    self.logger.debug("\t\t\t\t\t\t" + str(subproblems[i]))
 
         #for i in range(m):
         #    for j in range(n):
@@ -114,12 +116,14 @@ class LabelMatcher:
         #    print
 
         penalty = subproblems[m][n]
+
+        self.logger.debug("\t\t\t\t\tEdit distance between {c1} and {c2}:\t{p}".format(c1=str(''.join(A)),c2=str(''.join(B)),p=str(penalty)))
         intermediates = self.perform_backtrace(A, B, subproblems, allow_insertions) if backtrace else None
         return penalty, intermediates
 
 
     def perform_backtrace(self, A, B, subproblems, allow_insertions=False):
-        self.logger.debug("\t\t\t\t\tPerforming backtrace for {c1} and {c2}".format(c1=str(A),c2=str(B)))
+        self.logger.debug("\t\t\t\t\tPerforming backtrace for {c1} and {c2}".format(c1=str(''.join(A)),c2=str(''.join(B))))
         answer = []
         intermediates = []
 
@@ -129,6 +133,7 @@ class LabelMatcher:
         bi = i - 1
 
         while i > 0 or j > 0:
+            self.logger.debug('\t\t\t\t\t\ti: '+str(i)+',j: '+ str(j))
             curr_intermediate = []
 
             pos = subproblems[i][j]
@@ -141,7 +146,7 @@ class LabelMatcher:
             case3_ins_split = subproblems[i][j-1] + self.SPLIT_PENALTY
             case3_ins_gen = subproblems[i][j-1] + self.INS_PENALTY
 
-            if i > 0 and pos == case1_match:
+            if i > 0 and j > 0 and pos == case1_match:
                 curr_intermediate.append(B[bi])
                 bi -= 1
                 aj -= 1
@@ -197,52 +202,51 @@ class LabelMatcher:
             intermediates.append(curr_intermediate)
             #print(intermediates)
         #print(intermediates)
-        return reversed(intermediates)
+        return intermediates[::-1]#reversed(intermediates)
 
     def get_min_edit_distance(self, choice1, choice2, allow_insertions=False, backtrace=True):
         #print(choice1)
         #print(choice2)
-        self.logger.debug("\t\t\tGetting min edit distance between {c1} and {c2}".format(c1=str(choice1),c2=str(choice2)))
+        self.logger.debug("\t\t\tGetting min edit distance between {c1} and {c2}".format(c1=str(''.join(choice1)),c2=str(''.join(choice2))))
         curr_min = float("inf")
         best_combo = None
         #best_ops = None
-        best_intermediates = None
+        best_intermediates = [] #None
         backwards = False
         for A in itertools.permutations(choice1):
             A = [i for i in re.split('(\W+)', SPLIT.join(A)) if i != ',']
             #A = re.split('(\*)', SPLIT.join(A))
             for B in itertools.permutations(choice2):
                 B = [i for i in re.split('(\W+)', SPLIT.join(B)) if i != ',']
-                self.logger.debug("\t\t\t\tCurr min:\t{m}".format(m=str(curr_min)))
                 #self.logger.debug("\t\t\t\t\tA:" + str(A) + "\tB:" + str(B))
                 #B = re.split('(\*)', SPLIT.join(B))
                 score, intermediates = self.get_edit_distance(A, B, allow_insertions, backtrace=backtrace)
-                self.logger.debug('\t\t\t\tScore={s}'.format(s=score))
-                if intermediates:
-                    self.logger.debug('\t\t\t\tIntermediates:' + ',\t'.join(map(str, intermediates)))#[str(''.join(inter)) for inter in intermediates]))
-                    #self.logger.debug('\t\t\t\tIntermediates:' + ',\t'.join([str(''.join(inter)) for inter in intermediates]))
-                #self.logger.debug('\t\t\t\tIntermediates:')
-                #for inter in intermediates:
-                #    self.logger.debug('\t\t\t\t\t' + str(inter))
+                #self.logger.debug('\t\t\t\tScore={s}'.format(s=score))
+                #self.logger.debug(type(intermediates))
+                #if intermediates:
+                #    self.logger.debug('\t\t\t\tIntermediates:' + ',\t'.join(map(str, intermediates)))#[str(''.join(inter)) for inter in intermediates]))
                 if score < curr_min:
                     curr_min = score
                     best_combo = (A, B)
                     #best_ops = codes
-                    best_intermediates = intermediates
+                    if intermediates:
+                        best_intermediates = list(intermediates)
                     backwards = False
+                    self.logger.debug("\t\t\t\tUpdated curr min:\t{m}".format(m=str(curr_min)))
+                    self.logger.debug("\t\t\t\tUpdated best intermediates:"+ ',\t'.join(map(str, best_intermediates)))
                 score, intermediates = self.get_edit_distance(B, A, allow_insertions, backtrace=backtrace)
-                self.logger.debug('\t\t\t\tScore={s}'.format(s=score))
-                if intermediates:
-                    self.logger.debug('\t\t\t\tIntermediates:' + ',\t'.join(map(str, intermediates)))#[str(''.join(inter)) for inter in intermediates]))
-                    #self.logger.debug('\t\t\t\tIntermediates:' + ',\t'.join(intermediates))
-                    #for inter in intermediates:
-                    #    self.logger.debug('\t\t\t\t\t' + str(inter))
+                #self.logger.debug('\t\t\t\tScore={s}'.format(s=score))
+                #if intermediates:
+                #    self.logger.debug('\t\t\t\tIntermediates:' + ',\t'.join(map(str, intermediates)))#[str(''.join(inter)) for inter in intermediates]))
                 if score < curr_min:
                     curr_min = score
                     best_combo = (A, B)
                     #best_ops = codes
-                    best_intermediates = intermediates
+                    if intermediates:
+                        best_intermediates = list(intermediates)
                     backwards = True
+                    self.logger.debug("\t\t\t\tUpdated curr min:\t{m}".format(m=str(curr_min)))
+                    self.logger.debug("\t\t\t\tUpdated best intermediates:"+ ',\t'.join(map(str, best_intermediates)))
         #best_intermediates = [(''.join(x)).split(SPLIT) for x in best_intermediates]
         #best_intermediates = [filter(None, x) for x in best_intermediates]
         if backtrace:
@@ -250,10 +254,8 @@ class LabelMatcher:
             #print(best_intermediates)
             #print(best_intermediates)
 
-            self.logger.debug("\t\t\tBest intermediates:")
             for i in range(len(best_intermediates)):
                 new_inter = []
-                self.logger.debug("\t\t\t\t" + str(best_intermediates[i]))   
                 for l in best_intermediates[i]:
                     #print('l', l)
                     if type(l) is list:
@@ -263,9 +265,9 @@ class LabelMatcher:
                         new_inter.append(l)
                 #print(best_intermediates[i], new_inter)
                 best_intermediates[i] = new_inter
-                self.logger.debug("\t\t\t\t" + str(best_intermediates[i]))   
             best_intermediates = [[list(group) for k, group in itertools.groupby(l, lambda x: x == "*") if not k] for l in best_intermediates]
             best_intermediates = [filter(None, x) for x in best_intermediates]
+            self.logger.debug("\t\t\t\tBest intermediates:\t{b}".format(b=',\t'.join(map(str, best_intermediates))))
             
             #print()
 
@@ -286,17 +288,17 @@ class LabelMatcher:
                 for choice1 in grp1.choices:
                     c1 = choice1.with_str_groups()
                     for choice2 in grp2.choices:
-                        self.logger.info("\tAligning choice {ch1} with choice {ch2}".format(ch1=str(choice1), ch2=str(choice2)))
+                        self.logger.debug("\tAligning choice {ch1} with choice {ch2}".format(ch1=str(choice1), ch2=str(choice2)))
                         prescore = choice1.score + choice2.score
-                        self.logger.debug("\t\tPrescore: " + str(prescore))
+                        #self.logger.debug("\t\tPrescore: " + str(prescore))
                         c2 = choice2.with_str_groups()
                         score, combo, intermediates = self.get_min_edit_distance(c1, c2)
-                        self.logger.info("\t\tProduced the following choices with overall score " + str(score))
+                        self.logger.debug("\t\tProduced the following choices with overall score " + str(score))
                         curr_choices = [Choice(groups=inter) for inter in intermediates]
                         for c in curr_choices:
                             c3 = c.with_str_groups()
                             c.score = prescore + self.get_min_edit_distance(c3, c1, backtrace=False)[0] + self.get_min_edit_distance(c3, c2, backtrace=False)[0]
-                            self.logger.info("\t\t\t" + str(c))
+                            self.logger.debug("\t\t\t" + str(c))
                         choice_grps.append(Choice_Group(choices=curr_choices, children=[choice1, choice2], overall_score=score + prescore))
         return Label(choice_groups = choice_grps)
 

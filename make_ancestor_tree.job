@@ -1,9 +1,7 @@
 #!/bin/bash
 #PBS -N ancestor_tree
-#PBS -m abe
-#PBS -M "schaefce@miamioh.edu"
-#PBS -l nodes=1:ppn=2
-#PBS -l walltime=2:0:0
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=100:0:0
 
 
 cd ~/karro/gene_block_evolution
@@ -15,7 +13,9 @@ if [ -z $gb ]; then
 fi
 
 if [ -z $tree ]; then
-    tree="test.nwk" #"reorder.nwk" #"test.nwk"
+    #tree="reorder.nwk" 
+    tree="test2.nwk" 
+    #tree="test_again.nwk"
 fi
 
 if [ -z $ids ]; then
