@@ -344,21 +344,21 @@ class LabelMatcher:
         for grp1 in self.L1.choice_groups:
             for grp2 in self.L2.choice_groups:
                 for choice1 in grp1.choices:
-                    c1 = choice1.with_str_groups()
+                    c1 = grp1.choices[choice1].with_str_groups()#choice1.with_str_groups()
                     for choice2 in grp2.choices:
                         self.logger.debug("\tAligning choice {ch1} with choice {ch2}".format(ch1=str(choice1), ch2=str(choice2)))
-                        prescore = choice1.score + choice2.score
+                        prescore = grp1.choices[choice1].score + grp2.choices[choice2].score
                         #self.logger.debug("\t\tPrescore: " + str(prescore))
-                        c2 = choice2.with_str_groups()
+                        c2 = grp2.choices[choice2].with_str_groups()#choice2.with_str_groups()
                         score, combo, intermediates, scores = self.get_min_edit_distance(c1, c2)
                         self.logger.debug("\t\tProduced the following choices with overall score " + str(score))
                         curr_choices = [Choice(groups=inter,score=(prescore+s)) for inter,s in zip(intermediates, scores)]
                         for c in curr_choices:
-                            c3 = c.with_str_groups()
+                            c3 = c.group_list_string()
                             if c3 in choice_map:
                                 curr = choice_map[c3]
                                 if curr[0] > c.score:
-                                    choice_groups[curr[1]].remove_by_str(c3)
+                                    choice_grps[curr[1]].remove_by_str(c3)
                                     choice_map[c3] = (c.score, i)
                             else:
                                 choice_map[c3] = (c.score, i)

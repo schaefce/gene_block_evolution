@@ -213,6 +213,7 @@ class LabelMatcher:
         #best_ops = None
         best_intermediates = [] #None
         backwards = False
+        
         for A in itertools.permutations(choice1):
             A = [i for i in re.split('(\W+)', SPLIT.join(A)) if i != ',']
             #A = re.split('(\*)', SPLIT.join(A))

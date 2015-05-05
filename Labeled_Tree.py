@@ -67,7 +67,7 @@ class Choice_Group():
                 choices.choice_group = self
     
     def add_choice(self, choice):
-        choice_str = choice.with_str_groups()
+        choice_str = choice.group_list_string()
         if choice_str in self.choices:
             curr = self.choices[choice_str]
             if choice.score < curr.score:
@@ -80,7 +80,7 @@ class Choice_Group():
         if score:
             self.overall_score = score
 
-    def remove_choice_by_str(self, choice_str):
+    def remove_by_str(self, choice_str):
         if choice_str in self.choices:
             del self.choices[choice_str]
         
