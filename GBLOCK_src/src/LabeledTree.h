@@ -1,99 +1,168 @@
-import logging
-from Bio import Phylo
-from Bio.Phylo import Newick
-from Bio.Phylo import BaseTree
-from Bio.Phylo.BaseTree import TreeElement
+//import logging
+//from Bio import Phylo
+//from Bio.Phylo import Newick
+//from Bio.Phylo import BaseTree
+//from Bio.Phylo.BaseTree import TreeElement
 
-MAX_SCORE = float("inf")
+//MAX_SCORE = float("inf")
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+typedef vector<ChoiceGroup*> cgList;
+typedef vector<Choice*> cList;
+typedef unordered_map<string, Choice*> cMap;
+//typedef pair<Choice*, Choice*> children;
 
 
-class Choice():
-    def __init__(self, choice_group=None, groups=None, score=MAX_SCORE):
-        self.groups = groups
-        self.score = score
-        self.choice_group = choice_group
+string join(vector<string>& lst, string delimiter){
+    stringstream ss;
+    size_t n = lst.size(), last = n - 1;
+    for (size_t i = 0; i < n; ++i){
+        ss << lst[i];
+        if( i!= last )
+            ss << delim;
+    }
+    return ss.str();
+}
 
-    def set_groups(self, grps):
-        self.groups = grps
+string joinByComma(vector<string>& lst){
+    return join(lst, ',');
+}
 
-    def get_children(self):
-        if self.choice_group:
-            return self.choice_group.children
-        else:
-            return None
 
-    def get_label(self):
-        #print(self.choice_group)
-        return self.choice_group.label
+class Choice {//:
+public:
+    Choice(ChoiceGroup* cg, vector<string> groups, float score){   //def __init__(self, choice_group=None, groups=None, score=MAX_SCORE):
+        splitGroups = groups;   //self.groups = groups
+        cScore = score;         //self.score = score
+        cGroup = cg;            //self.choice_group = choice_group
+    }
 
-    def with_str_groups(self):
-        return [','.join(group) if type(group) is list else group for group in self.groups]
+    void setGroups(){   //def set_groups(self, grps):
+        //self.groups = grps
+    }
 
-    def group_list_string(self):
+    children getChildren(){ //get_children(self):
+        if (cGroup) //self.choice_group:
+            return cGroup->getChildren();//self.choice_group.children
+        else
+            return 0;
+    }
+
+    string getLabel(){//def get_label(self):
+        //#print(self.choice_group)
+        return cGroup->getLabel();
+    }
+
+    vector<string> getStringGroups(){//def with_str_groups(self):
+        return transform(splitGroups.begin(), splitGroups.end(), joinByComma);
+        //return [','.join(group) if type(group) is list else group for group in self.groups]
+    }
+
+    string groupListString(){//def group_list_string(self):
         return '[{}]'.format(','.join('({})'.format(','.join(c for c in grp)) for grp in self.groups))
+    }
 
-    def __str__(self):
-        return 'Choice (score= {}): {}'.format(self.score, self.group_list_string())
-        #'[' + ','.join('(' + ','.join(c for c in grp) + ')' for grp in self.groups) + ']'
+    //def __str__(self):
+        //return 'Choice (score= {}): {}'.format(self.score, self.group_list_string())
+        //#'[' + ','.join('(' + ','.join(c for c in grp) + ')' for grp in self.groups) + ']'
 
-    def __repr__(self):
-        return self.__str__()
+    //def __repr__(self):
+        //return self.__str__()
 
-class Choice_Group():
-    def __init__(self, label=None, choices=None, children=None,  overall_score=MAX_SCORE):
-        self.set_choices(choices)
-        self.children = children
-        self.overall_score = overall_score
-        self.label = label
+    cgList* splitGroups;
+    float cScore;
+    ChoiceGroup* cGroup;
 
-    def set_choices_from_dict(cls, choice_dict=None):
-        self.choices = {}#[]
-        for c in choice_dict:
-            c2 = Choice(groups=c, choice_group=self, score=choice_dict[c])
-            self.add_choice(c2)
-            #self.choices.append(Choice(groups=c, choice_group=self, score=choice_dict[c]))
+};
 
-    def set_choices(self, choices):
-        if choices:
-            self.choices = {}#[]
-            if type(choices) is list:
-                for c in choices:
-                    #self.choices.append(c)
-                    self.add_choice(c)
-                    c.choice_group = self
-            else:
-                #self.choices.append(choices)
-                self.add_choice(choices)
-                choices.choice_group = self
-    
-    def add_choice(self, choice):
-        choice_str = choice.group_list_string()
-        if choice_str in self.choices:
-            curr = self.choices[choice_str]
-            if choice.score < curr.score:
-                self.choices[choice_str] = choice
-        else:
-            self.choices[choice_str] = choice
+class ChoiceGroup {//():
+    ChoiceGroup(Label* l, pair<Choice*, ){ //def __init__(self, label=None, choices=None, children=None,  overall_score=MAX_SCORE):
+        //self.set_choices(choices)
+        //self.children = children
+        //self.overall_score = overall_score
+        //self.label = label
+    }
 
 
-    def set_score(self, score):
-        if score:
-            self.overall_score = score
+    //def set_choices_from_dict(cls, choice_dict=None):
+    //    self.choices = {}#[]
+    //    for c in choice_dict:
+    //        c2 = Choice(groups=c, choice_group=self, score=choice_dict[c])
+    //        self.add_choice(c2)
+    //        #self.choices.append(Choice(groups=c, choice_group=self, score=choice_dict[c]))
 
-    def remove_by_str(self, choice_str):
-        if choice_str in self.choices:
-            del self.choices[choice_str]
-        
+    void setChoices(cList* newChoices) {//def set_choices(self, choices):
+        //if (newChoices) {
+            choices.clear(); // = {}#[]
+            for (Choice* c: newChoices){
+            //if type(choices) is list:
+                //for c in choices:
+                    //#self.choices.append(c)
+                addChoice(c);
+                c->cGroup = this;
+            }
+
+            //else:
+            //    #self.choices.append(choices)
+            //    self.add_choice(choices)
+            //    choices.choice_group = self
+        //}
+    }
+
+    Choice* getChoice(string cString){
+        if (choices.count(cString) > 0){
+            return choices[cString];
+        }
+        else{
+            return 0;
+        }
+    }
+
+    void addChoice(Choice* c){//def add_choice(self, choice):
+        string choiceString = c->groupListString();//choice_str = choice.group_list_string()
+        if (choices.count(choiceString) > 0){//choice_str in self.choices:
+            Choice* curr = choices[choiceString];
+            if (choice->score < curr->score){
+                choices[choiceString] = c;//self.choices[choice_str] = choice
+            }
+        else{
+            choices[choiceString] = c;//self.choices[choice_str] = choice
+        }
+    }
+
+    void setScore(float s){
+        overallScore = s;
+    }
+
+    //def set_score(self, score):
+    //    if score:
+    //        self.overall_score = score
+
+    void removeByString(string cString){
+        if (choices.count(cString) > 0){
+            choices.erase(cString);
+        }
+    }
+    //def remove_by_str(self, choice_str):
+    //    if choice_str in self.choices:
+    //        del self.choices[choice_str]
+
+    string getChoicesString
 
     def get_choices_string(self):
         return '\n'.join('\t{}. {}'.format(i, str(k)) for i,k in enumerate(self.choices))
 
-    def __str__(self):
-        return 'Choice Group: (overall score: {})\n{}'.format(self.overall_score, self.get_choices_string())
+    //def __str__(self):
+    //    return 'Choice Group: (overall score: {})\n{}'.format(self.overall_score, self.get_choices_string())
 
-    #def __repr__(self):
-    #    return self.__str__()
+    //#def __repr__(self):
+    //#    return self.__str__()
 
+    cMap choices;
+    float overallScore
+};
 
 class Label():
     def __init__(self, clade=None, choice_groups=None, final_choice=None, final_score=MAX_SCORE):
@@ -145,7 +214,7 @@ class Label():
 
     #def set_best_choice_as_final(self):
     #    best = self.get_best_choice()
-        
+
 
     def set_final_choice(self, choice):
         if choice:
@@ -267,7 +336,7 @@ class Labeled_Tree(Newick.Tree):
     def set_labels_from_choice(self, choice=None):
         if choice is None:
             return
-        
+
         l = choice.get_label()
         self.logger.debug("Set clade with name " + str(l.clade.name) + " with choice " + str(choice))
         if l:
@@ -276,10 +345,10 @@ class Labeled_Tree(Newick.Tree):
         if children:
             for c in children:
                 self.set_labels_from_choice(c)
-    
+
     def __str__(self):
-        return Newick.Tree.__str__(self) 
-        
+        return Newick.Tree.__str__(self)
+
 
 class Labeled_Clade(Label, Newick.Clade):
     """Labeled Tree Clade (sub-tree) object."""

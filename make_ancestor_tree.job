@@ -1,0 +1,40 @@
+#!/bin/bash
+#PBS -N ancestor_tree
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=100:0:0
+
+
+cd ~/karro/gene_block_evolution
+
+module load python-2.7.8
+
+if [ -z $gb ]; then
+    gb="optimized_operon/paaABCDEFGHIJK.txt"
+fi
+
+if [ -z $tree ]; then
+    #tree="reorder.nwk" 
+    tree="test2.nwk" 
+    #tree="test_again.nwk"
+fi
+
+if [ -z $ids ]; then
+    ids="mapping.csv"
+fi
+
+if [ -n "$mg" ]; then
+    MG="--max_gap ${mg}"
+else
+    MG=""
+fi
+
+if [ -n "$npr" ]; then   
+    PR="--no_prune"
+else
+    PR=""
+fi
+
+echo "${MG} ${PR} ${gb} ${tree} ${ids}" 
+
+python2.7 label_ancestors.py ${MG} ${PR} ${gb} ${tree} ${ids} #${MG} ${PR} #optimized_operon/paaABCDEFGHIJK.txt reorder.nwk mapping.csv 
+
