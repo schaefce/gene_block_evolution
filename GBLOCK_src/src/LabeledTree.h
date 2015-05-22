@@ -56,11 +56,19 @@ public:
     }
 
     vector<string> getStringGroups(){//def with_str_groups(self):
-        return transform(splitGroups.begin(), splitGroups.end(), joinByComma);
+        vector<string> stringGroups;
+        stringGroups.resize(splitGroups.size()*2);
+        return transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), joinByComma);
+        //return transform(splitGroups.begin(), splitGroups.end(), joinByComma);
         //return [','.join(group) if type(group) is list else group for group in self.groups]
     }
 
     string groupListString(){//def group_list_string(self):
+        vector<string> stringGroups = getStringGroups();
+        stringstream s;
+        copy(
+
+        return sprintf("[$s]", transform(split ))
         return '[{}]'.format(','.join('({})'.format(','.join(c for c in grp)) for grp in self.groups))
     }
 
