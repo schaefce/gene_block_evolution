@@ -18,10 +18,10 @@ import argparse
 # Most likely all/almost all will be removed because it may tempt someone to ruin what already seems to be working well.				#
 #########################################################################################################################################
 
-# removed from regulondb_dl_parse.py as a command line param for this master script
+# regulondb_dl_parse.py command line args that will not be alterable from this script.
+# If a gene block file is supplied, this stage will be skipped.
 regulon_url = 'http://regulondb.ccg.unam.mx/menu/download/datasets/files/OperonSet.txt'
 regulon_outfolder = './regulonDB/'
-# the followoing two require additional code to work, fix later
 regulon_download = 'True'
 regulon_experimental_only = 'True'
 
@@ -133,50 +133,71 @@ def main():
     #print infolder, outfolder, filter_file, num_proc, regulon_download, regulon_url, regulon_experimental_only, min_genes
     
     
-    # Stage 1: Get operon set and parse into something that we can use
+    # Step 1: Get gene block set and parse into something that we can use
+    # currently the default is to get operons from regulon db and use them as the gene neighborhoods we are searching for.
     cmd1 = "./regulondb_dl_parse.py -f %s -i %s -o %s -n %i -u %s -m %i" % (filter_file, infolder, regulon_outfolder, num_proc, regulon_url, min_genes)
     # print "cmd1", cmd1
     os.system(cmd1)
+    
+    
+    # Step 2: Create a phylogenetic tree from the organisms in the either the whole set provided in the genome directory, 
+    # or from the organisms that are included in the organism filter file.  
+    #TODO: add the ability to input a marker gene. (also make it possibel to choose a protein or RNA gene)
+    
+    cmd2 = "./create_newick_tree.py -i %s  -f %s" % (infolder, filter_file)
+    # print "cmd2", cmd2
+    os.system(cmd2)
 
-    #Stage 2: Create BLAST searchable databases. (I am limiting this to protein databases right now since that is what we do in the paper)
-    cmd2 = "./format_db.py -f %s -i %s -o %s -n %i" % (filter_file, infolder, BLAST_database_folder,  num_proc)
+    #Step 3: Create BLAST searchable databases. (I am limiting this to protein databases right now since that is what we do in the paper)
+    cmd3 = "./format_db.py -f %s -i %s -o %s -n %i" % (filter_file, infolder, BLAST_database_folder,  num_proc)
     
     # Set the database formatting option[Protein or DNA], even though we don't use it
     if format_protein == 'True':
         pass
     else:
-        cmd2 = cmd2 + ' -d'
-    #print cmd2
-    os.system(cmd2)
+        cmd3 = cmd3 + ' -d'
+    #print cmd3
+    os.system(cmd3)
     
-    #Stage 3: make the operon query fasta file(s)
+    #Step 4: make the operon query fasta file(s)
     operon_file = regulon_outfolder + 'operon_names_and_genes.txt'
     
     
-    cmd3 = "./make_operon_query.py -i %s -o %s -p %s -n %i -r %s" % (infolder, operon_query_outfile, operon_file, num_proc, refrence_organism)
-    #print cmd3
-    os.system(cmd3)
-
-    #Stage 4: run BLAST with the query that we made in stage 3, using the databases that we used in stage 2.
-    # TODO: add eval filtering here, going with default since i'm low on time.  i will fix in the nex few days
-    cmd4 = "./blast_script.py -d %s -o %s -f %s -n %i -q %s -e %f" % (BLAST_database_folder, blast_outfolder, filter_file, num_proc, operon_query_outfile, e_val)
-    print cmd4
+    cmd4 = "./make_operon_query.py -i %s -o %s -p %s -n %i -r %s" % (infolder, operon_query_outfile, operon_file, num_proc, refrence_organism)
+    #print "cmd4", cmd4
     os.system(cmd4)
+
+    #Step 5: run BLAST with the query that we made in stage 3, using the databases that we used in stage 2.
+    # TODO: add eval filtering here, going with default since i'm low on time.  i will fix in the nex few days
+    cmd5 = "./blast_script.py -d %s -o %s -f %s -n %i -q %s -e %f" % (BLAST_database_folder, blast_outfolder, filter_file, num_proc, operon_query_outfile, e_val)
+    print "cmd5", cmd5
+    os.system(cmd5)
     
-    # Stage 5: Parse the BLAST result and sort it by gene block
+    # Step 6: Parse the BLAST result and sort it by gene block
     
     # i'm just trying to get this out the door, everything works how it should, but i am saving time to get this out the door. the final
     # version will implement some ability to control this program's behavior.
-    cmd5 = "./blast_parse.py -f %s -n %i" % (filter_file, num_proc)
-    #print cmd5
-    os.system(cmd5)
-    
-    
-    
-    # Stage 6: filter out spurious results and report the gene blocks that best represent the origional.
-    cmd6 = "./filter_operon_blast_results.py -n %i -g %i" % (num_proc, max_gap)
-    print cmd6
+    cmd6 = "./blast_parse.py -f %s -n %i" % (filter_file, num_proc)
+    #print "cmd6", cmd6
     os.system(cmd6)
+    
+
+    # Step 7: filter out spurious results and report the gene blocks that best represent the origional.
+    cmd7 = "./filter_operon_blast_results.py -n %i -g %i" % (num_proc, max_gap)
+    print "cmd7", cmd7
+    os.system(cmd7)
+    
+    
+    # Step 8: determine z-scores for each value in the pairwaise event matrix that is calculated in step 7
+    
+    # This input will need to be altered to explicity take in the file created in 7... but for now the default will do.
+    cmd8 = "./make_event_distance_matrix.py"
+    print "cmd8", cmd8
+    os.system(cmd8)
+    
+    
+    
+    
     
     print time.time() - start
     
