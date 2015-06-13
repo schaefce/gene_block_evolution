@@ -1,5 +1,15 @@
 #include "labeledtree.h"
 
+
+
+void LabeledTree::addIdsAndLabels(map<string, map <string, string> idMap, vector<string>> labelMap) {
+  if(idMap){
+    addLeafIds(idMap);
+    if(labelMap){
+      addLeafLabels(labelMap);
+    }
+  }
+}
 LabeledTree(Tree *t, map<string, map <string, string> idMap, vector<string>> labelMap){
 
 

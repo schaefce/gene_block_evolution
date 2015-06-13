@@ -11,132 +11,65 @@
 #ifndef KARRO_TREE_H
 #define KARRO_TREE_H
 
-template <class N>
+template <typename Node>
 class Tree {
  public:
   Tree();
-  Tree()
-  Tree(std::string name);
-
-  Tree(std::pair<Tree*<N>,double> left, std::pair<Tree*<N>,double> right, std::string name);
-
+  Tree(Node* root);
   ~Tree();
 
-  bool hasChild(bool left) {
-    return left ? this->left.first : this->right.first;
-  }
-
-  Tree*<N> getChild(bool left) {
-    return left ? this->left.first : this->right.first;
-  }
-
-  double getWeight(bool left) {
-    return left ? this->left.second : this->right.second;
-  }
-
-  void addChild(Tree*<N> t, double weight, bool left);
-
-  std::string getName() {return name;}
-
-  bool isLeaf() {return !left.first && !right.first;}
+  std::string getName() {return this->root->name;}
 
   std::string newick();  // Return Newick string
 
   int num_leaves();
 
+  static Tree<Node>* read_newick_file(std::string file);
+
+  static Tree<Node>* parse_tree(std::string s);
+
  protected:
-  std::pair<Tree*<N>,double> left;
-  std::pair<Tree*<N>,double> right;
-  N* nodeData;
-  std::string newick_helper();
+  Node* root;
 };
 
-
-Tree*<N> parse_tree(std::string s);
-Tree*<N> read_newick_file(std::string file);
-
-#endif
-
-
-
-template<class N>
-Tree<N>::Tree() {
-  left = std::make_pair((Tree*)NULL,0);
-  right = std::make_pair((Tree*)NULL,0);
-  name = "";
+template<typename Node>
+Tree<Node>::Tree() {
+  this->root = (Node*)NULL;
 }
 
-template<class N>
-Tree<N>::Tree(std::string name) {
-  this->left = std::make_pair((Tree*<N>)NULL,0);
-  this->right = std::make_pair((Tree*<N>)NULL,0);
-  this->nodeData->name = name;
+template<typename Node>
+Tree<Node>::Tree(Node* root) {
+  this->root = root;
 }
 
-template<class N>
-Tree::Tree(std::pair<Tree*<N>,double> left, std::pair<Tree*<N>,double> right, std::string name) {
-  this->left = left;
-  this->right = right;
-  this->nodeData->name = name;
+template<typename Node>
+Tree<Node>::~Tree() {
+  if (this->root)
+    delete this->root;
 }
 
-template<class N>
-Tree<N>::~Tree() {
-  if (hasChild(true))
-    delete getChild(true);
-  if (hasChild(false))
-    delete getChild(false);
+template <typename Node>
+std::string Tree<Node>::newick() {
+  return this->root->newick_helper() + ";";
 }
 
-template<class N>
-void Tree<N>::addChild(Tree*<N> t, double weight, bool left) {
-  if (hasChild(left))
-    delete getChild(left);
-
-  if (left)
-    this->left = std::make_pair(t,weight);
-  else
-    this->right = std::make_pair(t,weight);
-}
-
-template<class N>
-std::string Tree<N>::newick_helper() {
-  if (isLeaf())
-      return name;
-
-  std::string s = "(";
-  if (hasChild(true))
-    s += getChild(true)->newick_helper() + ":" + std::to_string(getWeight(true));
-  if (hasChild(true) && hasChild(false))
-    s += ",";
-  if (hasChild(false))
-    s += getChild(false)->newick_helper() + ":" + std::to_string(getWeight(false));
-  return s + ")" + name;
-}
-
-template <class N>
-std::string Tree<N>::newick() {
-  return this->newick_helper() + ";";
-}
-
-template <class N>
-int Tree<N>::num_leaves() {
-  std::stack<Tree*> S;
+template <typename Node>
+int Tree<Node>::num_leaves() {
+  std::stack<Node*> S;
   S.push(this);
   int count = 0;
   while (!S.empty()) {
-    Tree* s = S.top();
+    Node* s = S.top();
     S.pop();
     if (s->isLeaf())
       count++;
     else {
       if (hasChild(true))
-	S.push(s->getChild(true));
+	      S.push(s->getChild(true));
       if (hasChild(false))
-	S.push(s->getChild(false));
+	      S.push(s->getChild(false));
     }
   }
-
   return count;
 }
 
@@ -180,39 +113,32 @@ inline std::string next_token(const std::string& s, int& p) {
       p++;
     }
   }
-
   return s.substr(p2, p-p2);
 }
 
 
-template <class N>
-Tree*<N> parse_subtree(const std::string& s, int& p) {
+template <typename Node>
+Node* parse_node(const std::string& s, int& p) {
   std::string t = next_token(s,p);
-
-
   if (t == "(") {
-    Tree*<N> left = parse_subtree(s, p);
+    Node* left = parse_node<Node>(s, p);
 
     t = next_token(s,p);
-    double left_weight;
+    //double left_weight;
     if (t == ":") {
-      left_weight = std::stoi(next_token(s,p));
+      left->setWeight(std::stoi(next_token(s,p)));
       t = next_token(s,p);
     }
-    else         // No edge weight provided
-      left_weight = 0;
 
     assert(t == ",");
-    Tree*<N> right = parse_subtree(s,p);
+    Node* right = parse_node<Node>(s,p);
 
     t = next_token(s,p);
-    double right_weight;
+    //double right_weight;
     if (t == ":") {
-      right_weight =  std::stoi(next_token(s,p));
+      right->setWeight(std::stoi(next_token(s,p)));
       t = next_token(s,p);
     }
-    else
-      right_weight = 0;
 
     assert(t == ")");
 
@@ -221,19 +147,23 @@ Tree*<N> parse_subtree(const std::string& s, int& p) {
       p--;
       name = "";
     }
-    return new Tree<N>(std::make_pair(left, left_weight), std::make_pair(right, right_weight), name);
+    return new Node(left, right, name);
   }
-  return new Tree<N>(t); // Leaf: token was the leaf labe
+  return new Node(t); // Leaf: token was the leaf labe
 }
 
-template <class N>
-Tree*<N> parse_tree(std::string s) {
+template <typename Node>
+Tree<Node>* Tree<Node>::parse_tree(std::string s) {
   int p = 0;
-  Tree*<N> t = parse_subtree(s, p);
+  Node* root = parse_node<Node>(s, p);
+  Tree* t = new Tree<Node>(root);
   std::string token = next_token(s,p);
   if (token == ":") { // String of format "(...)?:5" -- create a new root with a single (left) child).
     double weight = stoi(next_token(s,p));
-    t = new Tree<N>(std::make_pair(t,weight), std::make_pair((Tree*)NULL,0), std::string(""));
+    Node* root2 = new Node();
+    root->addChild(new Node(t, weight), true);
+    t = new Tree<Node>(root2); //std::make_pair(t,weight), std::make_pair((Tree*)NULL,0), std::string(""));
+    //root->setWeight(stoi(next_token(s,p)));
     token = next_token(s,p);
   }
 
@@ -241,11 +171,13 @@ Tree*<N> parse_tree(std::string s) {
   return t;
 }
 
-template <class N>
-Tree*<N> read_newick_file(std::string file) {
+template <typename Node>
+Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
   std::ifstream fin(file);
   std::stringstream strstream;
   strstream << fin.rdbuf();
 
-  return parse_tree(strstream.str());
+  return parse_tree<Node>(strstream.str());
 }
+
+#endif
