@@ -27,12 +27,21 @@ class LabeledNode : public BaseNode<LabeledNode> {
     this->label = (Label*)NULL;
   };
 
+  void setID(string id){
+    this->identity = id;
+  }
+
+  string getID(){
+    return this->identity;
+  }
+
   ~LabeledNode(){
     delete this->label;
   };
 
 private:
   Label* label;
+  string identity;
 };
 
 #endif

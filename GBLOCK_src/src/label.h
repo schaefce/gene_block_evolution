@@ -11,7 +11,59 @@ class Label{
 public:
   Label();
   //Label(LabeledTree* t);
-  void setChoiceGroups()
+  void setChoiceGroups(vector<ChoiceGroup*> choicegroups){
+    if (this->choiceGroups){
+      this->choiceGroups.clear();
+      for(string cg : choicegroups){
+        this->choiceGroups.append(cg);
+      }
+
+    }
+    def set_choice_groups(self, choice_groups):
+        if choice_groups:
+            self.choice_groups = []
+            if type(choice_groups) is list:
+                for cg in choice_groups:
+                    self.choice_groups.append(cg)
+                    cg.label = self
+            else:
+                self.choice_groups.append(choice_groups)
+                choice_groups.label = self
+  }
+
+  void addChoiceGroup(vector<ChoiceGroup*> choicegroups){
+    for (ChoiceGroup* cg : choicegroups){
+      addChoiceGroup(cg);
+    }
+  }
+
+  void addChoiceGroup(ChoiceGroup* choicegroup){
+    this->choiceGroups.append(choicegroup);
+  }
+
+  def add_choice_group(self, choice_group):
+      if type(choice_group) is list:
+          for cg in choice_groups:
+              self.choice_groups.append(cg)
+              cg.label = self
+      else:
+          self.choice_groups.append(choice_group)
+          choice_groups.label = self
+
+  vector<ChoiceGroup*> getChoiceGroups(){
+    return this->choiceGroups;
+  }
+
+  //bool operator==(const Label &otherLabel) const{
+  //  return this->choiceGroups == other->getChoiceGroups();
+  //};
+
+  static Label* createLeafLabel(std::vector<string> splitGroups){
+    Choice* c = new Choice(splitGroups);
+    ChoiceGroup* cg = new ChoiceGroup(vector<Choice*> {c});
+    Label* l = new Label();
+    l->addChoiceGroup(cg);
+  }
 
 
 private:

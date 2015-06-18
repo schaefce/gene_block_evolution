@@ -32,6 +32,7 @@ class BaseNode {
     this->weight = weight;
   };
 
+
   ~BaseNode(){
     if (hasChild(true))
       delete getChild(true);
@@ -39,7 +40,9 @@ class BaseNode {
       delete getChild(false);
   };
 
-  string getName() {return name;}
+  //void setName(string name){ this->name = name};
+
+  string getName() {return this->name;}
 
   void setWeight(double weight){ this->weight = weight;}
 
@@ -51,6 +54,10 @@ class BaseNode {
 
   bool isLeaf() { return !left.first && !right.first; }
 
+  void setParent(TargetNode* node){
+    this->parent = node;
+  }
+
   void addChild(TargetNode* node, bool left){
     if (hasChild(left))
       delete getChild(left);
@@ -59,6 +66,21 @@ class BaseNode {
     else
       this->right = node;
   };
+
+  TargetNode* recursivePrune(Node* target){
+    if (this == target){
+      return (TargetNode*)NULL;
+    }
+    else{
+      this->left = left->recursivePrune(target);
+      this->right = right->recursivePrune(target);
+      return this;
+    }
+  }
+
+  void prune(Node* target){
+    recursivePrune(target);
+  }
 
   string newick_helper(){
     if (isLeaf())

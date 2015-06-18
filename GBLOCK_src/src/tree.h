@@ -24,6 +24,10 @@ class Tree {
 
   int num_leaves();
 
+  void prune(Node* target);
+
+  vector<Node*> collectLeaves();
+
   static Tree<Node>* read_newick_file(std::string file);
 
   static Tree<Node>* parse_tree(std::string s);
@@ -53,10 +57,45 @@ std::string Tree<Node>::newick() {
   return this->root->newick_helper() + ";";
 }
 
+
+template <typename Node>
+bool Tree<Node>::prune(Node* target){
+  if (target == NULL){
+    return false;
+  }
+  else if (target == this->root){
+    this->root = (Node*)NULL;
+  }
+  else {
+    this->root = root->prune(target);
+  }
+}
+
+template <typename Node>
+std::vector<Node*> Tree<Node>::collectLeaves(){
+  std::stack<Node*> S;
+  std::vector<Node*> leafList;
+  S.push(this->root);
+  int count = 0;
+  while (!S.empty()) {
+    Node* s = S.top();
+    S.pop();
+    if (s->isLeaf())
+      leafList->push_back(s);
+    else {
+      if (s->hasChild(true))
+        S.push(s->getChild(true));
+      if (s->hasChild(false))
+        S.push(s->getChild(false));
+    }
+  }
+  return leafList;
+}
+
 template <typename Node>
 int Tree<Node>::num_leaves() {
   std::stack<Node*> S;
-  S.push(this);
+  S.push(this->root);
   int count = 0;
   while (!S.empty()) {
     Node* s = S.top();
@@ -64,9 +103,9 @@ int Tree<Node>::num_leaves() {
     if (s->isLeaf())
       count++;
     else {
-      if (hasChild(true))
+      if (s->hasChild(true))
 	      S.push(s->getChild(true));
-      if (hasChild(false))
+      if (s->hasChild(false))
 	      S.push(s->getChild(false));
     }
   }
@@ -153,7 +192,7 @@ Node* parse_node(const std::string& s, int& p) {
 }
 
 template <typename Node>
-Tree<Node>* Tree<Node>::parse_tree(std::string s) {
+static Tree<Node>* Tree<Node>::parse_tree(std::string s) {
   int p = 0;
   Node* root = parse_node<Node>(s, p);
   Tree* t = new Tree<Node>(root);
@@ -172,7 +211,7 @@ Tree<Node>* Tree<Node>::parse_tree(std::string s) {
 }
 
 template <typename Node>
-Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
+static Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
   std::ifstream fin(file);
   std::stringstream strstream;
   strstream << fin.rdbuf();
