@@ -1,0 +1,274 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A46054711B3492FC00E0CB1E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46054701B3492FC00E0CB1E /* main.cpp */; };
+		A46054821B34931A00E0CB1E /* labeledtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46054791B34931A00E0CB1E /* labeledtree.cpp */; };
+		A46054831B34931A00E0CB1E /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A46054801B34931A00E0CB1E /* Makefile */; };
+		A46054861B34D4E400E0CB1E /* difflib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46054851B34D4E400E0CB1E /* difflib.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A460546B1B3492FC00E0CB1E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A460546D1B3492FC00E0CB1E /* GeneBlock */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GeneBlock; sourceTree = BUILT_PRODUCTS_DIR; };
+		A46054701B3492FC00E0CB1E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A46054771B34931A00E0CB1E /* tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tree.h; path = ../../src/tree.h; sourceTree = "<group>"; };
+		A46054781B34931A00E0CB1E /* labeledtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = labeledtree.h; path = ../../src/labeledtree.h; sourceTree = "<group>"; };
+		A46054791B34931A00E0CB1E /* labeledtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = labeledtree.cpp; path = ../../src/labeledtree.cpp; sourceTree = "<group>"; };
+		A460547A1B34931A00E0CB1E /* labelednode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = labelednode.h; path = ../../src/labelednode.h; sourceTree = "<group>"; };
+		A460547B1B34931A00E0CB1E /* labelancestors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = labelancestors.h; path = ../../src/labelancestors.h; sourceTree = "<group>"; };
+		A460547C1B34931A00E0CB1E /* label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = label.h; path = ../../src/label.h; sourceTree = "<group>"; };
+		A460547D1B34931A00E0CB1E /* difflib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = difflib.h; path = ../../src/difflib.h; sourceTree = "<group>"; };
+		A460547E1B34931A00E0CB1E /* choicegroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = choicegroup.h; path = ../../src/choicegroup.h; sourceTree = "<group>"; };
+		A460547F1B34931A00E0CB1E /* basenode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basenode.h; path = ../../src/basenode.h; sourceTree = "<group>"; };
+		A46054801B34931A00E0CB1E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../src/Makefile; sourceTree = "<group>"; };
+		A46054811B34931A00E0CB1E /* choice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = choice.h; path = ../../src/choice.h; sourceTree = "<group>"; };
+		A46054841B34ADEF00E0CB1E /* utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility.h; sourceTree = "<group>"; };
+		A46054851B34D4E400E0CB1E /* difflib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = difflib.cpp; path = ../../src/difflib.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A460546A1B3492FC00E0CB1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A46054641B3492FC00E0CB1E = {
+			isa = PBXGroup;
+			children = (
+				A460546F1B3492FC00E0CB1E /* GeneBlock */,
+				A460546E1B3492FC00E0CB1E /* Products */,
+				A46054801B34931A00E0CB1E /* Makefile */,
+			);
+			sourceTree = "<group>";
+		};
+		A460546E1B3492FC00E0CB1E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A460546D1B3492FC00E0CB1E /* GeneBlock */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A460546F1B3492FC00E0CB1E /* GeneBlock */ = {
+			isa = PBXGroup;
+			children = (
+				A46054771B34931A00E0CB1E /* tree.h */,
+				A46054781B34931A00E0CB1E /* labeledtree.h */,
+				A46054791B34931A00E0CB1E /* labeledtree.cpp */,
+				A460547A1B34931A00E0CB1E /* labelednode.h */,
+				A460547B1B34931A00E0CB1E /* labelancestors.h */,
+				A460547C1B34931A00E0CB1E /* label.h */,
+				A460547D1B34931A00E0CB1E /* difflib.h */,
+				A46054851B34D4E400E0CB1E /* difflib.cpp */,
+				A460547E1B34931A00E0CB1E /* choicegroup.h */,
+				A460547F1B34931A00E0CB1E /* basenode.h */,
+				A46054811B34931A00E0CB1E /* choice.h */,
+				A46054701B3492FC00E0CB1E /* main.cpp */,
+				A46054841B34ADEF00E0CB1E /* utility.h */,
+			);
+			path = GeneBlock;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A460546C1B3492FC00E0CB1E /* GeneBlock */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A46054741B3492FC00E0CB1E /* Build configuration list for PBXNativeTarget "GeneBlock" */;
+			buildPhases = (
+				A46054691B3492FC00E0CB1E /* Sources */,
+				A460546A1B3492FC00E0CB1E /* Frameworks */,
+				A460546B1B3492FC00E0CB1E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GeneBlock;
+			productName = GeneBlock;
+			productReference = A460546D1B3492FC00E0CB1E /* GeneBlock */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A46054651B3492FC00E0CB1E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "Charlotte Schaeffer";
+				TargetAttributes = {
+					A460546C1B3492FC00E0CB1E = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = A46054681B3492FC00E0CB1E /* Build configuration list for PBXProject "GeneBlock" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A46054641B3492FC00E0CB1E;
+			productRefGroup = A460546E1B3492FC00E0CB1E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A460546C1B3492FC00E0CB1E /* GeneBlock */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A46054691B3492FC00E0CB1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A46054861B34D4E400E0CB1E /* difflib.cpp in Sources */,
+				A46054831B34931A00E0CB1E /* Makefile in Sources */,
+				A46054711B3492FC00E0CB1E /* main.cpp in Sources */,
+				A46054821B34931A00E0CB1E /* labeledtree.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A46054721B3492FC00E0CB1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A46054731B3492FC00E0CB1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A46054751B3492FC00E0CB1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A46054761B3492FC00E0CB1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A46054681B3492FC00E0CB1E /* Build configuration list for PBXProject "GeneBlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A46054721B3492FC00E0CB1E /* Debug */,
+				A46054731B3492FC00E0CB1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A46054741B3492FC00E0CB1E /* Build configuration list for PBXNativeTarget "GeneBlock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A46054751B3492FC00E0CB1E /* Debug */,
+				A46054761B3492FC00E0CB1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A46054651B3492FC00E0CB1E /* Project object */;
+}

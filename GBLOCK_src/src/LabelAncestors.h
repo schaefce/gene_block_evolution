@@ -1,235 +1,227 @@
-#!/usr/bin/python
-#from os.path import basename
-import os
-import logging
-import argparse
-import csv
-import math
-#from make_event_distance_matrix import homolog_list_grouping_function
-import sys
-from homolog4 import *
-from Bio import Phylo
-from Bio.Phylo import *
-from difflib_geneblock2 import LabelMatcher
-from Labeled_Tree import Label, Choice, Labeled_Tree, Labeled_Clade
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include "labeledtree.h"
+
+namespace po = boost::program_options;
+using namespace std;
+
+struct HOMOLOG {
+  /**
+    * HOMOLOG struct to easily contain the info needed for clustering
+    */
+  string accession;
+  int start;
+  int stop;
+  string annotation;
+
+  bool operator < (const HOMOLOG& h2) const {
+    return (start < h2.start);
+  }
+};
 
 
-def parse_params(args):
-    """Parse command line arguments using the argparse library"""
-    parser = argparse.ArgumentParser(description = "Evaluate RAIDER against RepeatScout")
-    parser.add_argument('gene_block', help='Path to file with data about geneblock')
-    parser.add_argument('tree', help='Path to file with tree data')
-    parser.add_argument('id_map', help='Path to file mapping IDs to labels')
-    parser.add_argument('--no_prune', dest='prune', action='store_false', help='Do not prune unlabeled leaves', default=True)
-    parser.add_argument('--max_gap', dest='max_gap', type=int, help='Max gap', default=500)
-    parser.add_argument('-f','--fname', dest='ofile', help='File to output tree to')#, default="labeled_tree.nwk")
-    return parser.parse_args(args)
+map<string, vector<string>> getLabelMap(string geneBlock, int maxGap){
+  /** Use gene_block result from file to determine the homologs for each organism
+    * and group them according to homolog_list_grouping_function. Returns a mapping
+    * from organism's accession ID to list of homolog lists.
+    */
 
-def get_label_map(gene_block_fname, max_gap=500):
-    """ Use gene_block result from file to determine the homologs for each organism
-    and group them according to homolog_list_grouping_function. Returns a mapping
-    from organism's accession ID to list of homolog lists.
-    """
+  map<string, vector<string>> labelMap;
 
-    # In case ever want to store gene_block name
-    # gene_block = os.path.basename(fname).split('.')[0]
-    d = {}
-    org_dict = {}
-    for line in [i.strip() for i in open(gene_block_fname).readlines()]:
-    # catch some errors if they occur and report a useful message as a result.
-        try:
-            hlog = Homolog.from_blast(line)
-        except:
-            print("ERROR " +  line)
-        try:
-            accession = hlog.accession()
-        except:
-            print(line)
-        predicted_gene = hlog.blast_annatation()
+  map<string, HOMOLOG> orgMap;
 
-        # store the homolog where it belongs
-        if accession in org_dict.keys():
-            org_dict[accession].append(hlog)
-        else:
-            org_dict.update({accession:[hlog]})
+  ifstream infile(geneBlock);
+  string line;
 
-    for accession in sorted(org_dict.keys()):
-        h_list = org_dict.pop(accession)
-        h_list.sort(key=lambda x: x.start())
-        groups = homolog_list_grouping_function(h_list, max_gap)
-        d[accession] = []
-        for neighborhood in groups:
-            d[accession].append([i.blast_annatation() for i in neighborhood])
-    return d
+  while(getline(infile,line)){
+    boost::trim(line);
+    vector<string> homologV; //homologV will consist of 12 parts- we are interested in the 2nd and
+    boost::split(homologV, line, ::isspace);
 
-def homolog_list_grouping_function(list_homologs, max_gap):
-    """ Stole this out of make_event_distance_matrix """
-    result = []
-    neighborhood = [list_homologs[0]]
-    
-    for i in list_homologs[1:]:
-        #look at current
-        start = neighborhood[-1].start() #start = list_homologs[i].start()
-        stop = neighborhood[-1].stop() #stop = list_homologs[i].stop()
-        # look at next
-        start_n = i.start() #start_n = list_homologs[i+1].start()
-        stop_n = i.stop() #stop_n = list_homologs[i+1].stop()
-        
-        # We have found neighboring genes, as defined by max_gap
-        if math.fabs(start - stop_n) < max_gap or math.fabs(stop - start_n) < max_gap:
-            neighborhood.append(i)
-        # These genes do not neighbor eachother
-        else: 
-            result.append(neighborhood)
-            neighborhood = [i]
-    result.append(neighborhood)
-    #print list_homologs[0].organism(), "result", result, "neighborhood_found ", neighborhood_found  
-    return result
+    vector<string> subjLine;
+    boost::split(subjLine, homologV[1], is_from_range('|','|'));
+    string accession = subjLine[0];
 
-def get_identifiers(fname):
-    #idmap = {}
-    #for v, k in csv.reader(open(fname, 'r')):
-    #    idmap[k] = v
-    #return idmap
-    return {k:v for v,k in csv.reader(open(fname,'r'))}
+    vector<string> queryLine;
+    boost::split(queryLine, homologV[0], is_from_range('|','|'));
+    string annotation = subjLine[3];
 
+    HOMOLOG h;
+    h.accession = accession;
+    h.start = subjLine[4];
+    h.stop = subjLine[5];
+    h.annotation = annotation;
 
-def add_leaf_labels(tree, id_map, label_map, prune_unlabeled=True):
-    terminals = tree.get_terminals()
-    prune_list = []
-    for i in range(len(terminals)):
-        leaf = tree.get_terminals()[i]
-        curr_name = terminals[i].name
-        if curr_name in id_map.keys():
-            ident = id_map[curr_name]
-            if ident in label_map.keys():
-                leaf.ident = ident
-                #only_choice = Choice(label_map[ident])
-                leaf.label = Label.for_leaf(label_map[ident])#(choices=[only_choice])
-                #leaf.label.set_final_choice(choice=only_choice)
-                #if leaf.label.is_final:
-                #    leaf.comment = leaf.label.final_label
-            else:
-                prune_list.append(curr_name)
-        else:
-            prune_list.append(curr_name)
-    if prune_unlabeled:
-        for node in prune_list:
-            tree.prune(node)
-    tree.ladderize(reverse=True)
+    if (orgMap.count(accession)) {
+      orgMap[accession].push_back(h);
+    }
+    else {
+      vector<HOMOLOG> hlogs;
+      hlogs.push_back(h);
+      orgMap[accession] = hlogs;
+    }
 
+  }
 
-def read_tree(fname, treeformat='newick'):
-    tree = Phylo.read(fname, treeformat)
-    return tree
+  for (map<string,vector<HOMOLOG>>::iterator it = orgMap.begin(); it != orgMap.end(); it++){
+    vector<HOMOLOG> homologs = it->second;
+    std::sort(homologs.begin(), homologs.end());
 
-def write_tree(tree, fname, treeformat='newick'):
-    logger.info("Writing phylogenetic tree to file " + fname)
-    Phylo.write(tree, fname, treeformat)
+    vector<vector<HOMOLOG>> groups = homologListGroupingFunction(homologs, maxGap);
 
+    vector<string> neighbors;
 
-def format_tree(gene_block, map_fname, tree_fname, max_gap = 500, prune_unlabeled=True):
-    """ Use gene_block_organism_data for this gene_block, mapping of common names
-    IDs, and existing tree file to create tree labeled with list of homologs.
+    labelMap[it->first] = neighbors;
 
-    :Parameters:
-        gene_block : string
+    for (vector<HOMOLOG> neighbor : groups){
+      for (HOMOLOG h : neighbor){
+        neighbors.push_back(h.annotation);
+      }
+    }
+  }
 
-    """
-    logger.info("Creating phylogenetic tree")
-    #gblock_fname = gene_block if infolder is None else '{folder}/{block}.txt'.format(folder=infolder, block=gene_block)
-    label_map = get_label_map(gene_block, max_gap)#get_labelings(gene_block, infolder, filter)
-    id_map = get_identifiers(map_fname)
-    #print(id_map)
-    tree = read_tree(tree_fname)
-    logger.debug("Created phylogenetic tree:\n" + str(tree))
-    #print(tree)
-    tree = Labeled_Tree.from_tree_and_maps(tree, id_map, label_map)
-    logger.debug("Created phylogenetic tree with labeled leaves:\n" + str(tree))
-    return tree
+  return labelMap;
+}
+
+vector<vector<HOMOLOG>> homologListGroupingFunction(vector<HOMOLOG> &homologs, int maxGap){
+  //""" Stole this out of make_event_distance_matrix """
+  vector<vector<HOMOLOG>> result;
+
+  vector<HOMOLOG> neighborhood;
+  neighborhood.push_back(homologs[0]);
+
+  if(homologs.size() > 1){
+    for (int i = 1; i < homologs.size(); i++){
+      int start = neighborhood.last().start;
+      int stop = neighborhood.last().stop;
+
+      int start_n = homologs[i].start;
+      int stop_n = homologs[i].stop;
+
+      if(abs(start - stop_n) < maxGap || abs(stop - start_n) < maxGap){
+        neighborhood.push_back(homologs[i]);
+      }
+      else{
+        result.push_back(neighborhood);
+        neighborhood.clear();
+        neighborhood.push_back(homologs[i]);
+      }
+    }
+  }
+  result.push_back(neighborhood);
+  return result;
+}
+
+map<string,string> getIdentifiers(string fname){
+  /**
+    * Given name of csv file of ids and common names, creates a mapping of each
+    * common name to its respective id.
+    */
+
+  map<string, string> idMap;
+
+  ifstream infile(fname);
+  string line;
+
+  while(getline(infile,line)){
+    boost::trim(line);
+    vector<string> idV; //idV consists of 2 parts -- name and id
+    boost::split(idV, line, is_from_range(',',','));
+    idMap[idV[1]] = idV[0];
+  }
+
+  return idMap;
+}
+
+// TODO: figure out how to handle this...
+//def write_tree(tree, fname, treeformat='newick'):
+    //logger.info("Writing phylogenetic tree to file " + fname)
+    //Phylo.write(tree, fname, treeformat)
 
 
-def set_possible_labels(tree, logname):
-    #tree.ladderize(reverse=True)
-    logger.info("Setting all possible labels for tree")
-    tree.ladderize()
-    
-    parents = {}
-    for clade in tree.find_clades(order='level'):
-        for child in clade:
-            parents[child] = clade
-
-    #print tree
-    child_prs = get_child_pairs(tree)
-    parent = None
-    logger.debug("Child pairs:\t" + str(child_prs))
-    while child_prs:
-        pr = child_prs.pop()
-        if len(pr) < 2:
-            break
-        A = pr[0]
-        B = pr[1]
-        #print(str(A), str(B))
-        #assert(get_parent(tree, A) == get_parent(tree, B))
-        #parent = get_parent(tree, A)
-        assert(parents[A]==parents[B])#(tree, A) == get_parent(tree, B))
-        parent = parents[A]#(tree, A)
-        logger.info("Getting possible labels for parent of {c1} and {c2}".format(c1=str(A), c2=str(B)))
-        lm = LabelMatcher(A.label, B.label, logname)
-        ancestor_label = lm.get_ancestor_label()
-        parent.add_label(ancestor_label)
-        logger.info("Next parent received the labeling:\n" + str(ancestor_label))
-    logger.debug("Done setting all possible labels for tree")
+LabeledTree* formatTree(string geneBlock, string idFile , string treeFile, int maxGap, bool prune){
+  /**
+    * Use (1) geneBlock organism data, (2) a mapping of common names to
+    * IDs, and (3) an existing tree file to create a tree labeled with list of homologs.
+    *
+    */
+  map<string, vector<string>> labelMap = getLabelMap(geneBlock, maxGap);
+  map<string, string> idMap = getIdentifiers(idFile);
+  LabeledTree* tree = LabeledTree::read_newick_file(treeFile);
+  //TODO: figure out how to get this working
+  tree->addIdsAndLabels(idMap, labelMap);
+  return tree;
+}
 
 
-
-def get_parent(tree, child_clade):
-    node_path = tree.get_path(child_clade)
-    #print(str(node_path[-2]))
-    
-    return node_path[-2]
-
-
-def get_child_pairs(tree):
-    child_pairs = []
-
-    def dfs(elem, get_children, stack):
-        pair=get_children(elem)
-        if pair:
-            stack.append(pair)
-            for v in pair:
-                dfs(v,get_children,stack)
-        return stack
-
-    get_children = lambda elem: elem.clades
-    #child_pairs.append(tree.root)
-    return dfs(tree.root, get_children, child_pairs)
+void setPossibleLabels(LabeledTree* tree, LabelMatcher* lm) {
+  /**
+    * Set all possible labels for the tree.
+    */
+  //tree.ladderize()
+  if(tree != NULL){
+    setPossibleLabelsHelper(tree->getChild(TRUE), lm);
+    setPossibleLabelsHelper(tree->getChild(FALSE), lm);
+    tree->setLabel(lm->getAncestorLabel(tree->getChild(TRUE)->getLabel(), tree->getChild(FALSE)->getLabel()));
+  }
+}
 
 
-if __name__ == "__main__":
-    args = parse_params(sys.argv[1:])
-    tname = os.path.splitext(os.path.basename(args.tree))[0]# basename(args.tree)
-    logname = 'geneblock.new.' + tname
-    logger = logging.getLogger(logname)
-    logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler('gblock.log.debug.' + tname, mode='w')
-    f = logging.Formatter('%(asctime)s: %(message)s')
-    #f = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
-    fh.setLevel(logging.DEBUG)
-    fh.setFormatter(f)
-    logger.addHandler(fh)
-    fih = logging.FileHandler('gblock.log.info' + tname, mode='w')
-    #f = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
-    fih.setLevel(logging.INFO)
-    fih.setFormatter(f)
-    logger.addHandler(fih)
-    tree = format_tree(args.gene_block,args.id_map, args.tree, args.max_gap, args.prune)
-    #print(tree)
-    set_possible_labels(tree, logname)
-    logger.info("Created phylogenetic tree with labeled leaves:\n" + str(tree))
-    tree.set_labels_from_root()
-    logger.info("Final tree with labels and scores:\n" + str(tree))
-    ofile = args.ofile if args.ofile else str(tname + '.labeled.nwk')
-    write_tree(tree, ofile)
-    #print(tree)
+int main(int argc, char **argv){
 
+  std::string geneblock = NULL;
+  std::string tree = NULL;
+  std::string ids = NULL;
+
+  po::options_description desc("Geneblocker Usage Options");
+
+  desc.add_options()
+    ("help,h", "Display this help message")
+    ("noPrune,n", po::value<bool>()->default_value(TRUE)->implicit_value(FALSE), "Do not prune unlabeled leaves")
+    ("maxGap,g", po::value<int>()->default_value(5), "Maximum gap size")
+    ("fname,f", po::value<std::string>(), "File to output tree to.")
+    ("geneBlock", po::value<std::string>(&geneblock)->required(), "Path to file with data about geneblock")
+    ("treeFile", po::value<std::string>(&tree)->required(), "Path to file with tree data")
+    ("idMap", po::value<std::string>(&ids)->required(), "Path to file mapping IDs to labels");
+
+  po::positional_options_description p;
+  p.add("geneBlock", 1).add("tree", 1).add("idMap", 1);
+
+
+  po::variables_map vm;
+  try{
+    po::store(po::parse_command_line(argc, argv, desc),vm);
+
+    if(vm.count("help")){
+      std::cout << desc << std::endl;
+      return 0;
+    }
+
+    po::notify(vm);
+
+  } catch(std::exception& e){
+    std::cerr << "Error parsing options: " << e.what() << std::endl;
+    std::cerr << desc << std::endl;
+    return 1;
+  }
+
+  boost::filesystem::path p(tree);
+  std::string baseTreeFile = p.stem();
+
+  LabeledTree tree = formatTree(geneblock, ids, tree, vm["maxGap"].as<int>(), vm["noPrune"].as<bool>());
+  setPossibleLabels(&tree); //,logname);
+
+  tree.setLabelsFromRoot();
+
+  std::string ofile;
+
+  if(vm.count("fname")){
+    ofile = vm["fname"].as<string>();
+  }
+  else{
+    ofile = baseTreeFile + 'labeled.nwk';
+  }
+
+  writeTree(&tree, ofile);
+}

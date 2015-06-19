@@ -1,84 +1,119 @@
-#include "Choice.h"
+#include "choice.h"
 
 class Label;
 
 class ChoiceGroup {
 
 public:
+  ChoiceGroup(vector<Choice*> choices, pair<Choice*, Choice*> childChoices, float score=MAX_SCORE){
+    //groupLabel = l;
+    setChoices(choices);
+    children = childChoices;
+    score = score;
+  }
 
-    ChoiceGroup(Label* l, vector<Choice*> choices, pair<Choice*, Choice*> childChoices, float score=MAX_SCORE){
-        groupLabel = l;
-        groupChoices = choices;
-        children = childChoices;
-        groupScore = score;
+  ChoiceGroup(vector<Choice*> choices){
+    setChoices(choices);
+    //this->children = new pair<(Choice*)NULL, (Choice*)NULL>;
+  }
+  
+  
+  void setChildren(std::pair<Choice*, Choice*> childChoices){
+    children = childChoices;
+  }
+  
+  std::pair<Choice*,Choice*> getChildren() {
+    return children;
+  }
+  
+  void setLabel(Label* l){
+    groupLabel = l;
+  }
+  
+  Label* getLabel(){
+    return groupLabel;
+  }
+
+  float getScore() const {
+    return score;
+  }
+
+  void setScore(float score){
+    this->score = score;
+  }
+
+  void setChoices(vector<Choice*> choiceV){
+    if(!choiceMap.empty()){
+      choiceMap.clear();
     }
-
-    ChoiceGroup(Label* l, vector<Choice*> choices, pair<Choice*, Choice*> childChoices){
-        groupLabel = l;
-        groupChoices = choices;
-        children = childChoices;
-        groupScore = MAX_SCORE;
+    for (Choice* c : choiceV){
+      addChoice(c);
     }
+  }
+  
+  void setChoices(std::map<std::vector<std::string>,float> choiceDict){
+    if(!choiceMap.empty()){
+      choiceMap.clear();
+    }
+    for (std::map<std::vector<std::string>,float>::iterator it = choiceDict.begin(); it != choiceDict.end(); ++it){
+      addChoice(new Choice(it->first, it->second));
+    }
+  }
 
+  void addChoice(Choice* choice){
+    string cString = choice->groupListString();
+    if(choiceMap.count(cString)){
+      Choice* curr = choiceMap[cString];
+      if(choice->getScore() < curr->getScore()){
+        choiceMap[cString] = choice;
+      }
+    }
+    else{
+      choiceMap[cString] = choice;
+    }
+    choiceMap[cString]->setChoiceGroup(this);
+  }
+  
+  std::vector<Choice*> getChoices(){
+    std::vector<Choice*> choiceV;
+    transform(choiceMap.begin(), choiceMap.end(), choiceV.begin(), [](std::pair<std::string, Choice*> &p){ return p.second; });
+    return choiceV;
+  }
+  
+  bool removeChoiceByString(std::string cString){
+    if(choiceMap.count(cString)){
+      choiceMap.erase(cString);
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  
+  std::string choicesString() const{
+    std::stringstream ss;
+    for(std::map<string,Choice*>::const_iterator it = choiceMap.begin(); it != choiceMap.end(); ++it){
+      long i = std::distance(choiceMap.begin(), it);
+      ss << '\t';
+      ss << i;
+      ss << ". ";
+      ss << it->second;
+      if (std::distance(it, choiceMap.end()) != 1){
+        ss << '\n';
+      }
+    }
+    return ss.str();
+  }
 
+  friend std::ostream& operator<<(std::ostream &strm, const ChoiceGroup &cg){
+    return strm << "Choice Group: (overall score " << cg.getScore() << "): " << cg.choicesString();
+  }
 
-
-
-    Label* groupLabel;
-    vector<Choice*> groupChoices;
-    pair<Choice*, Choice*> childChoices;
-    float groupScore;
-
-
-    def __init__(self, label=None, choices=None, children=None,  overall_score=MAX_SCORE):
-        self.set_choices(choices)
-        self.children = children
-        self.overall_score = overall_score
-        self.label = label
-
-    def set_choices_from_dict(cls, choice_dict=None):
-        self.choices = {}#[]
-        for c in choice_dict:
-            c2 = Choice(groups=c, choice_group=self, score=choice_dict[c])
-            self.add_choice(c2)
-            #self.choices.append(Choice(groups=c, choice_group=self, score=choice_dict[c]))
-
-    def set_choices(self, choices):
-        if choices:
-            self.choices = {}#[]
-            if type(choices) is list:
-                for c in choices:
-                    #self.choices.append(c)
-                    self.add_choice(c)
-                    c.choice_group = self
-            else:
-                #self.choices.append(choices)
-                self.add_choice(choices)
-                choices.choice_group = self
-
-    def add_choice(self, choice):
-        choice_str = choice.group_list_string()
-        if choice_str in self.choices:
-            curr = self.choices[choice_str]
-            if choice.score < curr.score:
-                self.choices[choice_str] = choice
-        else:
-            self.choices[choice_str] = choice
-
-
-    def set_score(self, score):
-        if score:
-            self.overall_score = score
-
-    def remove_by_str(self, choice_str):
-        if choice_str in self.choices:
-            del self.choices[choice_str]
-
-
-    def get_choices_string(self):
-        return '\n'.join('\t{}. {}'.format(i, str(k)) for i,k in enumerate(self.choices))
-
-    def __str__(self):
-        return 'Choice Group: (overall score: {})\n{}'.format(self.overall_score, self.get_choices_string())
+private:
+  Label* groupLabel;
+  std::map<std::string,Choice*> choiceMap;
+  std::pair<Choice*, Choice*> children;
+  float score;
 
 };
+

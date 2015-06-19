@@ -23,7 +23,7 @@ class LabeledNode : public BaseNode<LabeledNode> {
   };
 
   LabeledNode(LabeledNode* left, LabeledNode* right, string name, double weight=0) :
-    BaseNode<LabeledNode>(left, right, string, weight){
+    BaseNode<LabeledNode>(left, right, name, weight){
     this->label = (Label*)NULL;
   };
 
@@ -33,6 +33,14 @@ class LabeledNode : public BaseNode<LabeledNode> {
 
   string getID(){
     return this->identity;
+  }
+  
+  void setLabel(Label* label){
+    this->label = label;
+  }
+  
+  Label* getLabel(){
+    return label;
   }
 
   ~LabeledNode(){

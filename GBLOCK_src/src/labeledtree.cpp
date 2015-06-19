@@ -2,18 +2,18 @@
 
 
 
-void LabeledTree::addIdsAndLabels(map <string, string> idMap, map <string, vector<string>> labelMap, bool prune=false) {
-  if(idMap){
-    addLeafIds(idMap);
-    if(labelMap){
-      addLeafLabels(labelMap);
+void LabeledTree::addIdsAndLabels(map <string, string> idMap, map <string, vector<string>> labelMap, bool prune) {
+  if(!idMap.empty()){
+    addLeafIds(idMap, prune);
+    if(!labelMap.empty()){
+      addLeafLabels(labelMap, prune);
     }
   }
 }
 
-void LabeledTree::addLeafIds(map <string, string> idMap, bool prune=false){
+void LabeledTree::addLeafIds(map <string, string> idMap, bool prune){
   vector<LabeledNode*> toPrune;
-  if (idMap) {
+  if (!idMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
       if(idMap.count(leaf->getName())){
         leaf->setID(idMap[leaf->getName()]);
@@ -23,17 +23,17 @@ void LabeledTree::addLeafIds(map <string, string> idMap, bool prune=false){
       }
     }
     for (LabeledNode* leaf : toPrune){
-      prune(leaf);
+      this->prune(leaf);
     }
   }
 }
 
-void LabeledTree::addLeafLabels(map <string, vector<string>> labelMap, bool prune=false){
+void LabeledTree::addLeafLabels(map <string, vector<string>> labelMap, bool prune){
   vector<LabeledNode*> toPrune;
-  if (labelMap) {
+  if (!labelMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
       if(labelMap.count(leaf->getID())){
-        leaf->setLabel(Label.createLeafLabel(labelMap[leaf->getID()]));
+        leaf->setLabel(Label::createLeafLabel(labelMap[leaf->getID()]));
         //leaf->setID(idMap[leaf->getName()]);
       }
       else if(prune){
@@ -41,7 +41,25 @@ void LabeledTree::addLeafLabels(map <string, vector<string>> labelMap, bool prun
       }
     }
     for (LabeledNode* leaf : toPrune){
-      prune(leaf);
+      this->prune(leaf);
     }
   }
+}
+
+void LabeledTree::setLabelsFromChoice(Choice* c){
+  if (c){
+    Label *l = c->getChoiceGroup()->getLabel();
+    if(l){
+      l->setFinalChoice(c);
+      std::pair<Choice*, Choice*> children = c->getChoiceGroup()->getChildren();
+      setLabelsFromChoice(children.first);
+      setLabelsFromChoice(children.second);
+    }
+  }
+  
+}
+
+void LabeledTree::setLabelsFromRoot(){
+  Choice* rootChoice = root->getLabel()->getBestChoice();
+  setLabelsFromChoice(rootChoice);
 }

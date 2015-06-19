@@ -52,7 +52,7 @@ class BaseNode {
 
   TargetNode* getChild(bool left) { return left ? this->left.first : this->right.first; }
 
-  bool isLeaf() { return !left.first && !right.first; }
+  bool isLeaf() { return !left && !right; }
 
   void setParent(TargetNode* node){
     this->parent = node;
@@ -67,7 +67,7 @@ class BaseNode {
       this->right = node;
   };
 
-  TargetNode* recursivePrune(Node* target){
+  TargetNode* recursivePrune(TargetNode* target){
     if (this == target){
       return (TargetNode*)NULL;
     }
@@ -78,7 +78,7 @@ class BaseNode {
     }
   }
 
-  void prune(Node* target){
+  void prune(TargetNode* target){
     recursivePrune(target);
   }
 

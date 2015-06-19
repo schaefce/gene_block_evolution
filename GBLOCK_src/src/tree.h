@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <stack>
+#include <vector>
 
 #ifndef KARRO_TREE_H
 #define KARRO_TREE_H
@@ -24,9 +25,9 @@ class Tree {
 
   int num_leaves();
 
-  void prune(Node* target);
+  bool prune(Node* target);
 
-  vector<Node*> collectLeaves();
+  std::vector<Node*> collectLeaves();
 
   static Tree<Node>* read_newick_file(std::string file);
 
@@ -65,9 +66,11 @@ bool Tree<Node>::prune(Node* target){
   }
   else if (target == this->root){
     this->root = (Node*)NULL;
+    return true;
   }
   else {
     this->root = root->prune(target);
+    return true;
   }
 }
 
@@ -76,7 +79,6 @@ std::vector<Node*> Tree<Node>::collectLeaves(){
   std::stack<Node*> S;
   std::vector<Node*> leafList;
   S.push(this->root);
-  int count = 0;
   while (!S.empty()) {
     Node* s = S.top();
     S.pop();
@@ -192,7 +194,7 @@ Node* parse_node(const std::string& s, int& p) {
 }
 
 template <typename Node>
-static Tree<Node>* Tree<Node>::parse_tree(std::string s) {
+Tree<Node>* Tree<Node>::parse_tree(std::string s) {
   int p = 0;
   Node* root = parse_node<Node>(s, p);
   Tree* t = new Tree<Node>(root);
@@ -211,12 +213,12 @@ static Tree<Node>* Tree<Node>::parse_tree(std::string s) {
 }
 
 template <typename Node>
-static Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
+Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
   std::ifstream fin(file);
   std::stringstream strstream;
   strstream << fin.rdbuf();
 
-  return parse_tree<Node>(strstream.str());
+  return parse_tree(strstream.str());
 }
 
 #endif

@@ -1,119 +1,93 @@
 
 #include <limits>
-using namespace std;
+#include <algorithm>
+#include <string>
+#include <vector>
+#include "utility.h"
 
 const float MAX_SCORE = std::numeric_limits<float>::max();
+
+class Label;
 
 class ChoiceGroup;
 
 class Choice {
 public:
+  Choice(std::vector<std::vector<string>> groups, float score=MAX_SCORE){
+    setGroups(groups);
+    this->choiceScore = score;
+  }
+  
+  Choice(std::vector<string> groups, float score=MAX_SCORE){
+    setGroups(groups);
+    this->choiceScore = score;
+  }
+  
+  void setChoiceGroup(ChoiceGroup* cg){
+    choiceGroup = cg;
+  }
+  
+  ChoiceGroup* getChoiceGroup(){
+    return choiceGroup;
+  }
 
-    Choice(ChoiceGroup* cg, vector<string> groups, float score=MAX_SCORE){
-        splitGroups = groups;
-        choiceGroup = cg;
-        choiceScore = score;
+  void setGroups(std::vector<std::vector<string>> grps){
+    this->splitGroups = grps;
+  }
+
+  void setGroups(std::vector<string> grps){
+    for(std::string s : grps){
+      this->splitGroups.push_back({s});
     }
+  }
+  
+  std::vector<vector<string>> getGroups(){
+    return this->splitGroups;
+  }
+  
+  void setScore(float score){
+    this->choiceScore = score;
+  }
+  
+  float getScore() const{
+    return this->choiceScore;
+  }
+  
+  //std::pair<Choice*, Choice*> getChildren(){
+  //  if(this->choiceGroup){ return this->choiceGroup->getChildren(); }
+  //  else{ return std::pair<Choice*, Choice*>((Choice*)NULL, (Choice*)NULL); }}
+  
 
+  std::vector<std::string> getStringGroups() const{
+    
+    vector<string> stringGroups;
+    stringGroups.resize(splitGroups.size()*2);
+    std::transform(splitGroups.begin(), splitGroups.end(), stringGroups.begin(), [](vector<string> v){ return join<string>(v,','); });
+    return stringGroups;
+    
+    //std::vector<std::string> stringGroupV;
+    
+    //for (std::vector<std::vector<std::string>>::iterator it = splitGroups.begin(); it != splitGroups.end(); ++it){
+    //  stringGroupV.push_back(join<string>((*it),','));
+    //}
+    //return stringGroupV;
+  }
+  
+  std::string groupListString() const {
+    std::vector<std::string> stringGroups = getStringGroups();
+    stringGroups.resize(stringGroups.size()*3);
+    std::transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), [](string s){ return formatEnds(s, '(', ')'); }); //'(' + s + ')'; });
+    return formatEnds(join<string>(stringGroups, ','), '[', ']');//'[' + join<string>(stringGroups,',') + ']';
+  }
+  
+  friend std::ostream& operator<<(std::ostream &strm, const Choice &c){
+    return strm << "Choice (score " << c.getScore() << "): " << c.groupListString();
+  }
 
-    void setGroups(vector<ChoiceGroup*> grps){
-        splitGroups = grps;
-    }
-
-
-
-
-    vector<ChoiceGroup*> splitGroups;
-    float choiceScore;
-    ChoiceGroup* choiceGroup;
-
+private:
+  std::vector<std::vector<string>> splitGroups;
+  //vector<string> splitGroups;
+  float choiceScore;
+  ChoiceGroup* choiceGroup;
 };
 
-
-
-    def set_groups(self, grps):
-        self.groups = grps
-
-    def get_children(self):
-        if self.choice_group:
-            return self.choice_group.children
-        else:
-            return None
-
-    def get_label(self):
-        #print(self.choice_group)
-        return self.choice_group.label
-
-    def with_str_groups(self):
-        return [','.join(group) if type(group) is list else group for group in self.groups]
-
-    def group_list_string(self):
-        return '[{}]'.format(','.join('({})'.format(','.join(c for c in grp)) for grp in self.groups))
-
-    def __str__(self):
-        return 'Choice (score= {}): {}'.format(self.score, self.group_list_string())
-        #'[' + ','.join('(' + ','.join(c for c in grp) + ')' for grp in self.groups) + ']'
-
-    def __repr__(self):
-        return self.__str__()
-
-class Choice {
-public:
-    Choice(ChoiceGroup* cg, vector<string> groups, float score){
-        splitGroups = groups;   //self.groups = groups
-        cScore = score;         //self.score = score
-        cGroup = cg;            //self.choice_group = choice_group
-    }
-
-
-    Choice(ChoiceGroup* cg, vector<string> groups, float score){
-        splitGroups = groups;   //self.groups = groups
-        cScore = score;         //self.score = score
-        cGroup = cg;            //self.choice_group = choice_group
-    }
-
-    void setGroups(){   //def set_groups(self, grps):
-        //self.groups = grps
-    }
-
-    children getChildren(){ //get_children(self):
-        if (cGroup) //self.choice_group:
-            return cGroup->getChildren();//self.choice_group.children
-        else
-            return 0;
-    }
-
-    string getLabel(){//def get_label(self):
-        //#print(self.choice_group)
-        return cGroup->getLabel();
-    }
-
-    vector<string> getStringGroups(){//def with_str_groups(self):
-        vector<string> stringGroups;
-        stringGroups.resize(splitGroups.size()*2);
-        return transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), joinByComma);
-        //return transform(splitGroups.begin(), splitGroups.end(), joinByComma);
-        //return [','.join(group) if type(group) is list else group for group in self.groups]
-    }
-
-    string groupListString(){//def group_list_string(self):
-        vector<string> stringGroups = getStringGroups();
-        stringstream s;
-        copy(
-
-        return sprintf("[$s]", transform(split ))
-        return '[{}]'.format(','.join('({})'.format(','.join(c for c in grp)) for grp in self.groups))
-    }
-
-    //def __str__(self):
-        //return 'Choice (score= {}): {}'.format(self.score, self.group_list_string())
-        //#'[' + ','.join('(' + ','.join(c for c in grp) + ')' for grp in self.groups) + ']'
-
-    //def __repr__(self):
-        //return self.__str__()
-
-    cgList* splitGroups;
-    float cScore;
-    ChoiceGroup* cGroup;
-
-};
