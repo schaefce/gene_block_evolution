@@ -26,6 +26,10 @@ class LabeledNode : public BaseNode<LabeledNode> {
     BaseNode<LabeledNode>(left, right, name, weight){
     this->label = (Label*)NULL;
   };
+  
+  void setWeight(double weight){
+    this->weight = weight;
+  }
 
   void setID(string id){
     this->identity = id;
@@ -46,6 +50,17 @@ class LabeledNode : public BaseNode<LabeledNode> {
   ~LabeledNode(){
     delete this->label;
   };
+  
+  LabeledNode* recursivePrune(LabeledNode* target){
+    if (this == target){
+      return (LabeledNode*)NULL;
+    }
+    else{
+      this->left = left->recursivePrune(target);
+      this->right = right->recursivePrune(target);
+      return this;
+    }
+  }
 
 private:
   Label* label;

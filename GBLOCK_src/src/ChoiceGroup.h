@@ -16,20 +16,20 @@ public:
     setChoices(choices);
     //this->children = new pair<(Choice*)NULL, (Choice*)NULL>;
   }
-  
-  
+
+
   void setChildren(std::pair<Choice*, Choice*> childChoices){
     children = childChoices;
   }
-  
+
   std::pair<Choice*,Choice*> getChildren() {
     return children;
   }
-  
+
   void setLabel(Label* l){
     groupLabel = l;
   }
-  
+
   Label* getLabel(){
     return groupLabel;
   }
@@ -50,7 +50,7 @@ public:
       addChoice(c);
     }
   }
-  
+
   void setChoices(std::map<std::vector<std::string>,float> choiceDict){
     if(!choiceMap.empty()){
       choiceMap.clear();
@@ -73,13 +73,13 @@ public:
     }
     choiceMap[cString]->setChoiceGroup(this);
   }
-  
+
   std::vector<Choice*> getChoices(){
     std::vector<Choice*> choiceV;
     transform(choiceMap.begin(), choiceMap.end(), choiceV.begin(), [](std::pair<std::string, Choice*> &p){ return p.second; });
     return choiceV;
   }
-  
+
   bool removeChoiceByString(std::string cString){
     if(choiceMap.count(cString)){
       choiceMap.erase(cString);
@@ -89,7 +89,7 @@ public:
       return false;
     }
   }
-  
+
   std::string choicesString() const{
     std::stringstream ss;
     for(std::map<string,Choice*>::const_iterator it = choiceMap.begin(); it != choiceMap.end(); ++it){
@@ -116,4 +116,3 @@ private:
   float score;
 
 };
-

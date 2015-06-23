@@ -12,15 +12,12 @@ class Label{
 public:
   Label();
   
-  Label(vector<ChoiceGroup*> choiceGroups, float score=MAX_SCORE){
+  Label(std::vector<ChoiceGroup*> choiceGroups, float score=MAX_SCORE){
     setChoiceGroups(choiceGroups);
     finalScore = score;
-    //this->isFinal = false;
   }
-  
-  
 
-  void setChoiceGroups(vector<ChoiceGroup*> grps){
+  void setChoiceGroups(std::vector<ChoiceGroup*> grps){
     resetChoiceGroups();
     addChoiceGroups(grps);
   }
@@ -30,7 +27,7 @@ public:
     addChoiceGroups(grp);
   }
 
-  void addChoiceGroups(vector<ChoiceGroup*> choicegroups){
+  void addChoiceGroups(std::vector<ChoiceGroup*> choicegroups){
     for (ChoiceGroup* cg : choicegroups){
       addChoiceGroups(cg);
     }
@@ -41,13 +38,13 @@ public:
     choicegroup->setLabel(this);
   }
 
-  vector<ChoiceGroup*> getChoiceGroups(){
+  std::vector<ChoiceGroup*> getChoiceGroups(){
     return this->choiceGroups;
   }
   
   Choice* getBestChoice(){
     float min = MAX_SCORE;
-    Choice* bestChoice = nullptr;
+    Choice* bestChoice = (Choice*)NULL;
     for (ChoiceGroup* cg : this->choiceGroups){
       for (Choice* c : cg->getChoices()){
         if (c->getScore() < min){
@@ -94,13 +91,15 @@ public:
   
   std::vector<std::string> getStringChoiceGroups() const{
     std::vector<std::string> stringGroups;
-    std::transform(choiceGroups.begin(), choiceGroups.end(), stringGroups.begin(), [](ChoiceGroup &cg){ std::stringstream ss; ss << cg; return ss.str(); });
+    std::transform(choiceGroups.begin(), choiceGroups.end(), stringGroups.begin(), []( ChoiceGroup* cg){
+      std::stringstream ss; ss << (*cg); return ss.str();
+    });
     return stringGroups;
   }
 
-  static Label* createLeafLabel(std::vector<string> splitGroups){
+  static Label* createLeafLabel(std::vector<std::string> splitGroups){
     Choice* c = new Choice(splitGroups);
-    ChoiceGroup* cg = new ChoiceGroup(vector<Choice*> {c});
+    ChoiceGroup* cg = new ChoiceGroup(std::vector<Choice*> {c});
     Label* l = new Label();
     l->addChoiceGroups(cg);
     return l;
@@ -110,7 +109,7 @@ public:
     if (l.hasFinal())
       return strm << "Final Label: " << l.getFinalLabel() << "," << l.getFinalScore();
     else
-      return strm << "Label:\n" << join(l.getStringChoiceGroups(), '\n');
+      return strm << "Label:\n" << join(l.getStringChoiceGroups(), "\n");
   }
 
 
@@ -121,8 +120,7 @@ private:
     }
   }
   
-  //LabeledTree* clade;
-  vector<ChoiceGroup*> choiceGroups;
+  std::vector<ChoiceGroup*> choiceGroups;
   bool isFinal;
   Choice* finalChoice;
   float finalScore;

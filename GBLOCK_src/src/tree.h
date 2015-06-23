@@ -18,6 +18,11 @@ class Tree {
   Tree();
   Tree(Node* root);
   ~Tree();
+  
+  
+  Node* getRoot(){
+    return root;
+  }
 
   std::string getName() {return this->root->name;}
 
@@ -69,7 +74,7 @@ bool Tree<Node>::prune(Node* target){
     return true;
   }
   else {
-    this->root = root->prune(target);
+    root->prune(target);
     return true;
   }
 }
@@ -83,7 +88,7 @@ std::vector<Node*> Tree<Node>::collectLeaves(){
     Node* s = S.top();
     S.pop();
     if (s->isLeaf())
-      leafList->push_back(s);
+      leafList.push_back(s);
     else {
       if (s->hasChild(true))
         S.push(s->getChild(true));
@@ -202,7 +207,8 @@ Tree<Node>* Tree<Node>::parse_tree(std::string s) {
   if (token == ":") { // String of format "(...)?:5" -- create a new root with a single (left) child).
     double weight = stoi(next_token(s,p));
     Node* root2 = new Node();
-    root->addChild(new Node(t, weight), true);
+    root->setWeight(weight);
+    root2->addChild(root, true);
     t = new Tree<Node>(root2); //std::make_pair(t,weight), std::make_pair((Tree*)NULL,0), std::string(""));
     //root->setWeight(stoi(next_token(s,p)));
     token = next_token(s,p);
