@@ -168,7 +168,7 @@ void setPossibleLabelsHelper(LabeledNode* node) {
    * Set all possible labels for the tree.
    */
   //tree.ladderize()
-  if(node){
+  if(node && node->getChild(true) && node->getChild(false)){
     setPossibleLabelsHelper(node->getChild(true));
     setPossibleLabelsHelper(node->getChild(false));
     node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
@@ -182,6 +182,7 @@ void setPossibleLabels(LabeledTree* tree) {
     * Set all possible labels for the tree.
     */
   //tree.ladderize()
+  LabelMatcher::initialize();
   if(tree && tree->getRoot()){
     setPossibleLabelsHelper(tree->getRoot());
   }

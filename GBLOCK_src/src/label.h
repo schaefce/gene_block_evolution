@@ -16,7 +16,31 @@ public:
     setChoiceGroups(choiceGroups);
     finalScore = score;
   }
+  
+  Label(std::vector<std::string> splitGroups, float score=MAX_SCORE, bool isLeaf=false){
+    Choice* c = new Choice(splitGroups);
+    if(isLeaf){
+      c->setScore(0);
+    }
+    ChoiceGroup* cg = new ChoiceGroup(c);
+    if(isLeaf){
+      cg->setScore(0);
+    }
+    setChoiceGroups(cg);
+    if(isLeaf){
+      setFinalChoice(c);
+    }
+  }
 
+  static Label* createLeafLabel(std::vector<std::string> splitGroups){
+    
+    Choice* c = new Choice(splitGroups);
+    ChoiceGroup* cg = new ChoiceGroup(std::vector<Choice*> {c});
+    Label* l = new Label();
+    l->addChoiceGroups(cg);
+    return l;
+  }
+  
   void setChoiceGroups(std::vector<ChoiceGroup*> grps){
     resetChoiceGroups();
     addChoiceGroups(grps);
@@ -97,14 +121,7 @@ public:
     return stringGroups;
   }
   
-  static Label* createLeafLabel(std::vector<std::string> splitGroups){
-    
-    Choice* c = new Choice(splitGroups);
-    ChoiceGroup* cg = new ChoiceGroup(std::vector<Choice*> {c});
-    Label* l;
-    l->addChoiceGroups(cg);
-    return l;
-  }
+
   
   friend std::ostream& operator<<(std::ostream &strm, const Label &l){
     if (l.hasFinal())

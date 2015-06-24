@@ -35,7 +35,7 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
   if (!labelMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
       if(labelMap.count(leaf->getID())){
-        leaf->setLabel(Label::createLeafLabel((std::vector<std::string>){labelMap[leaf->getID()]}));
+        leaf->setLabel(new Label(labelMap[leaf->getID()],0,true));// Label::createLeafLabel((std::vector<std::string>){labelMap[leaf->getID()]}));
         //leaf->setID(idMap[leaf->getName()]);
       }
       else if(prune){

@@ -17,7 +17,7 @@ static float DUP_PENALTY, DEL_DUP_PENALTY, SPLIT_PENALTY, DEL_SPLIT_PENALTY, DEL
 static std::string SPLIT;
 static bool allowInsertions;
 
-LabelMatcher::LabelMatcher(){
+void LabelMatcher::initialize(){
   DEL_DUP_PENALTY = DUP_PENALTY = 5;
   SPLIT_PENALTY = DEL_SPLIT_PENALTY = 7;
   INS_PENALTY = DEL_PENALTY = 3;
@@ -96,7 +96,7 @@ float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediate
   for (int j = 0; j < n+1; j++){
     subproblems[0][j] = j * INS_PENALTY;
   }
-  for (int i = 0; i < n+1; i++){
+  for (int i = 0; i < m+1; i++){
     subproblems[i][0] = i * DEL_PENALTY;
   }
   
@@ -127,6 +127,11 @@ float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediate
   //intermediatesVector intermediates;
   if(backtrace)
     intermediates = performBacktrace(A, B, subproblems, intermediates);
+  
+  for(int i = 0; i < m+1; i++){
+    delete [] subproblems[i];
+  }
+  delete [] subproblems;
   
   return penalty; //TODO: return penalty, intermediates;
 }
@@ -294,11 +299,11 @@ float LabelMatcher::getMinEditDistance(stringVector choice1, stringVector choice
     
   do {
     stringVector A = reSplit(join<std::string>(choice1, SPLIT), "\\W+");
-    A.erase(std::remove_if(A.begin(), A.end(), [](std::string s){ return s == ","; }));
+    A.erase(std::remove_if(A.begin(), A.end(), [](std::string s){ return s == "," || s == ""; }), A.end());
       
     do {
       stringVector B = reSplit(join<std::string>(choice2, SPLIT), "\\W+");
-      B.erase(std::remove_if(B.begin(), B.end(), [](std::string s){ return s == ","; }));
+      B.erase(std::remove_if(B.begin(), B.end(), [](std::string s){ return s == "," || s == ""; }), B.end());
       intermediatesVector currIntermediates;
       float score = getEditDistance(A, B, currIntermediates, false);
       if (score < currMin){
@@ -332,8 +337,11 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
     for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
       for (Choice* choice1 : grp1->getChoices()){
         stringVector c1 = choice1->getStringGroups();
+        c1.erase(std::remove_if(c1.begin(), c1.end(), [](std::string s){ return s == ""; }), c1.end());
+        
         for (Choice* choice2 : grp2->getChoices()){
           stringVector c2 = choice2->getStringGroups();
+          c2.erase(std::remove_if(c2.begin(), c2.end(), [](std::string s){ return s == ""; }), c2.end());
           prescore = choice1->getScore() + choice2->getScore();
           intermediatesVector intermediates;
           float score = getMinEditDistance(c1, c2, intermediates, true);
