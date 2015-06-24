@@ -30,18 +30,18 @@ struct HOMOLOG {
 std::vector<std::vector<HOMOLOG>> homologListGroupingFunction(std::vector<HOMOLOG> &homologs, int maxGap){
   //""" Stole this out of make_event_distance_matrix """
   std::vector<std::vector<HOMOLOG>> result;
-  
+
   std::vector<HOMOLOG> neighborhood;
   neighborhood.push_back(homologs[0]);
-  
+
   if(homologs.size() > 1){
     for (int i = 1; i < homologs.size(); i++){
       int start = neighborhood.back().start;
       int stop = neighborhood.back().stop;
-      
+
       int start_n = homologs[i].start;
       int stop_n = homologs[i].stop;
-      
+
       if(abs(start - stop_n) < maxGap || abs(stop - start_n) < maxGap){
         neighborhood.push_back(homologs[i]);
       }
@@ -109,13 +109,12 @@ std::map<std::string, std::vector<std::string>> getLabelMap(std::string geneBloc
 
     std::vector<std::string> neighbors;
 
-    labelMap[it->first] = neighbors;
-
     for (std::vector<HOMOLOG> neighbor : groups){
       for (HOMOLOG h : neighbor){
         neighbors.push_back(h.annotation);
       }
     }
+    labelMap[it->first] = neighbors;
   }
 
   return labelMap;

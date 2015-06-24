@@ -5,10 +5,13 @@
 //  Created by Schaeffer, Charlotte Elizabeth Ms. on 6/19/15.
 //  Copyright (c) 2015 Charlotte Schaeffer. All rights reserved.
 //
+
+
 #include "difflib.h"
 #include <limits>
 #include <algorithm>
 #include <map>
+#include "utility.h"
 
 static float DUP_PENALTY, DEL_DUP_PENALTY, SPLIT_PENALTY, DEL_SPLIT_PENALTY, DEL_PENALTY, INS_PENALTY, MISMATCH_PENALTY, MATCH_PENALTY;
 static std::string SPLIT;
@@ -133,7 +136,6 @@ intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector 
     * Perform backtrace to determine what alignment of A and B produced lowest penalty in subproblems
     */
   
-  //intermediatesVector intermediates;
   
   splitGroupVector splits;
   long j = A.size(); //j = n
@@ -141,7 +143,7 @@ intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector 
   long i = B.size(); //i = m
   long bi = i - 1;
   while (i > 0 || j > 0){
-    std::vector<splitGroupPiece> currIntermediate;
+    splitGroup currIntermediate;
     float pos = subproblems[i][j];
     float case1_match = subproblems[i-1][j-1] + MATCH_PENALTY;
     float case2_del_dup = subproblems[i-1][j] + DEL_DUP_PENALTY;
@@ -209,7 +211,7 @@ intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector 
     }
     splits.push_back(currIntermediate);
   }
-  std::reverse(intermediates.begin(), intermediates.end());
+  std::reverse(splits.begin(), splits.end());
   
   splitGroupVector bestSplitGroups = crossProduct(splits);
   
@@ -223,12 +225,20 @@ intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector 
       score += p.score;
     }
     ssVector splits = groupBy(parts, SPLIT);
-    intermediates.push_back(Intermediate(splits,score));
+    intermediates.push_back(Intermediate{splits,score});
   }
   return intermediates;
 }
 
+
+
 splitGroupVector LabelMatcher::crossProduct(splitGroupVector input){
+  struct Iters {
+    splitGroup::const_iterator begin;
+    splitGroup::const_iterator end;
+    splitGroup::const_iterator me;
+  };
+  
   splitGroupVector out;
   std::vector<Iters> Vi;
   
