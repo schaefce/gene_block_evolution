@@ -4,12 +4,10 @@
 #include <iostream>
 #include "basenode.h"
 #include "label.h"
-using namespace std;
 
 #ifndef LABELED_NODE_H
 #define LABELED_NODE_H
 
-using namespace std;
 
 class LabeledNode : public BaseNode<LabeledNode> {
  public:
@@ -18,11 +16,11 @@ class LabeledNode : public BaseNode<LabeledNode> {
     this->label = (Label*)NULL;
   };
 
-  LabeledNode(string name, double weight=0) : BaseNode<LabeledNode>(name, weight){
+  LabeledNode(std::string name, double weight=0) : BaseNode<LabeledNode>(name, weight){
     this->label = (Label*)NULL;
   };
 
-  LabeledNode(LabeledNode* left, LabeledNode* right, string name, double weight=0) :
+  LabeledNode(LabeledNode* left, LabeledNode* right, std::string name, double weight=0) :
     BaseNode<LabeledNode>(left, right, name, weight){
     this->label = (Label*)NULL;
   };
@@ -31,12 +29,20 @@ class LabeledNode : public BaseNode<LabeledNode> {
     this->weight = weight;
   }
 
-  void setID(string id){
+  void setID(std::string id){
     this->identity = id;
   }
-
-  string getID(){
+  
+  std::string getID(){
     return this->identity;
+  }
+  
+  void setName(std::string name){
+    BaseNode<LabeledNode>::setName(name);
+  }
+  
+  std::string getName(){
+    return BaseNode<LabeledNode>::getName();
   }
   
   void setLabel(Label* label){
@@ -61,10 +67,12 @@ class LabeledNode : public BaseNode<LabeledNode> {
       return this;
     }
   }
+  
+
 
 private:
   Label* label;
-  string identity;
+  std::string identity;
 };
 
 #endif

@@ -7,14 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A46054711B3492FC00E0CB1E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46054701B3492FC00E0CB1E /* main.cpp */; };
 		A46054821B34931A00E0CB1E /* labeledtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46054791B34931A00E0CB1E /* labeledtree.cpp */; };
-		A46054831B34931A00E0CB1E /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A46054801B34931A00E0CB1E /* Makefile */; };
 		A46054861B34D4E400E0CB1E /* difflib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46054851B34D4E400E0CB1E /* difflib.cpp */; };
+		AA17CEED1B36604E009AC375 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA17CEEC1B36604E009AC375 /* main.cpp */; };
+		AA17CEF51B390849009AC375 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA17CEF41B390849009AC375 /* libboost_system.a */; };
+		AA17CEF91B3908CC009AC375 /* libboost_program_options.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA17CEF81B3908CB009AC375 /* libboost_program_options.a */; };
+		AA17CEFB1B390915009AC375 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA17CEFA1B390914009AC375 /* libboost_filesystem.a */; };
+		AA17CF1C1B39E9D5009AC375 /* reorder.nwk in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA17CF1A1B39E6A0009AC375 /* reorder.nwk */; };
+		AA17CF1D1B39E9D5009AC375 /* mapping.csv in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA17CF1B1B39E6A0009AC375 /* mapping.csv */; };
+		AA17CF1E1B39E9D5009AC375 /* paaABCDEFGHIJK.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = AA17CF181B39E67A009AC375 /* paaABCDEFGHIJK.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A460546B1B3492FC00E0CB1E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				AA17CF1C1B39E9D5009AC375 /* reorder.nwk in CopyFiles */,
+				AA17CF1D1B39E9D5009AC375 /* mapping.csv in CopyFiles */,
+				AA17CF1E1B39E9D5009AC375 /* paaABCDEFGHIJK.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		AA17CF0D1B39CBBF009AC375 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -27,24 +44,42 @@
 
 /* Begin PBXFileReference section */
 		A460546D1B3492FC00E0CB1E /* GeneBlock */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GeneBlock; sourceTree = BUILT_PRODUCTS_DIR; };
-		A46054701B3492FC00E0CB1E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A46054771B34931A00E0CB1E /* tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tree.h; path = ../../src/tree.h; sourceTree = "<group>"; };
-		A46054781B34931A00E0CB1E /* labeledtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = labeledtree.h; path = ../../src/labeledtree.h; sourceTree = "<group>"; };
+		A46054771B34931A00E0CB1E /* tree.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = tree.h; path = ../../src/tree.h; sourceTree = "<group>"; };
+		A46054781B34931A00E0CB1E /* labeledtree.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = labeledtree.h; path = ../../src/labeledtree.h; sourceTree = "<group>"; };
 		A46054791B34931A00E0CB1E /* labeledtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = labeledtree.cpp; path = ../../src/labeledtree.cpp; sourceTree = "<group>"; };
-		A460547A1B34931A00E0CB1E /* labelednode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = labelednode.h; path = ../../src/labelednode.h; sourceTree = "<group>"; };
-		A460547B1B34931A00E0CB1E /* labelancestors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = labelancestors.h; path = ../../src/labelancestors.h; sourceTree = "<group>"; };
-		A460547C1B34931A00E0CB1E /* label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = label.h; path = ../../src/label.h; sourceTree = "<group>"; };
-		A460547D1B34931A00E0CB1E /* difflib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = difflib.h; path = ../../src/difflib.h; sourceTree = "<group>"; };
-		A460547E1B34931A00E0CB1E /* choicegroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = choicegroup.h; path = ../../src/choicegroup.h; sourceTree = "<group>"; };
-		A460547F1B34931A00E0CB1E /* basenode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basenode.h; path = ../../src/basenode.h; sourceTree = "<group>"; };
-		A46054801B34931A00E0CB1E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../src/Makefile; sourceTree = "<group>"; };
-		A46054811B34931A00E0CB1E /* choice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = choice.h; path = ../../src/choice.h; sourceTree = "<group>"; };
-		A46054841B34ADEF00E0CB1E /* utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility.h; sourceTree = "<group>"; };
+		A460547A1B34931A00E0CB1E /* labelednode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = labelednode.h; path = ../../src/labelednode.h; sourceTree = "<group>"; };
+		A460547C1B34931A00E0CB1E /* label.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = label.h; path = ../../src/label.h; sourceTree = "<group>"; };
+		A460547F1B34931A00E0CB1E /* basenode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = basenode.h; path = ../../src/basenode.h; sourceTree = "<group>"; };
+		A46054801B34931A00E0CB1E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../src/Makefile; sourceTree = "<group>"; };
+		A46054811B34931A00E0CB1E /* choice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = choice.h; path = ../../src/choice.h; sourceTree = "<group>"; };
+		A46054841B34ADEF00E0CB1E /* utility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = utility.h; sourceTree = "<group>"; };
 		A46054851B34D4E400E0CB1E /* difflib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = difflib.cpp; path = ../../src/difflib.cpp; sourceTree = "<group>"; };
+		AA17CEEC1B36604E009AC375 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../src/main.cpp; sourceTree = "<group>"; };
+		AA17CEEE1B38DD26009AC375 /* difflib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = difflib.h; path = ../../src/difflib.h; sourceTree = "<group>"; };
+		AA17CEF11B38DE51009AC375 /* choicegroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = choicegroup.h; path = ../../src/choicegroup.h; sourceTree = "<group>"; };
+		AA17CEF21B390813009AC375 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../../../../../../../usr/local/lib; sourceTree = "<group>"; };
+		AA17CEF41B390849009AC375 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../../../../../../../../usr/local/Cellar/boost/1.56.0/lib/libboost_system.a; sourceTree = "<group>"; };
+		AA17CEF61B3908B3009AC375 /* libboost_program_options.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_program_options.dylib; path = ../../../../../../../../../usr/local/Cellar/boost/1.56.0/lib/libboost_program_options.dylib; sourceTree = "<group>"; };
+		AA17CEF81B3908CB009AC375 /* libboost_program_options.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_program_options.a; path = ../../../../../../../../../usr/local/Cellar/boost/1.56.0/lib/libboost_program_options.a; sourceTree = "<group>"; };
+		AA17CEFA1B390914009AC375 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../../../../../../../../../usr/local/Cellar/boost/1.56.0/lib/libboost_filesystem.a; sourceTree = "<group>"; };
+		AA17CF0F1B39CBBF009AC375 /* Unit Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Unit Tests"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA17CF181B39E67A009AC375 /* paaABCDEFGHIJK.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = paaABCDEFGHIJK.txt; path = ../../../optimized_operon/paaABCDEFGHIJK.txt; sourceTree = "<group>"; };
+		AA17CF1A1B39E6A0009AC375 /* reorder.nwk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = reorder.nwk; path = ../../../reorder.nwk; sourceTree = "<group>"; };
+		AA17CF1B1B39E6A0009AC375 /* mapping.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mapping.csv; path = ../../../mapping.csv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A460546A1B3492FC00E0CB1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA17CEFB1B390915009AC375 /* libboost_filesystem.a in Frameworks */,
+				AA17CEF91B3908CC009AC375 /* libboost_program_options.a in Frameworks */,
+				AA17CEF51B390849009AC375 /* libboost_system.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA17CF0C1B39CBBF009AC375 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -57,9 +92,13 @@
 		A46054641B3492FC00E0CB1E = {
 			isa = PBXGroup;
 			children = (
+				AA17CEFA1B390914009AC375 /* libboost_filesystem.a */,
+				AA17CEF81B3908CB009AC375 /* libboost_program_options.a */,
+				AA17CEF61B3908B3009AC375 /* libboost_program_options.dylib */,
+				AA17CEF41B390849009AC375 /* libboost_system.a */,
+				AA17CEF21B390813009AC375 /* lib */,
 				A460546F1B3492FC00E0CB1E /* GeneBlock */,
 				A460546E1B3492FC00E0CB1E /* Products */,
-				A46054801B34931A00E0CB1E /* Makefile */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				A460546D1B3492FC00E0CB1E /* GeneBlock */,
+				AA17CF0F1B39CBBF009AC375 /* Unit Tests */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,24 +114,44 @@
 		A460546F1B3492FC00E0CB1E /* GeneBlock */ = {
 			isa = PBXGroup;
 			children = (
+				AA17CF1A1B39E6A0009AC375 /* reorder.nwk */,
+				AA17CF1B1B39E6A0009AC375 /* mapping.csv */,
+				AA17CF181B39E67A009AC375 /* paaABCDEFGHIJK.txt */,
+				AA17CEF11B38DE51009AC375 /* choicegroup.h */,
 				A46054771B34931A00E0CB1E /* tree.h */,
+				AA17CEEC1B36604E009AC375 /* main.cpp */,
 				A46054781B34931A00E0CB1E /* labeledtree.h */,
 				A46054791B34931A00E0CB1E /* labeledtree.cpp */,
-				A460547A1B34931A00E0CB1E /* labelednode.h */,
-				A460547B1B34931A00E0CB1E /* labelancestors.h */,
-				A460547C1B34931A00E0CB1E /* label.h */,
-				A460547D1B34931A00E0CB1E /* difflib.h */,
+				A46054801B34931A00E0CB1E /* Makefile */,
+				AA17CEEE1B38DD26009AC375 /* difflib.h */,
 				A46054851B34D4E400E0CB1E /* difflib.cpp */,
-				A460547E1B34931A00E0CB1E /* choicegroup.h */,
+				A460547A1B34931A00E0CB1E /* labelednode.h */,
+				A460547C1B34931A00E0CB1E /* label.h */,
 				A460547F1B34931A00E0CB1E /* basenode.h */,
 				A46054811B34931A00E0CB1E /* choice.h */,
-				A46054701B3492FC00E0CB1E /* main.cpp */,
 				A46054841B34ADEF00E0CB1E /* utility.h */,
 			);
 			path = GeneBlock;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		AA17CEE81B365E27009AC375 /* Build with Make */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = AA17CEEB1B365E27009AC375 /* Build configuration list for PBXLegacyTarget "Build with Make" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "/Users/carlyschaeffer/Documents/Miami University/Grad School/ream/gene_block_evolution/GBLOCK_src/src";
+			dependencies = (
+			);
+			name = "Build with Make";
+			passBuildSettingsInEnvironment = 1;
+			productName = "Build with Make";
+		};
+/* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
 		A460546C1B3492FC00E0CB1E /* GeneBlock */ = {
@@ -111,6 +171,23 @@
 			productReference = A460546D1B3492FC00E0CB1E /* GeneBlock */;
 			productType = "com.apple.product-type.tool";
 		};
+		AA17CF0E1B39CBBF009AC375 /* Unit Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA17CF131B39CBBF009AC375 /* Build configuration list for PBXNativeTarget "Unit Tests" */;
+			buildPhases = (
+				AA17CF0B1B39CBBF009AC375 /* Sources */,
+				AA17CF0C1B39CBBF009AC375 /* Frameworks */,
+				AA17CF0D1B39CBBF009AC375 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Unit Tests";
+			productName = "Unit Tests";
+			productReference = AA17CF0F1B39CBBF009AC375 /* Unit Tests */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -121,6 +198,12 @@
 				ORGANIZATIONNAME = "Charlotte Schaeffer";
 				TargetAttributes = {
 					A460546C1B3492FC00E0CB1E = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					AA17CEE81B365E27009AC375 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					AA17CF0E1B39CBBF009AC375 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
 				};
@@ -138,6 +221,8 @@
 			projectRoot = "";
 			targets = (
 				A460546C1B3492FC00E0CB1E /* GeneBlock */,
+				AA17CEE81B365E27009AC375 /* Build with Make */,
+				AA17CF0E1B39CBBF009AC375 /* Unit Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -148,9 +233,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A46054861B34D4E400E0CB1E /* difflib.cpp in Sources */,
-				A46054831B34931A00E0CB1E /* Makefile in Sources */,
-				A46054711B3492FC00E0CB1E /* main.cpp in Sources */,
+				AA17CEED1B36604E009AC375 /* main.cpp in Sources */,
 				A46054821B34931A00E0CB1E /* labeledtree.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA17CF0B1B39CBBF009AC375 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +328,24 @@
 		A46054751B3492FC00E0CB1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/Cellar/boost/1.56.0/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+					/usr/local/Cellar/boost/1.56.0/lib,
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-I/usr/local/Cellar/boost/1.56.0/include",
+				);
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=*]" = "-lboost_program_options";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -244,6 +353,74 @@
 		A46054761B3492FC00E0CB1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/Cellar/boost/1.56.0/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+					/usr/local/Cellar/boost/1.56.0/lib,
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-I/usr/local/Cellar/boost/1.56.0/include",
+				);
+				"OTHER_LDFLAGS[arch=*]" = "-lboost_program_options";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		AA17CEE91B365E27009AC375 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUGGING_SYMBOLS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AA17CEEA1B365E27009AC375 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		AA17CF141B39CBBF009AC375 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/gtest-dkswhrbpgphrjgbklvkgyegtucrx/Build/Products/Debug",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AA17CF151B39CBBF009AC375 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/gtest-dkswhrbpgphrjgbklvkgyegtucrx/Build/Products/Debug",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -265,6 +442,24 @@
 			buildConfigurations = (
 				A46054751B3492FC00E0CB1E /* Debug */,
 				A46054761B3492FC00E0CB1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA17CEEB1B365E27009AC375 /* Build configuration list for PBXLegacyTarget "Build with Make" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA17CEE91B365E27009AC375 /* Debug */,
+				AA17CEEA1B365E27009AC375 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA17CF131B39CBBF009AC375 /* Build configuration list for PBXNativeTarget "Unit Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA17CF141B39CBBF009AC375 /* Debug */,
+				AA17CF151B39CBBF009AC375 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

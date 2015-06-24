@@ -1,11 +1,14 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <map>
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/program_options.hpp>
+
 #include "labeledtree.h"
 #include "difflib.h"
-#include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem/convenience.hpp>
 
 using namespace boost;
 namespace po = boost::program_options;
@@ -14,21 +17,21 @@ struct HOMOLOG {
   /**
     * HOMOLOG struct to easily contain the info needed for clustering
     */
-  string accession;
+  std::string accession;
   int start;
   int stop;
-  string annotation;
+  std::string annotation;
 
   bool operator < (const HOMOLOG& h2) const {
     return (start < h2.start);
   }
 };
 
-vector<vector<HOMOLOG>> homologListGroupingFunction(vector<HOMOLOG> &homologs, int maxGap){
+std::vector<std::vector<HOMOLOG>> homologListGroupingFunction(std::vector<HOMOLOG> &homologs, int maxGap){
   //""" Stole this out of make_event_distance_matrix """
-  vector<vector<HOMOLOG>> result;
+  std::vector<std::vector<HOMOLOG>> result;
   
-  vector<HOMOLOG> neighborhood;
+  std::vector<HOMOLOG> neighborhood;
   neighborhood.push_back(homologs[0]);
   
   if(homologs.size() > 1){
@@ -54,33 +57,34 @@ vector<vector<HOMOLOG>> homologListGroupingFunction(vector<HOMOLOG> &homologs, i
 }
 
 
-map<string, vector<string>> getLabelMap(string geneBlock, int maxGap){
+
+std::map<std::string, std::vector<std::string>> getLabelMap(std::string geneBlock, int maxGap){
   /** Use gene_block result from file to determine the homologs for each organism
     * and group them according to homolog_list_grouping_function. Returns a mapping
     * from organism's accession ID to list of homolog lists.
     */
 
-  map<string, vector<string>> labelMap;
+  std::map<std::string, std::vector<std::string>> labelMap;
 
-  map<string, vector<HOMOLOG>> orgMap;
+  std::map<std::string, std::vector<HOMOLOG>> orgMap;
 
-  ifstream infile(geneBlock);
-  string line;
+  std::ifstream infile(geneBlock);
+  std::string line;
 
   while(getline(infile,line)){
     boost::trim(line);
-    vector<string> homologV; //homologV will consist of 12 parts- we are interested in the 2nd and
+    std::vector<std::string> homologV; //homologV will consist of 12 parts- we are interested in the 2nd and
     boost::split(homologV, line, ::isspace);
 
-    vector<string> subjLine;
-    boost::split(subjLine, homologV[1], boost::is_from_range('|','|'));
-    string accession = subjLine[0];
+    std::vector<std::string> subjLine;
+    boost::split(subjLine, homologV[1], is_from_range('|','|'));
+    std::string accession = subjLine[0];
 
-    vector<string> queryLine;
-    boost::split(queryLine, homologV[0], boost::is_from_range('|','|'));
-    string annotation = subjLine[3];
+    std::vector<std::string> queryLine;
+    boost::split(queryLine, homologV[0], is_from_range('|','|'));
+    std::string annotation = subjLine[3];
 
-    HOMOLOG h;
+    HOMOLOG h ;
     h.accession = accession;
     h.start = stoi(subjLine[4]);
     h.stop = stoi(subjLine[5]);
@@ -90,24 +94,24 @@ map<string, vector<string>> getLabelMap(string geneBlock, int maxGap){
       orgMap[accession].push_back(h);
     }
     else {
-      vector<HOMOLOG> hlogs;
+      std::vector<HOMOLOG> hlogs;
       hlogs.push_back(h);
       orgMap[accession] = hlogs;
     }
 
   }
 
-  for (map<string,vector<HOMOLOG>>::iterator it = orgMap.begin(); it != orgMap.end(); it++){
-    vector<HOMOLOG> homologs = it->second;
+  for (std::map<std::string,std::vector<HOMOLOG>>::iterator it = orgMap.begin(); it != orgMap.end(); it++){
+    std::vector<HOMOLOG> homologs = it->second;
     std::sort(homologs.begin(), homologs.end());
 
-    vector<vector<HOMOLOG>> groups = homologListGroupingFunction(homologs, maxGap);
+    std::vector<std::vector<HOMOLOG>> groups = homologListGroupingFunction(homologs, maxGap);
 
-    vector<string> neighbors;
+    std::vector<std::string> neighbors;
 
     labelMap[it->first] = neighbors;
 
-    for (vector<HOMOLOG> neighbor : groups){
+    for (std::vector<HOMOLOG> neighbor : groups){
       for (HOMOLOG h : neighbor){
         neighbors.push_back(h.annotation);
       }
@@ -118,21 +122,21 @@ map<string, vector<string>> getLabelMap(string geneBlock, int maxGap){
 }
 
 
-map<string,string> getIdentifiers(string fname){
+std::map<std::string,std::string> getIdentifiers(std::string fname){
   /**
     * Given name of csv file of ids and common names, creates a mapping of each
     * common name to its respective id.
     */
 
-  map<string, string> idMap;
+  std::map<std::string, std::string> idMap;
 
-  ifstream infile(fname);
-  string line;
+  std::ifstream infile(fname);
+  std::string line;
 
   while(getline(infile,line)){
     boost::trim(line);
-    vector<string> idV; //idV consists of 2 parts -- name and id
-    boost::split(idV, line, boost::is_from_range(',',','));
+    std::vector<std::string> idV; //idV consists of 2 parts -- name and id
+    boost::split(idV, line, is_from_range(',',','));
     idMap[idV[1]] = idV[0];
   }
 
@@ -145,55 +149,61 @@ map<string,string> getIdentifiers(string fname){
     //Phylo.write(tree, fname, treeformat)
 
 
-LabeledTree* formatTree(string geneBlock, string idFile , string treeFile, int maxGap, bool prune){
+LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string treeFile, int maxGap, bool prune){
   /**
     * Use (1) geneBlock organism data, (2) a mapping of common names to
     * IDs, and (3) an existing tree file to create a tree labeled with list of homologs.
     *
     */
-  map<string, vector<string>> labelMap = getLabelMap(geneBlock, maxGap);
-  map<string, string> idMap = getIdentifiers(idFile);
+  std::map<std::string, std::vector<std::string>> labelMap = getLabelMap(geneBlock, maxGap);
+  std::map<std::string, std::string> idMap = getIdentifiers(idFile);
   LabeledTree* tree = (LabeledTree*)LabeledTree::read_newick_file(treeFile);
   //TODO: figure out how to get this working
   tree->addIdsAndLabels(idMap, labelMap);
   return tree;
 }
 
-void setPossibleLabelsHelper(LabeledNode* node, LabelMatcher lm){
-  if (node){
-    setPossibleLabelsHelper(node->getChild(true), lm);
-    setPossibleLabelsHelper(node->getChild(false), lm);
-    node->setLabel(lm.getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
+
+void setPossibleLabelsHelper(LabeledNode* node) {
+  /**
+   * Set all possible labels for the tree.
+   */
+  //tree.ladderize()
+  if(node){
+    setPossibleLabelsHelper(node->getChild(true));
+    setPossibleLabelsHelper(node->getChild(false));
+    node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
   }
 }
 
-void writeTree(LabeledTree* tree, std::string filename){
-  
-}
 
 
-void setPossibleLabels(LabeledTree* tree, LabelMatcher lm) {
+void setPossibleLabels(LabeledTree* tree) {
   /**
     * Set all possible labels for the tree.
     */
   //tree.ladderize()
   if(tree && tree->getRoot()){
-    setPossibleLabelsHelper(tree->getRoot(), lm);
+    setPossibleLabelsHelper(tree->getRoot());
   }
+}
+
+void writeTree(LabeledTree* tree, std::string ofile){
+  //TODO
 }
 
 
 int main(int argc, char **argv){
 
-  std::string geneblock = NULL;
-  std::string tree = NULL;
-  std::string ids = NULL;
+  std::string geneblock;
+  std::string tree;
+  std::string ids;
 
   po::options_description desc("Geneblocker Usage Options");
 
   desc.add_options()
     ("help,h", "Display this help message")
-    ("noPrune,n", po::value<bool>()->default_value(true)->implicit_value(false), "Do not prune unlabeled leaves")
+    ("noPrune,n", po::value<bool>()->default_value(false)->implicit_value(true), "Do not prune unlabeled leaves")
     ("maxGap,g", po::value<int>()->default_value(5), "Maximum gap size")
     ("fname,f", po::value<std::string>(), "File to output tree to.")
     ("geneBlock", po::value<std::string>(&geneblock)->required(), "Path to file with data about geneblock")
@@ -201,7 +211,7 @@ int main(int argc, char **argv){
     ("idMap", po::value<std::string>(&ids)->required(), "Path to file mapping IDs to labels");
 
   po::positional_options_description p;
-  p.add("geneBlock", 1).add("tree", 1).add("idMap", 1);
+  p.add("geneBlock", 1).add("treeFile", 1).add("idMap", 1);
 
 
   po::variables_map vm;
@@ -221,20 +231,18 @@ int main(int argc, char **argv){
     return 1;
   }
 
-  boost::filesystem::path fPath(tree);
-  std::string baseTreeFile = fPath.stem().string();
+  boost::filesystem::path filePath(tree);
+  std::string baseTreeFile = filePath.stem().string();
 
   LabeledTree* lTree = formatTree(geneblock, ids, tree, vm["maxGap"].as<int>(), vm["noPrune"].as<bool>());
-  
-  LabelMatcher lm;
-  setPossibleLabels(lTree, lm); //,logname);
+  setPossibleLabels(lTree); //,logname);
 
   lTree->setLabelsFromRoot();
 
   std::string ofile;
 
   if(vm.count("fname")){
-    ofile = vm["fname"].as<string>();
+    ofile = vm["fname"].as<std::string>();
   }
   else{
     ofile = baseTreeFile + "labeled.nwk";

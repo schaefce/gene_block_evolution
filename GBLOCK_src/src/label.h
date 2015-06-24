@@ -96,11 +96,12 @@ public:
     });
     return stringGroups;
   }
-
+  
   static Label* createLeafLabel(std::vector<std::string> splitGroups){
+    
     Choice* c = new Choice(splitGroups);
     ChoiceGroup* cg = new ChoiceGroup(std::vector<Choice*> {c});
-    Label* l = new Label();
+    Label* l;
     l->addChoiceGroups(cg);
     return l;
   }
@@ -127,5 +128,7 @@ private:
   std::string finalLabel;
 
 };
+
+
 
 #endif

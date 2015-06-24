@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stack>
 #include <vector>
+#include <streambuf>
 
 #ifndef KARRO_TREE_H
 #define KARRO_TREE_H
@@ -66,7 +67,7 @@ std::string Tree<Node>::newick() {
 
 template <typename Node>
 bool Tree<Node>::prune(Node* target){
-  if (target == NULL){
+  if (target){
     return false;
   }
   else if (target == this->root){
@@ -127,9 +128,9 @@ int Tree<Node>::num_leaves() {
 //   WEIGHT   --> <int> | <float>
 
 // Determine of the string represents one of the grammer markers
-std::string markers = ":,();";
-inline bool is_marker(char c) {
 
+inline bool is_marker(char c) {
+  std::string markers = ":,();";
   for (std::string::iterator i = markers.begin(); i != markers.end(); i++)
     if (*i == c)
       return true;
@@ -221,10 +222,13 @@ Tree<Node>* Tree<Node>::parse_tree(std::string s) {
 template <typename Node>
 Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
   std::ifstream fin(file);
-  std::stringstream strstream;
-  strstream << fin.rdbuf();
+  std::string s((std::istreambuf_iterator<char>(fin)),
+                  std::istreambuf_iterator<char>());
+  //std::stringstream strstream;
+  //strstream << fin.rdbuf();
 
-  return parse_tree(strstream.str());
+  //return parse_tree(strstream.str());
+  return parse_tree(s);
 }
 
 #endif

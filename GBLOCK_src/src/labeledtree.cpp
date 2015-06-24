@@ -2,7 +2,8 @@
 
 
 
-void LabeledTree::addIdsAndLabels(map <string, string> idMap, map <string, vector<string>> labelMap, bool prune) {
+
+void LabeledTree::addIdsAndLabels(std::map <std::string, std::string> idMap, std::map <std::string, std::vector<std::string>> labelMap, bool prune) {
   if(!idMap.empty()){
     addLeafIds(idMap, prune);
     if(!labelMap.empty()){
@@ -11,11 +12,12 @@ void LabeledTree::addIdsAndLabels(map <string, string> idMap, map <string, vecto
   }
 }
 
-void LabeledTree::addLeafIds(map <string, string> idMap, bool prune){
-  vector<LabeledNode*> toPrune;
+void LabeledTree::addLeafIds(std::map <std::string, std::string> idMap, bool prune){
+  std::vector<LabeledNode*> toPrune;
   if (!idMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
-      if(idMap.count(leaf->getName())){
+      std::cout << idMap.count(leaf->getName()) << std::endl;
+      if(idMap.find(leaf->getName()) != idMap.end()){
         leaf->setID(idMap[leaf->getName()]);
       }
       else if(prune){
@@ -28,12 +30,12 @@ void LabeledTree::addLeafIds(map <string, string> idMap, bool prune){
   }
 }
 
-void LabeledTree::addLeafLabels(map <string, vector<string>> labelMap, bool prune){
-  vector<LabeledNode*> toPrune;
+void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>> labelMap, bool prune){
+  std::vector<LabeledNode*> toPrune;
   if (!labelMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
       if(labelMap.count(leaf->getID())){
-        leaf->setLabel(Label::createLeafLabel(labelMap[leaf->getID()]));
+        leaf->setLabel(Label::createLeafLabel((std::vector<std::string>){labelMap[leaf->getID()]}));
         //leaf->setID(idMap[leaf->getName()]);
       }
       else if(prune){

@@ -2,12 +2,10 @@
 // Defined: A BaseNode with zero or more BaseNodes as children.
 #include <string>
 #include <iostream>
-using namespace std;
 
 #ifndef BASE_NODE_H
 #define BASE_NODE_H
 
-using namespace std;
 
 template <typename TargetNode>
 class BaseNode {
@@ -15,20 +13,20 @@ class BaseNode {
   BaseNode(){
     this->left = (TargetNode*)NULL;
     this->right = (TargetNode*)NULL;
-    this->name = "";
+    setName("");
   };
 
-  BaseNode(string name, double weight=0){
+  BaseNode(std::string name, double weight=0){
     this->left = (TargetNode*)NULL;
     this->right = (TargetNode*)NULL;
-    this->name = name;
+    setName(name);
     this->weight = weight;
   };
 
-  BaseNode(TargetNode* left, TargetNode* right, string name, double weight=0){
+  BaseNode(TargetNode* left, TargetNode* right, std::string name, double weight=0){
     this->left = left;
     this->right = right;
-    this->name = name;
+    setName(name);
     this->weight = weight;
   };
 
@@ -40,9 +38,15 @@ class BaseNode {
       delete getChild(false);
   };
 
-  //void setName(string name){ this->name = name};
+  void setName(std::string name){
+    name.erase(
+            remove( name.begin(), name.end(), '\'' ),
+            name.end()
+            );
+    this->name = name;
+  }
 
-  string getName() {return this->name;}
+  std::string getName() {return this->name;}
 
   void setWeight(double weight){ this->weight = weight;}
 
@@ -73,10 +77,10 @@ class BaseNode {
     target->recursivePrune(target);
   }
 
-  string newick_helper(){
+  std::string newick_helper(){
     if (isLeaf())
         return name;
-    string s = "(";
+    std::string s = "(";
     if (hasChild(true))
       s += getChild(true)->newick_helper() + ":" + std::to_string(getChild(true)->getWeight());
     if (hasChild(true) && hasChild(false))
@@ -91,7 +95,7 @@ class BaseNode {
  protected:
   TargetNode* left;
   TargetNode* right;
-  string name;
+  std::string name;
   double weight;
 };
 
