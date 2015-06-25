@@ -45,6 +45,9 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
     for (LabeledNode* leaf : toPrune){
       this->prune(leaf);
     }
+    for (LabeledNode* leaf : collectLeaves()){
+      assert(leaf->getLabel());
+    }
   }
 }
 

@@ -66,6 +66,9 @@ std::vector<std::vector<T>> groupBy(std::vector<T> input, T item){
       addition.push_back(currItem);
     }
   }
+  if(!addition.empty()){
+    result.push_back(addition);
+  }
   return result;
 }
 

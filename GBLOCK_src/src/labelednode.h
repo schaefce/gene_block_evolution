@@ -58,12 +58,24 @@ class LabeledNode : public BaseNode<LabeledNode> {
   };
   
   LabeledNode* recursivePrune(LabeledNode* target){
-    if (this == target){
-      return (LabeledNode*)NULL;
+    if (this){
+      if (this->left == target){
+        delete getChild(left);
+        this->left = (LabeledNode*)NULL;
+        return this;
+      }
+      else if (this->right == target){
+        delete getChild(right);
+        this->right = (LabeledNode*)NULL;
+        return this;
+      }
+      else{
+        this->left = left->recursivePrune(target);
+        this->right = right->recursivePrune(target);
+        return this;
+      }
     }
     else{
-      this->left = left->recursivePrune(target);
-      this->right = right->recursivePrune(target);
       return this;
     }
   }

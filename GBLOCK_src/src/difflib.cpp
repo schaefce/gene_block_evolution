@@ -126,7 +126,7 @@ float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediate
   float penalty = subproblems[m][n];
   //intermediatesVector intermediates;
   if(backtrace)
-    intermediates = performBacktrace(A, B, subproblems, intermediates);
+    performBacktrace(A, B, subproblems, intermediates);
   
   for(int i = 0; i < m+1; i++){
     delete [] subproblems[i];
@@ -136,7 +136,25 @@ float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediate
   return penalty; //TODO: return penalty, intermediates;
 }
 
-intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector B, int **subproblems, intermediatesVector &intermediates){
+std::vector<std::vector<std::string>> groupBy(std::vector<std::string> input, std::string item){
+  std::vector<std::vector<std::string>> result;
+  std::vector<std::string> addition;
+  for(std::string currItem : input){
+    if (currItem == item){
+      result.push_back(addition);
+      addition.clear();
+    }
+    else{
+      addition.push_back(currItem);
+    }
+  }
+  if(!addition.empty()){
+    result.push_back(addition);
+  }
+  return result;
+}
+
+void LabelMatcher::performBacktrace(stringVector A, stringVector B, int **subproblems, intermediatesVector &intermediates){
   /**
     * Perform backtrace to determine what alignment of A and B produced lowest penalty in subproblems
     */
@@ -150,66 +168,67 @@ intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector 
   while (i > 0 || j > 0){
     splitGroup currIntermediate;
     float pos = subproblems[i][j];
-    float case1_match = subproblems[i-1][j-1] + MATCH_PENALTY;
-    float case2_del_dup = subproblems[i-1][j] + DEL_DUP_PENALTY;
-    float case2_del_split = subproblems[i-1][j] + DEL_SPLIT_PENALTY;
-    float case2_del_gen = subproblems[i-1][j] + DEL_PENALTY;
-    float case3_ins_dup = subproblems[i][j-1] + DUP_PENALTY;
-    float case3_ins_split = subproblems[i][j-1] + SPLIT_PENALTY;
-    float case3_ins_gen = subproblems[i][j-1] + INS_PENALTY;
-    if (i > 0 && j > 0 & pos == case1_match){
-      currIntermediate.push_back(splitGroupPiece(B[bi], MATCH_PENALTY));
+    
+    //float case1_match = subproblems[i-1][j-1] + MATCH_PENALTY;
+    //float case2_del_dup = subproblems[i-1][j] + DEL_DUP_PENALTY;
+    //float case2_del_split = subproblems[i-1][j] + DEL_SPLIT_PENALTY;
+    //float case2_del_gen = subproblems[i-1][j] + DEL_PENALTY;
+    //float case3_ins_dup = subproblems[i][j-1] + DUP_PENALTY;
+    //float case3_ins_split = subproblems[i][j-1] + SPLIT_PENALTY;
+    //float case3_ins_gen = subproblems[i][j-1] + INS_PENALTY;
+    if (i > 0 && j > 0 & pos == subproblems[i-1][j-1] + MATCH_PENALTY){ //case1_match){
+      currIntermediate.push_back(new splitGroupPiece(B[bi], MATCH_PENALTY));
       bi -= 1;
       aj -= 1;
       i -= 1;
       j -= 1;
     }
     else if (j > 1 && pos == subproblems[i][j-2] + DUP_PENALTY + SPLIT_PENALTY) {
-      currIntermediate.push_back(splitGroupPiece((std::vector<std::string>) {A[aj],A[aj-1]}, DEL_DUP_PENALTY + DEL_SPLIT_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(A[aj], DEL_DUP_PENALTY + SPLIT_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(A[aj-1], DUP_PENALTY + DEL_SPLIT_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(DUP_PENALTY + SPLIT_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece((std::vector<std::string>) {A[aj],A[aj-1]}, DEL_DUP_PENALTY + DEL_SPLIT_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(A[aj], DEL_DUP_PENALTY + SPLIT_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(A[aj-1], DUP_PENALTY + DEL_SPLIT_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(DUP_PENALTY + SPLIT_PENALTY));
       j -= 2;
       aj -= 2;
     }
-    else if (i > 0 && pos == case2_del_dup){
-      currIntermediate.push_back(splitGroupPiece(B[bi], DEL_DUP_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(DUP_PENALTY));
+    else if (i > 0 && pos == subproblems[i-1][j] + DEL_DUP_PENALTY){ //case2_del_dup){
+      currIntermediate.push_back(new splitGroupPiece(B[bi], DEL_DUP_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(DUP_PENALTY));
       i -= 1;
       bi -= 1;
     }
-    else if (i > 0 && pos == case2_del_split){
-      currIntermediate.push_back(splitGroupPiece(B[bi], DEL_SPLIT_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(SPLIT_PENALTY));
+    else if (i > 0 && pos == subproblems[i-1][j] + DEL_SPLIT_PENALTY){ //case2_del_split){
+      currIntermediate.push_back(new splitGroupPiece(B[bi], DEL_SPLIT_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(SPLIT_PENALTY));
       i -= 1;
       bi -= 1;
     }
-    else if (i > 0 && pos == case2_del_gen){
-      currIntermediate.push_back(splitGroupPiece(B[bi],DEL_PENALTY));
+    else if (i > 0 && pos == subproblems[i-1][j] + DEL_PENALTY){ //case2_del_gen){
+      currIntermediate.push_back(new splitGroupPiece(B[bi],DEL_PENALTY));
       
       if (allowInsertions){
-        currIntermediate.push_back(splitGroupPiece(INS_PENALTY)); //IF ALLOWED TO HAVE SUDDEN INSERTS
+        currIntermediate.push_back(new splitGroupPiece(INS_PENALTY)); //IF ALLOWED TO HAVE SUDDEN INSERTS
       }
       i -= 1;
       bi -= 1;
     }
-    else if (j > 0 && pos == case3_ins_dup) {
-      currIntermediate.push_back(splitGroupPiece(A[aj],DEL_DUP_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(DUP_PENALTY));
+    else if (j > 0 && pos == subproblems[i][j-1] + DUP_PENALTY){ //case3_ins_dup) {
+      currIntermediate.push_back(new splitGroupPiece(A[aj],DEL_DUP_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(DUP_PENALTY));
       j -= 1;
       aj -= 1;
     }
     
-    else if (j > 0 && pos == case3_ins_split) {
-      currIntermediate.push_back(splitGroupPiece(A[aj],DEL_SPLIT_PENALTY));
-      currIntermediate.push_back(splitGroupPiece(SPLIT_PENALTY));
+    else if (j > 0 && pos == subproblems[i][j-1] + SPLIT_PENALTY){ //case3_ins_split) {
+      currIntermediate.push_back(new splitGroupPiece(A[aj],DEL_SPLIT_PENALTY));
+      currIntermediate.push_back(new splitGroupPiece(SPLIT_PENALTY));
       j -= 1;
       aj -= 1;
     }
-    else if (j > 0 && pos == case3_ins_gen) {
-      currIntermediate.push_back(splitGroupPiece(A[aj], DEL_PENALTY));
+    else if (j > 0 && pos == subproblems[i][j-1] + INS_PENALTY){ //case3_ins_gen) {
+      currIntermediate.push_back(new splitGroupPiece(A[aj], DEL_PENALTY));
       if (allowInsertions){
-        currIntermediate.push_back(splitGroupPiece(INS_PENALTY)); //IF ALLOWED TO HAVE SUDDEN INSERTS
+        currIntermediate.push_back(new splitGroupPiece(INS_PENALTY)); //IF ALLOWED TO HAVE SUDDEN INSERTS
       }
       j -= 1;
       aj -= 1;
@@ -223,16 +242,17 @@ intermediatesVector LabelMatcher::performBacktrace(stringVector A, stringVector 
   for (splitGroup sg : bestSplitGroups){
     stringVector parts;
     float score = 0;
-    for (splitGroupPiece p : sg){
-      for (std::string s : p.piece){
+    for (splitGroupPiece* p: sg){
+      for (std::string s : p->piece){
         if (s != "") parts.push_back(s);
       }
-      score += p.score;
+      score += p->score;
     }
-    ssVector splits = groupBy(parts, SPLIT);
-    intermediates.push_back(Intermediate{splits,score});
+    ssVector splitsV = groupBy(parts, SPLIT);
+    Intermediate* inter = new Intermediate(splitsV,score);
+    intermediates.push_back(inter);
   }
-  return intermediates;
+  //return intermediates;
 }
 
 
@@ -346,9 +366,11 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
           intermediatesVector intermediates;
           float score = getMinEditDistance(c1, c2, intermediates, true);
           std::vector<Choice*> currChoices;
-          std::transform(intermediates.begin(), intermediates.end(), currChoices.begin(), [prescore](Intermediate i){
-            return new Choice(i.splits, i.score + prescore);
-          });
+          //std::transform(intermediates.begin(), intermediates.end(), currChoices.begin(), [prescore](Intermediate* i){return new Choice(i->splits, i->score + prescore);});
+          currChoices.reserve(intermediates.size());
+          std::for_each(intermediates.begin(),intermediates.end(),
+                        [&currChoices, prescore](const Intermediate *i)
+                        { currChoices.push_back(new Choice(i->splits, i->score + prescore)); });
           for (Choice* c : currChoices){
             std::string choiceString = c->groupListString();
             if(!choiceMap.count(choiceString)){

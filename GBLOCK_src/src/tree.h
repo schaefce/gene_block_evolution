@@ -67,7 +67,7 @@ std::string Tree<Node>::newick() {
 
 template <typename Node>
 bool Tree<Node>::prune(Node* target){
-  if (target){
+  if (!target){
     return false;
   }
   else if (target == this->root){

@@ -148,7 +148,7 @@ std::map<std::string,std::string> getIdentifiers(std::string fname){
     //Phylo.write(tree, fname, treeformat)
 
 
-LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string treeFile, int maxGap, bool prune){
+LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string treeFile, int maxGap, bool noPrune){
   /**
     * Use (1) geneBlock organism data, (2) a mapping of common names to
     * IDs, and (3) an existing tree file to create a tree labeled with list of homologs.
@@ -158,7 +158,7 @@ LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string 
   std::map<std::string, std::string> idMap = getIdentifiers(idFile);
   LabeledTree* tree = (LabeledTree*)LabeledTree::read_newick_file(treeFile);
   //TODO: figure out how to get this working
-  tree->addIdsAndLabels(idMap, labelMap);
+  tree->addIdsAndLabels(idMap, labelMap, !noPrune);
   return tree;
 }
 
@@ -168,7 +168,7 @@ void setPossibleLabelsHelper(LabeledNode* node) {
    * Set all possible labels for the tree.
    */
   //tree.ladderize()
-  if(node && node->getChild(true) && node->getChild(false)){
+  if(node && node->getChild(true) && node->getChild(false) ){
     setPossibleLabelsHelper(node->getChild(true));
     setPossibleLabelsHelper(node->getChild(false));
     node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
@@ -203,7 +203,7 @@ int main(int argc, char **argv){
 
   desc.add_options()
     ("help,h", "Display this help message")
-    ("noPrune,n", po::value<bool>()->default_value(false)->implicit_value(true), "Do not prune unlabeled leaves")
+    ("noPrune,n", po::value<bool>()->default_value(false), "Do not prune unlabeled leaves")
     ("maxGap,g", po::value<int>()->default_value(5), "Maximum gap size")
     ("fname,f", po::value<std::string>(), "File to output tree to.")
     ("geneBlock", po::value<std::string>(&geneblock)->required(), "Path to file with data about geneblock")
