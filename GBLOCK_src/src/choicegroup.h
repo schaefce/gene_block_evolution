@@ -1,21 +1,33 @@
 #include "choice.h"
+#include <map>
+#include <string>
+#include <vector>
+
+#ifndef CHOICE_GROUP_H
+#define CHOICE_GROUP_H
 
 class Label;
 
 class ChoiceGroup {
 
 public:
-  ChoiceGroup(vector<Choice*> choices, pair<Choice*, Choice*> childChoices, float score=MAX_SCORE){
+  ChoiceGroup(std::vector<Choice*> choices, std::pair<Choice*, Choice*> childChoices, float score=MAX_SCORE){
     //groupLabel = l;
     setChoices(choices);
     children = childChoices;
     score = score;
   }
 
-  ChoiceGroup(vector<Choice*> choices){
+  ChoiceGroup(std::vector<Choice*> choices){
     setChoices(choices);
     //this->children = new pair<(Choice*)NULL, (Choice*)NULL>;
   }
+  
+  ChoiceGroup(Choice* choice){
+    setChoices((std::vector<Choice*>){choice});
+    //this->children = new pair<(Choice*)NULL, (Choice*)NULL>;
+  }
+
 
 
   void setChildren(std::pair<Choice*, Choice*> childChoices){
@@ -41,8 +53,9 @@ public:
   void setScore(float score){
     this->score = score;
   }
+  
 
-  void setChoices(vector<Choice*> choiceV){
+  void setChoices(std::vector<Choice*> choiceV){
     if(!choiceMap.empty()){
       choiceMap.clear();
     }
@@ -61,7 +74,7 @@ public:
   }
 
   void addChoice(Choice* choice){
-    string cString = choice->groupListString();
+    std::string cString = choice->groupListString();
     if(choiceMap.count(cString)){
       Choice* curr = choiceMap[cString];
       if(choice->getScore() < curr->getScore()){
@@ -76,7 +89,11 @@ public:
 
   std::vector<Choice*> getChoices(){
     std::vector<Choice*> choiceV;
-    transform(choiceMap.begin(), choiceMap.end(), choiceV.begin(), [](std::pair<std::string, Choice*> &p){ return p.second; });
+    choiceV.reserve(choiceMap.size());
+    std::for_each(choiceMap.begin(),choiceMap.end(),
+                  [&choiceV](const std::map<std::string,Choice*>::value_type& p)
+                  { choiceV.push_back(p.second); });
+    //transform(choiceMap.begin(), choiceMap.end(), choiceV.begin(), [](const std::pair<std::string, Choice*> &p){ return p.second; });
     return choiceV;
   }
 
@@ -92,7 +109,7 @@ public:
 
   std::string choicesString() const{
     std::stringstream ss;
-    for(std::map<string,Choice*>::const_iterator it = choiceMap.begin(); it != choiceMap.end(); ++it){
+    for(std::map<std::string,Choice*>::const_iterator it = choiceMap.begin(); it != choiceMap.end(); ++it){
       long i = std::distance(choiceMap.begin(), it);
       ss << '\t';
       ss << i;
@@ -116,3 +133,5 @@ private:
   float score;
 
 };
+
+#endif

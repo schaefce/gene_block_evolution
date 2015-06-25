@@ -4,6 +4,7 @@
 #include <map>
 #include "tree.h"
 #include "labelednode.h"
+#include "label.h"
 
 #ifndef LABELED_TREE_H
 #define LABELED_TREE_H
@@ -15,7 +16,7 @@ class LabeledTree: public Tree<LabeledNode> {
   
   LabeledTree(LabeledNode* root) : Tree(root){ }
   
-  void addIdsAndLabels(std::map <string, string> idMap, std::map <string, vector<string>> labelMap, bool prune=false);
+  void addIdsAndLabels(std::map <std::string, std::string> idMap, std::map <std::string, std::vector<std::string>> labelMap, bool prune=true);
   
   void setLabelsFromRoot();
 
@@ -23,8 +24,8 @@ class LabeledTree: public Tree<LabeledNode> {
 
 private:
   LabeledNode* root;
-  void addLeafIds(std::map <string, string> idMap, bool prune=false);
-  void addLeafLabels(std::map <string, vector<string>> labelMap, bool prune=false);
+  void addLeafIds(std::map <std::string, std::string> idMap, bool prune=true);
+  void addLeafLabels(std::map <std::string, std::vector<std::string>> labelMap, bool prune=true);
   void setLabelsFromChoice(Choice* c);
 };
 
