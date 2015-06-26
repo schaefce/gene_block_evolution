@@ -16,7 +16,6 @@ void LabeledTree::addLeafIds(std::map <std::string, std::string> idMap, bool pru
   std::vector<LabeledNode*> toPrune;
   if (!idMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
-      std::cout << idMap.count(leaf->getName()) << std::endl;
       if(idMap.find(leaf->getName()) != idMap.end()){
         leaf->setID(idMap[leaf->getName()]);
       }
@@ -27,6 +26,7 @@ void LabeledTree::addLeafIds(std::map <std::string, std::string> idMap, bool pru
     for (LabeledNode* leaf : toPrune){
       this->prune(leaf);
     }
+
   }
 }
 
@@ -36,7 +36,6 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
     for (LabeledNode* leaf : collectLeaves()){
       if(labelMap.count(leaf->getID())){
         leaf->setLabel(new Label(labelMap[leaf->getID()],0,true));// Label::createLeafLabel((std::vector<std::string>){labelMap[leaf->getID()]}));
-        //leaf->setID(idMap[leaf->getName()]);
       }
       else if(prune){
         toPrune.push_back(leaf);
@@ -44,9 +43,6 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
     }
     for (LabeledNode* leaf : toPrune){
       this->prune(leaf);
-    }
-    for (LabeledNode* leaf : collectLeaves()){
-      assert(leaf->getLabel());
     }
   }
 }
@@ -56,9 +52,9 @@ void LabeledTree::setLabelsFromChoice(Choice* c){
     Label *l = c->getChoiceGroup()->getLabel();
     if(l){
       l->setFinalChoice(c);
-      std::pair<Choice*, Choice*> children = c->getChoiceGroup()->getChildren();
-      setLabelsFromChoice(children.first);
-      setLabelsFromChoice(children.second);
+      std::pair<Choice*, Choice*> parents = c->getChoiceGroup()->getParents();
+      setLabelsFromChoice(parents.first);
+      setLabelsFromChoice(parents.second);
     }
   }
   

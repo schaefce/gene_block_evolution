@@ -11,31 +11,62 @@ class Label;
 class ChoiceGroup {
 
 public:
-  ChoiceGroup(std::vector<Choice*> choices, std::pair<Choice*, Choice*> childChoices, float score=MAX_SCORE){
-    //groupLabel = l;
+  ChoiceGroup(std::vector<Choice*> choices, std::pair<Choice*, Choice*> parentChoices, float score=MAX_SCORE){
     setChoices(choices);
-    children = childChoices;
+    setParents(parentChoices);
     score = score;
   }
 
   ChoiceGroup(std::vector<Choice*> choices){
     setChoices(choices);
-    //this->children = new pair<(Choice*)NULL, (Choice*)NULL>;
   }
   
   ChoiceGroup(Choice* choice){
     setChoices((std::vector<Choice*>){choice});
-    //this->children = new pair<(Choice*)NULL, (Choice*)NULL>;
+  }
+  
+  ChoiceGroup(const ChoiceGroup &other){
+    setChoices(other.copyChoices());
+    setScore(other.getScore());
+    setParents(other.copyParents());
+  }
+  
+  ChoiceGroup& operator= (const ChoiceGroup &other){
+    setChoices(other.copyChoices());
+    setScore(other.getScore());
+    setParents(other.copyParents());
+    return *this;
+  }
+  
+  ~ChoiceGroup(){
+    for (Choice* c : getChoices()){
+      delete c;
+    }
+    if (hasParents()){
+      delete parents.first;
+      delete parents.second;
+    }
   }
 
-
-
-  void setChildren(std::pair<Choice*, Choice*> childChoices){
-    children = childChoices;
+  void setParents(std::pair<Choice*, Choice*> parentChoices){
+    parents = parentChoices;
   }
-
-  std::pair<Choice*,Choice*> getChildren() {
-    return children;
+  
+  std::pair<Choice*,Choice*> getParents() {
+    return parents;
+  }
+  
+  std::pair<Choice*,Choice*> copyParents() const{
+    if (hasParents()){
+      return (std::pair<Choice*,Choice*>) {new Choice(*parents.first), new Choice(*parents.second)};
+    }
+    else{
+      return (std::pair<Choice*,Choice*>) {(Choice*)NULL, (Choice*)NULL};
+    }
+  }
+  
+  bool hasParents() const {
+    return parents.first && parents.second;
   }
 
   void setLabel(Label* l){
@@ -93,7 +124,15 @@ public:
     std::for_each(choiceMap.begin(),choiceMap.end(),
                   [&choiceV](const std::map<std::string,Choice*>::value_type& p)
                   { choiceV.push_back(p.second); });
-    //transform(choiceMap.begin(), choiceMap.end(), choiceV.begin(), [](const std::pair<std::string, Choice*> &p){ return p.second; });
+    return choiceV;
+  }
+  
+  std::vector<Choice*> copyChoices() const{
+    std::vector<Choice*> choiceV;
+    choiceV.reserve(choiceMap.size());
+    std::for_each(choiceMap.begin(),choiceMap.end(),
+                  [&choiceV](const std::map<std::string,Choice*>::value_type& p)
+                  { choiceV.push_back(new Choice(*p.second)); });
     return choiceV;
   }
 
@@ -114,7 +153,7 @@ public:
       ss << '\t';
       ss << i;
       ss << ". ";
-      ss << it->second;
+      ss << *(it->second);
       if (std::distance(it, choiceMap.end()) != 1){
         ss << '\n';
       }
@@ -129,7 +168,7 @@ public:
 private:
   Label* groupLabel;
   std::map<std::string,Choice*> choiceMap;
-  std::pair<Choice*, Choice*> children;
+  std::pair<Choice*, Choice*> parents;
   float score;
 
 };

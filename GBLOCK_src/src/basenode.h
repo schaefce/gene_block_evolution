@@ -24,8 +24,8 @@ class BaseNode {
   };
 
   BaseNode(TargetNode* left, TargetNode* right, std::string name, double weight=0){
-    this->left = left;
-    this->right = right;
+    setChild(left, true); //this->left = left;
+    setChild(right, false); //this->right = right;
     setName(name);
     this->weight = weight;
   };
@@ -45,7 +45,7 @@ class BaseNode {
             );
     this->name = name;
   }
-
+  
   std::string getName() {return this->name;}
 
   void setWeight(double weight){ this->weight = weight;}
@@ -53,6 +53,7 @@ class BaseNode {
   double getWeight() { return this->weight;}
 
   bool hasChild(bool left) { return left ? this->left : this->right; }
+  
 
   TargetNode* getChild(bool left) { return left ? this->left : this->right; }
 
@@ -65,17 +66,28 @@ class BaseNode {
   void addChild(TargetNode* node, bool left){
     if (hasChild(left))
       delete getChild(left);
-    if (left)
-      this->left = node;
-    else
-      this->right = node;
+    setChild(node, left);
   };
-
-
-
-  void prune(TargetNode* target){
-    target->recursivePrune(target);
+  
+  void setChild(TargetNode* node, bool left){
+    if (left){
+      this->left = node;
+    }
+    else{
+      this->right = node;
+    }
   }
+  
+  void removeChild(bool left){
+    if(hasChild(left)){
+      delete getChild(left);
+    }
+    setChild((TargetNode*)NULL, left);
+  }
+
+
+
+  
 
   std::string newick_helper(){
     if (isLeaf())

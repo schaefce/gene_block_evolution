@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <map>
 #include "utility.h"
+#include <iostream>
 
 static float DUP_PENALTY, DEL_DUP_PENALTY, SPLIT_PENALTY, DEL_SPLIT_PENALTY, DEL_PENALTY, INS_PENALTY, MISMATCH_PENALTY, MATCH_PENALTY;
 static std::string SPLIT;
@@ -353,42 +354,63 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
   std::vector<ChoiceGroup*> choiceGroups;
   int i = 0;
   float prescore;
-  for (ChoiceGroup* grp1 : L1->getChoiceGroups()){
-    for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
-      for (Choice* choice1 : grp1->getChoices()){
-        stringVector c1 = choice1->getStringGroups();
-        c1.erase(std::remove_if(c1.begin(), c1.end(), [](std::string s){ return s == ""; }), c1.end());
+  
+  if(L1 && L2){
+    std::cout << "Child label 1:\n" << *L1 << std::endl;
+    std::cout << "Child label 2:\n" << *L2 << std::endl;
+    for (ChoiceGroup* grp1 : L1->getChoiceGroups()){
+      for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
+        for (Choice* choice1 : grp1->getChoices()){
+          stringVector c1 = choice1->getStringGroups();
+          c1.erase(std::remove_if(c1.begin(), c1.end(), [](std::string s){ return s == ""; }), c1.end());
         
-        for (Choice* choice2 : grp2->getChoices()){
-          stringVector c2 = choice2->getStringGroups();
-          c2.erase(std::remove_if(c2.begin(), c2.end(), [](std::string s){ return s == ""; }), c2.end());
-          prescore = choice1->getScore() + choice2->getScore();
-          intermediatesVector intermediates;
-          float score = getMinEditDistance(c1, c2, intermediates, true);
-          std::vector<Choice*> currChoices;
-          //std::transform(intermediates.begin(), intermediates.end(), currChoices.begin(), [prescore](Intermediate* i){return new Choice(i->splits, i->score + prescore);});
-          currChoices.reserve(intermediates.size());
-          std::for_each(intermediates.begin(),intermediates.end(),
+          for (Choice* choice2 : grp2->getChoices()){
+            stringVector c2 = choice2->getStringGroups();
+            c2.erase(std::remove_if(c2.begin(), c2.end(), [](std::string s){ return s == ""; }), c2.end());
+            prescore = choice1->getScore() + choice2->getScore();
+            intermediatesVector intermediates;
+            float score = getMinEditDistance(c1, c2, intermediates, true);
+            std::vector<Choice*> currChoices;
+            //std::transform(intermediates.begin(), intermediates.end(), currChoices.begin(), [prescore](Intermediate* i){return new Choice(i->splits, i->score + prescore);});
+            currChoices.reserve(intermediates.size());
+            std::for_each(intermediates.begin(),intermediates.end(),
                         [&currChoices, prescore](const Intermediate *i)
                         { currChoices.push_back(new Choice(i->splits, i->score + prescore)); });
-          for (Choice* c : currChoices){
-            std::string choiceString = c->groupListString();
-            if(!choiceMap.count(choiceString)){
-              std::pair<float,int> curr = choiceMap[choiceString];
-              if (curr.first > c->getScore()){
-                choiceGroups[curr.second]->removeChoiceByString(choiceString);
-                choiceMap[choiceString] = std::pair<float,int>(c->getScore(), i);
+            for (Choice* c : currChoices){
+              std::string choiceString = c->groupListString();
+              if(!choiceMap.count(choiceString)){
+                std::pair<float,int> curr = choiceMap[choiceString];
+                if (curr.first > c->getScore()){
+                  choiceGroups[curr.second]->removeChoiceByString(choiceString);
+                  choiceMap[choiceString] = std::pair<float,int>(c->getScore(), i);
+                }
+              }
+              else{
+                choiceMap[choiceString] = std::pair<float, int>(c->getScore(),i);
               }
             }
-            else{
-              choiceMap[choiceString] = std::pair<float, int>(c->getScore(),i);
-            }
+            choiceGroups.push_back(new ChoiceGroup(currChoices, std::pair<Choice*,Choice*>(choice1,choice2), score+prescore));
+            i++;
           }
-          choiceGroups.push_back(new ChoiceGroup(currChoices, std::pair<Choice*,Choice*>(choice1,choice2), score+prescore));
-          i++;
         }
       }
     }
+    return new Label(choiceGroups);
   }
-  return new Label(choiceGroups);
+  else if(L1 || L2){
+    if (L1){
+      std::cout << "Child label 1:\n" << *L1 << std::endl;
+      std::cout << "Child label 2:\nNULL" << std::endl;
+
+    }
+    else{
+      std::cout << "Child label 1:\nNULL" << std::endl;
+      std::cout << "Child label 2:\n" << *L2 << std::endl;
+    }
+    
+    return L1 ? new Label(L1->getChoiceGroups()) : new Label(L2->getChoiceGroups());
+  }
+  else{
+    return (Label*)NULL;
+  }
 }

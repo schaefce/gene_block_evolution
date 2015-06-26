@@ -75,7 +75,16 @@ bool Tree<Node>::prune(Node* target){
     return true;
   }
   else {
-    root->prune(target);
+    //root->prune(target);
+    assert(target->hasParent());
+    Node* parent = target->getParent();
+    if (parent->hasChild(true) && target == parent->getChild(true)){
+      parent->removeChild(true);
+    }
+    else if (parent->hasChild(false) && target == parent->getChild(false)){
+      parent->removeChild(false);
+    }
+    
     return true;
   }
 }

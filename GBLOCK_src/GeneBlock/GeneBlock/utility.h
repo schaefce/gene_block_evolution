@@ -27,7 +27,6 @@ std::string join(std::vector<T> groups, std::string C){
 template <typename T>
 std::vector<std::string> joinNested(std::vector<std::vector<T>> groups, std::string C){
   std::vector<std::string> stringGroups;
-  stringGroups.resize(groups.size()*2);
   std::transform(groups.begin(), groups.end(), stringGroups.begin(), [&C](std::vector<T> v){ return join<T>(v,C); });
   return stringGroups;
 }

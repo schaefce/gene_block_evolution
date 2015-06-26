@@ -15,7 +15,9 @@ public:
   Label(std::vector<ChoiceGroup*> choiceGroups, float score=MAX_SCORE){
     setChoiceGroups(choiceGroups);
     finalScore = score;
+    isFinal = false;
   }
+  
   
   Label(std::vector<std::string> splitGroups, float score=MAX_SCORE, bool isLeaf=false){
     Choice* c = new Choice(splitGroups);
@@ -29,6 +31,33 @@ public:
     setChoiceGroups(cg);
     if(isLeaf){
       setFinalChoice(c);
+    }
+  }
+  
+  
+  Label(const Label &other){
+    setChoiceGroups(other.copyChoiceGroups());
+    if (other.isFinal){
+      setFinalChoice(other.copyFinalChoice());
+    }
+  }
+  
+
+  
+  Label& operator= (const Label &other){
+    setChoiceGroups(other.copyChoiceGroups());
+    if (other.isFinal){
+      setFinalChoice(other.copyFinalChoice());
+    }
+    return *this;
+  }
+  
+  ~Label(){
+    for (ChoiceGroup* cg : getChoiceGroups()){
+      delete cg;
+    }
+    if (hasFinal()){
+      delete finalChoice;
     }
   }
 
@@ -61,9 +90,18 @@ public:
     choiceGroups.push_back(choicegroup);
     choicegroup->setLabel(this);
   }
+  
 
   std::vector<ChoiceGroup*> getChoiceGroups(){
     return this->choiceGroups;
+  }
+  
+  std::vector<ChoiceGroup*> copyChoiceGroups() const{
+    std::vector<ChoiceGroup*> copy;
+    for(ChoiceGroup* cg : choiceGroups){
+      copy.push_back(new ChoiceGroup(*cg));
+    }
+    return copy;
   }
   
   Choice* getBestChoice(){
@@ -97,10 +135,14 @@ public:
     }
   }
   
+  Choice* copyFinalChoice() const{
+    return new Choice(*finalChoice);
+  }
+  
   void setFinalLabel(){
     if(finalChoice){
       std::stringstream ss;
-      ss << finalChoice;
+      ss << *(finalChoice);
       finalLabel = ss.str();
     }
   }
@@ -115,9 +157,11 @@ public:
   
   std::vector<std::string> getStringChoiceGroups() const{
     std::vector<std::string> stringGroups;
-    std::transform(choiceGroups.begin(), choiceGroups.end(), stringGroups.begin(), []( ChoiceGroup* cg){
-      std::stringstream ss; ss << (*cg); return ss.str();
-    });
+    for(ChoiceGroup* cg : choiceGroups){
+      std::stringstream ss;
+      ss << *cg;
+      stringGroups.push_back(ss.str());
+    }
     return stringGroups;
   }
   
@@ -127,7 +171,7 @@ public:
     if (l.hasFinal())
       return strm << "Final Label: " << l.getFinalLabel() << "," << l.getFinalScore();
     else
-      return strm << "Label:\n" << join(l.getStringChoiceGroups(), "\n");
+      return strm << "Label:\n" << join<std::string>(l.getStringChoiceGroups(), "\n");
   }
 
 

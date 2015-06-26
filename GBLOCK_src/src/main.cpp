@@ -172,6 +172,12 @@ void setPossibleLabelsHelper(LabeledNode* node) {
     setPossibleLabelsHelper(node->getChild(true));
     setPossibleLabelsHelper(node->getChild(false));
     node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
+    if (node->getLabel()){
+      std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
+    }
+    else{
+      std::cout << "Parent assigned label: NULL" << std::endl;
+    }
   }
 }
 

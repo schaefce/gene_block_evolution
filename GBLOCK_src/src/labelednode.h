@@ -22,7 +22,14 @@ class LabeledNode : public BaseNode<LabeledNode> {
 
   LabeledNode(LabeledNode* left, LabeledNode* right, std::string name, double weight=0) :
     BaseNode<LabeledNode>(left, right, name, weight){
-    this->label = (Label*)NULL;
+      this->label = (Label*)NULL;
+      if(left){
+        left->setParent(this);
+      }
+      if(right){
+        right->setParent(this);
+      }
+
   };
   
   void setWeight(double weight){
@@ -35,6 +42,10 @@ class LabeledNode : public BaseNode<LabeledNode> {
   
   std::string getID(){
     return this->identity;
+  }
+  
+  bool hasID(){
+    return !this->identity.empty();
   }
   
   void setName(std::string name){
@@ -54,36 +65,53 @@ class LabeledNode : public BaseNode<LabeledNode> {
   }
 
   ~LabeledNode(){
-    delete this->label;
+    if(this->label){
+      delete this->label;
+    }
   };
   
-  LabeledNode* recursivePrune(LabeledNode* target){
-    if (this){
-      if (this->left == target){
-        delete getChild(left);
-        this->left = (LabeledNode*)NULL;
-        return this;
-      }
-      else if (this->right == target){
-        delete getChild(right);
-        this->right = (LabeledNode*)NULL;
-        return this;
-      }
-      else{
-        this->left = left->recursivePrune(target);
-        this->right = right->recursivePrune(target);
-        return this;
-      }
-    }
-    else{
-      return this;
-    }
+  void setParent(LabeledNode* node){ this->parent = node; }
+  
+  LabeledNode* getParent() { return this->parent; }
+  
+  bool hasParent() { return this->parent; }
+  
+  
+  void setChild(LabeledNode* node, bool left){
+    BaseNode<LabeledNode>::setChild(node, left);
+    node->setParent(this);
   }
+  
+  
+  
+  
+  //LabeledNode* prune(LabeledNode* target){
+  //  if (this->left){
+  //    if(this->left== target){
+  //      delete getChild(true);
+  //      this->left = (LabeledNode*)NULL;
+  //    }
+  //    else{
+  //      this->left = left->prune(target);
+  //    }
+  //  }
+  //  if (this->right){
+  //    if(this->right == target){
+  //      delete getChild(false);
+  //      this->right = (LabeledNode*)NULL;
+  //    }
+  //    else{
+  //      this->right = right->prune(target);
+  //    }
+  //  }
+  //  return this;
+  //}
   
 
 
 private:
   Label* label;
+  LabeledNode* parent;
   std::string identity;
 };
 

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "utility.h"
 
 #ifndef CHOICE_H
@@ -20,12 +21,17 @@ class Choice {
 public:
   Choice(ssVector groups, float score=MAX_SCORE){
     setGroups(groups);
-    this->choiceScore = score;
+    setScore(score);
   }
   
   Choice(std::vector<std::string> groups, float score=MAX_SCORE){
     setGroups(groups);
-    this->choiceScore = score;
+    setScore(score);
+  }
+  
+  Choice(const Choice &other){
+    setGroups(other.getGroups());
+    setScore(other.getScore());
   }
   
   void setChoiceGroup(ChoiceGroup* cg){
@@ -37,16 +43,22 @@ public:
   }
 
   void setGroups(ssVector grps){
-    this->splitGroups = grps;
+    splitGroups = grps;
+    std::regex re("\\s+");
+    splitGroups.erase(std::remove_if(splitGroups.begin(), splitGroups.end(), [re](std::vector<std::string> sV){ return sV.size() == 1 && (std::regex_match (sV[0],re) || sV[0].empty()); }), splitGroups.end());
+
   }
 
   void setGroups(std::vector<std::string> grps){
+    std::regex re("\\s+");
     for(std::string s : grps){
-      this->splitGroups.push_back({s});
+      if (!std::regex_match (s,re)){
+        this->splitGroups.push_back({s});
+      }
     }
   }
   
-  ssVector getGroups(){
+  ssVector getGroups() const{
     return this->splitGroups;
   }
   
@@ -64,10 +76,14 @@ public:
   
   
   std::vector<std::string> getStringGroups() const{
-    return joinNested<std::string>(splitGroups,",");
-    //vector<string> stringGroups;
+    std::vector<std::string> joined = joinNested<std::string>(splitGroups,",");
+    std::regex re("\\s+");
+
+    joined.erase(std::remove_if(joined.begin(), joined.end(), [re](std::string s){ return std::regex_match (s,re) || s.empty(); }), joined.end());
+    return joined;
+    //std::vector<std::string> stringGroups;
     //stringGroups.resize(splitGroups.size()*2);
-    //std::transform(splitGroups.begin(), splitGroups.end(), stringGroups.begin(), [](vector<string> v){ return join<string>(v,','); });
+    //std::transform(splitGroups.begin(), splitGroups.end(), stringGroups.begin(), [](std::vector<std::string> v){ return join<std::string>(v,","); });
     //return stringGroups;
     
     //std::vector<std::string> stringGroupV;
@@ -80,9 +96,11 @@ public:
   
   std::string groupListString() const {
     std::vector<std::string> stringGroups = getStringGroups();
-    stringGroups.resize(stringGroups.size()*3);
+
     std::transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), [](std::string s){ return formatEnds(s, '(', ')'); }); //'(' + s + ')'; });
+ 
     return formatEnds(join<std::string>(stringGroups, ","), '[', ']');//'[' + join<string>(stringGroups,',') + ']';
+    
   }
   
   friend std::ostream& operator<<(std::ostream &strm, const Choice &c){
