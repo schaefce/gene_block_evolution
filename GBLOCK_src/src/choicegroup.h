@@ -1,7 +1,5 @@
 #include "choice.h"
 #include <map>
-#include <string>
-#include <vector>
 
 #ifndef CHOICE_GROUP_H
 #define CHOICE_GROUP_H

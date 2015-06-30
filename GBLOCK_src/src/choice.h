@@ -1,8 +1,6 @@
 
 #include <limits>
 #include <algorithm>
-#include <string>
-#include <vector>
 #include <iostream>
 #include "utility.h"
 
@@ -45,7 +43,7 @@ public:
   void setGroups(ssVector grps){
     splitGroups = grps;
     std::regex re("\\s+");
-    splitGroups.erase(std::remove_if(splitGroups.begin(), splitGroups.end(), [re](std::vector<std::string> sV){ return sV.size() == 1 && (std::regex_match (sV[0],re) || sV[0].empty()); }), splitGroups.end());
+    //splitGroups.erase(std::remove_if(splitGroups.begin(), splitGroups.end(), [re](std::vector<std::string> sV){ return sV.size() == 1 && (std::regex_match (sV[0],re) || sV[0].empty()); }), splitGroups.end());
 
   }
 
@@ -76,16 +74,23 @@ public:
   
   
   std::vector<std::string> getStringGroups() const{
-    std::vector<std::string> joined = joinNested<std::string>(splitGroups,",");
-    std::regex re("\\s+");
+    //std::vector<std::string> joined = joinNested<std::string>(splitGroups,",");
+    //std::regex re("\\s+");
 
-    joined.erase(std::remove_if(joined.begin(), joined.end(), [re](std::string s){ return std::regex_match (s,re) || s.empty(); }), joined.end());
-    return joined;
+    //joined.erase(std::remove_if(joined.begin(), joined.end(), [re](std::string s){ return std::regex_match (s,re) || s.empty(); }), joined.end());
+    //return joined;
+    
     //std::vector<std::string> stringGroups;
     //stringGroups.resize(splitGroups.size()*2);
     //std::transform(splitGroups.begin(), splitGroups.end(), stringGroups.begin(), [](std::vector<std::string> v){ return join<std::string>(v,","); });
     //return stringGroups;
     
+    
+    std::vector<std::string> stringGroups;
+    std::for_each(splitGroups.begin(),splitGroups.end(),
+                  [&stringGroups](const ssVector::value_type& p)
+                  { stringGroups.push_back(join<std::string>(p,",")); });
+    return stringGroups;
     //std::vector<std::string> stringGroupV;
     
     //for (std::vector<std::vector<std::string>>::iterator it = splitGroups.begin(); it != splitGroups.end(); ++it){
@@ -97,10 +102,21 @@ public:
   std::string groupListString() const {
     std::vector<std::string> stringGroups = getStringGroups();
 
-    std::transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), [](std::string s){ return formatEnds(s, '(', ')'); }); //'(' + s + ')'; });
+    std::transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), [](std::string s){ return formatEnds(s, "(", ")"); }); //'(' + s + ')'; });
  
-    return formatEnds(join<std::string>(stringGroups, ","), '[', ']');//'[' + join<string>(stringGroups,',') + ']';
+    return formatEnds(join<std::string>(stringGroups, ","), "[", "]");//'[' + join<string>(stringGroups,',') + ']';
     
+  }
+  
+  std::string formatted() const {
+    std::vector<std::string> stringGroups = getStringGroups();
+    
+    //std::transform(stringGroups.begin(), stringGroups.end(), stringGroups.begin(), [](std::string s){ return formatEnds(s, "\\(", "\\)"); });
+    
+    std::stringstream ss;
+    ss << join<std::string>(stringGroups, "*");//'[' + join<string>(stringGroups,',') + ']';
+    ss << "|Score= " << choiceScore;
+    return ss.str();
   }
   
   friend std::ostream& operator<<(std::ostream &strm, const Choice &c){

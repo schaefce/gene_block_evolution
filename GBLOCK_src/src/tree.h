@@ -61,7 +61,9 @@ Tree<Node>::~Tree() {
 
 template <typename Node>
 std::string Tree<Node>::newick() {
-  return this->root->newick_helper() + ";";
+  std::stringstream ss;
+  this->root->newick_helper(ss);
+  return ss.str() + ";";
 }
 
 

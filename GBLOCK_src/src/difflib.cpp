@@ -8,15 +8,13 @@
 
 
 #include "difflib.h"
-#include <limits>
-#include <algorithm>
-#include <map>
-#include "utility.h"
 #include <iostream>
+
 
 static float DUP_PENALTY, DEL_DUP_PENALTY, SPLIT_PENALTY, DEL_SPLIT_PENALTY, DEL_PENALTY, INS_PENALTY, MISMATCH_PENALTY, MATCH_PENALTY;
 static std::string SPLIT;
 static bool allowInsertions;
+
 
 void LabelMatcher::initialize(){
   DEL_DUP_PENALTY = DUP_PENALTY = 5;
@@ -26,6 +24,50 @@ void LabelMatcher::initialize(){
   MATCH_PENALTY = -1;
   SPLIT = "*";
 }
+
+template <typename T>
+void printV(std::vector<T> toPrint, std::string name=""){
+  if (!name.empty()){
+    std::cout << name << ": ";
+  }
+  for(int i = 0; i < toPrint.size(); i++){
+    std::cout << toPrint[i] << " ";
+  }
+  std::cout << std::endl;
+}
+
+void printScores(std::vector<std::pair<float,float>> toPrint, std::string name=""){
+  if (!name.empty()){
+    std::cout << name << ": ";
+  }
+  for(int i = 0; i < toPrint.size(); i++){
+    std::cout << "(" << toPrint[i].first << ", " << toPrint[i].second << ") ";
+  }
+  std::cout << std::endl;
+}
+
+void printMatrix(float ** subproblems, long m, long n){
+  std::cout << "\tSubproblem Matrix: ";
+  for (int j = 0; j < n+1; j++){
+    std::cout << "\t";
+    for (int i = 0; i < m+1; i++){
+      std::cout << subproblems[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+template <typename T>
+void printVV(std::vector<std::vector<T>> toPrint){
+  for(int i = 0; i < toPrint.size(); i++){
+    printV<T>(toPrint[i]);
+    //for(int j = 0; j < toPrint[i].size(); j++){
+    //  std::cout << toPrint[i][j] << " ";
+    //}
+    //std::cout << std::endl;
+  }
+}
+
 
 float LabelMatcher::getDeletionPenalty(stringVector A, stringVector B, int j, int i){
   /**
@@ -89,9 +131,9 @@ float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediate
   long n = A.size();
   long m = B.size();
   //std::vector<std::vector<int>> subproblems;
-  int **subproblems = new int*[m+1];
+  float **subproblems = new float*[m+1];
   for (int i = 0; i < m+1; i++){
-    subproblems[i] = new int[n+1];
+    subproblems[i] = new float[n+1];
   }
   
   for (int j = 0; j < n+1; j++){
@@ -155,11 +197,13 @@ std::vector<std::vector<std::string>> groupBy(std::vector<std::string> input, st
   return result;
 }
 
-void LabelMatcher::performBacktrace(stringVector A, stringVector B, int **subproblems, intermediatesVector &intermediates){
+void LabelMatcher::performBacktrace(stringVector A, stringVector B, float **subproblems, intermediatesVector &intermediates){
   /**
     * Perform backtrace to determine what alignment of A and B produced lowest penalty in subproblems
     */
+
   
+  //printMatrix(subproblems, B.size(), A.size());
   
   splitGroupVector splits;
   long j = A.size(); //j = n
@@ -314,33 +358,47 @@ splitGroupVector LabelMatcher::crossProduct(splitGroupVector input){
 
 
 
+
 float LabelMatcher::getMinEditDistance(stringVector choice1, stringVector choice2, intermediatesVector &intermediates, bool backtrace){
   float currMin = std::numeric_limits<float>::max();
   std::pair<stringVector,stringVector> bestCombo;
-    
+  std::string escapedSplit ="\\" + SPLIT;
+  //printV(choice1, "\tChoice1:");
+  //printV(choice2, "\tChoice2:");
+
+  std::vector<std::pair<float,float>> scores;
+  
   do {
-    stringVector A = reSplit(join<std::string>(choice1, SPLIT), "\\W+");
+    stringVector A = delimSplit(join<std::string>(choice1, SPLIT),escapedSplit, true); //"\\W+");
     A.erase(std::remove_if(A.begin(), A.end(), [](std::string s){ return s == "," || s == ""; }), A.end());
-      
     do {
-      stringVector B = reSplit(join<std::string>(choice2, SPLIT), "\\W+");
+      std::pair<float,float> currScores;
+      //stringVector B = reSplit(join<std::string>(choice2, SPLIT), "\\W+");
+      stringVector B = delimSplit(join<std::string>(choice2, SPLIT),escapedSplit, true); //"\\W+");
       B.erase(std::remove_if(B.begin(), B.end(), [](std::string s){ return s == "," || s == ""; }), B.end());
+      //printV(A, "\t\tA");
+      //printV(B, "\t\tB");
       intermediatesVector currIntermediates;
       float score = getEditDistance(A, B, currIntermediates, false);
+      currScores.first = score;
       if (score < currMin){
         currMin = score;
         bestCombo.first = A;
         bestCombo.second = B;
       }
       score = getEditDistance(B, A, currIntermediates, false);
+      currScores.second = score;
       if (score < currMin){
         currMin = score;
         bestCombo.first = B;
         bestCombo.second = A;
       }
+      scores.push_back(currScores);
     } while(std::next_permutation(choice2.begin(),choice2.end()));
   } while(std::next_permutation(choice1.begin(),choice1.end()));
 
+  //printScores(scores, "\tScores:");
+  
   if (backtrace){
     //intermediatesVector currIntermediates;
     getEditDistance(bestCombo.first, bestCombo.second, intermediates, true);
@@ -354,10 +412,10 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
   std::vector<ChoiceGroup*> choiceGroups;
   int i = 0;
   float prescore;
-  
   if(L1 && L2){
     std::cout << "Child label 1:\n" << *L1 << std::endl;
     std::cout << "Child label 2:\n" << *L2 << std::endl;
+    
     for (ChoiceGroup* grp1 : L1->getChoiceGroups()){
       for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
         for (Choice* choice1 : grp1->getChoices()){

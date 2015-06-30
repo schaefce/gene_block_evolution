@@ -7,8 +7,6 @@
  * 		A flexible class for comparing pairs of labels.
  */
 
-#include <string>
-#include "choice.h"
 #include "label.h"
 
 typedef std::vector<std::string> stringVector;
@@ -74,7 +72,7 @@ private:
   static float getSpecialSplitPenalty(stringVector A, stringVector B, int j, int i);
   static splitGroupVector crossProduct(splitGroupVector input);
   static float getEditDistance(stringVector A, stringVector B, intermediatesVector &intermediates, bool backtrace);
-  static void performBacktrace(stringVector A, stringVector B, int **subproblems, intermediatesVector &intermediates);
+  static void performBacktrace(stringVector A, stringVector B, float **subproblems, intermediatesVector &intermediates);
 
 
 

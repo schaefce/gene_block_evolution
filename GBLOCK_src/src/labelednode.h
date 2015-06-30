@@ -1,7 +1,5 @@
 // BaseNode.h: Simple (binary) tree class
 // Defined: A BaseNode with zero or more BaseNodes as children.
-#include <string>
-#include <iostream>
 #include "basenode.h"
 #include "label.h"
 
@@ -81,6 +79,54 @@ class LabeledNode : public BaseNode<LabeledNode> {
     BaseNode<LabeledNode>::setChild(node, left);
     node->setParent(this);
   }
+  
+  std::string get_info_string() const{
+    return ":" + std::to_string(weight);
+  }
+  
+  
+  std::string newick_helper(bool withLabels=true) {
+    if (!withLabels){
+      return BaseNode::newick_helper();
+    }
+    else{
+      std::string fLabel = label ? "|" + label->formatted() : "";
+      if (isLeaf()){
+        return name + fLabel;
+      }
+      std::string s = "(";
+      if (hasChild(true))
+        s += getChild(true)->newick_helper() + getChild(true)->get_info_string();//":" + std::to_string(getChild(true)->getWeight());
+      if (hasChild(true) && hasChild(false))
+        s += ",";
+      if (hasChild(false))
+        s += getChild(false)->newick_helper() + getChild(false)->get_info_string();//":" + std::to_string(getChild(false)->getWeight());
+      return s + ")" + name + fLabel;
+    }
+  };
+  
+
+  
+  void newick_helper(std::stringstream &ss, bool withLabels=true){
+    if (!withLabels){
+      BaseNode::newick_helper(ss);
+    }
+    else{
+      std::string fLabel = label ? "|" + label->formatted() : "";
+      if (isLeaf()){
+        ss << name << fLabel;
+        return;
+      }
+      ss << "(";
+      if (hasChild(true))
+        ss << getChild(true)->newick_helper() << getChild(true)->get_info_string();// ":" << std::to_string(getChild(true)->getWeight());
+      if (hasChild(true) && hasChild(false))
+        ss << ",";
+      if (hasChild(false))
+        ss << getChild(false)->newick_helper() << getChild(true)->get_info_string();//+ ":" + std::to_string(getChild(false)->getWeight());
+      ss << ")" << name << fLabel;
+    }
+  };
   
   
   

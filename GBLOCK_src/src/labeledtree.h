@@ -1,7 +1,4 @@
 // Tree.h: Simple (binary) tree class
-#include <string>
-#include <iostream>
-#include <map>
 #include "tree.h"
 #include "labelednode.h"
 #include "label.h"
@@ -20,10 +17,12 @@ class LabeledTree: public Tree<LabeledNode> {
   
   void setLabelsFromRoot();
 
-  ~LabeledTree();
+  std::string newick();
 
+  ~LabeledTree();
+  
 private:
-  LabeledNode* root;
+  //LabeledNode* root;
   void addLeafIds(std::map <std::string, std::string> idMap, bool prune=true);
   void addLeafLabels(std::map <std::string, std::vector<std::string>> labelMap, bool prune=true);
   void setLabelsFromChoice(Choice* c);

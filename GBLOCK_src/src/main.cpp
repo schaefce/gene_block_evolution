@@ -1,14 +1,11 @@
 #include <fstream>
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <map>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/program_options.hpp>
 
-#include "labeledtree.h"
 #include "difflib.h"
+#include "labeledtree.h"
+
 
 using namespace boost;
 namespace po = boost::program_options;
@@ -195,7 +192,10 @@ void setPossibleLabels(LabeledTree* tree) {
 }
 
 void writeTree(LabeledTree* tree, std::string ofile){
-  //TODO
+  std::ofstream fstream;
+  fstream.open(ofile);
+  fstream << tree->newick();
+  fstream.close();
 }
 
 

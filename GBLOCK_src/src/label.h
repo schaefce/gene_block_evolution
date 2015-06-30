@@ -154,6 +154,13 @@ public:
       return "";
   }
   
+  std::string formatted() const{
+    if (isFinal){
+      return finalChoice->formatted();
+    }
+    return "";
+  }
+  
   
   std::vector<std::string> getStringChoiceGroups() const{
     std::vector<std::string> stringGroups;

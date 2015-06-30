@@ -46,18 +46,18 @@ class BaseNode {
     this->name = name;
   }
   
-  std::string getName() {return this->name;}
+  std::string getName() const {return this->name;}
 
   void setWeight(double weight){ this->weight = weight;}
 
-  double getWeight() { return this->weight;}
+  double getWeight() const { return this->weight;}
 
   bool hasChild(bool left) { return left ? this->left : this->right; }
   
 
   TargetNode* getChild(bool left) { return left ? this->left : this->right; }
 
-  bool isLeaf() { return !left && !right; }
+  bool isLeaf() const { return !left && !right; }
 
   void setParent(TargetNode* node){
     this->parent = node;
@@ -84,12 +84,25 @@ class BaseNode {
     }
     setChild((TargetNode*)NULL, left);
   }
-
-
-
   
+  
+ 
+  void newick_helper(std::stringstream &ss){
+    if (isLeaf()){
+      ss << name;
+      return;
+    }
+    ss << "(";
+    if (hasChild(true))
+      ss << getChild(true)->newick_helper() << ":" << std::to_string(getChild(true)->getWeight());
+    if (hasChild(true) && hasChild(false))
+      ss << ",";
+    if (hasChild(false))
+      ss << getChild(false)->newick_helper() + ":" + std::to_string(getChild(false)->getWeight());
+    ss << ")" << name;
+  };
 
-  std::string newick_helper(){
+  std::string newick_helper() {
     if (isLeaf())
         return name;
     std::string s = "(";

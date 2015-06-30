@@ -1,8 +1,5 @@
 #include "labeledtree.h"
 
-
-
-
 void LabeledTree::addIdsAndLabels(std::map <std::string, std::string> idMap, std::map <std::string, std::vector<std::string>> labelMap, bool prune) {
   if(!idMap.empty()){
     addLeafIds(idMap, prune);
@@ -23,9 +20,9 @@ void LabeledTree::addLeafIds(std::map <std::string, std::string> idMap, bool pru
         toPrune.push_back(leaf);
       }
     }
-    for (LabeledNode* leaf : toPrune){
-      this->prune(leaf);
-    }
+    //for (LabeledNode* leaf : toPrune){
+    //  this->prune(leaf);
+    //}
 
   }
 }
@@ -41,9 +38,10 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
         toPrune.push_back(leaf);
       }
     }
-    for (LabeledNode* leaf : toPrune){
-      this->prune(leaf);
-    }
+    //for (LabeledNode* leaf : toPrune){
+    //  this->prune(leaf);
+    //}
+    
   }
 }
 
@@ -64,3 +62,13 @@ void LabeledTree::setLabelsFromRoot(){
   Choice* rootChoice = root->getLabel()->getBestChoice();
   setLabelsFromChoice(rootChoice);
 }
+
+
+std::string LabeledTree::newick() {
+  std::stringstream ss;
+  this->root->newick_helper(ss, true);
+  return ss.str() + ";";
+  //return this->root->newick_helper() + ";";
+}
+
+
