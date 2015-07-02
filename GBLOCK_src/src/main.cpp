@@ -170,10 +170,10 @@ void setPossibleLabelsHelper(LabeledNode* node) {
     setPossibleLabelsHelper(node->getChild(false));
     node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
     if (node->getLabel()){
-      std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
+      //std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
     }
     else{
-      std::cout << "Parent assigned label: NULL" << std::endl;
+      //std::cout << "Parent assigned label: NULL" << std::endl;
     }
   }
 }
@@ -251,7 +251,7 @@ int main(int argc, char **argv){
     ofile = vm["fname"].as<std::string>();
   }
   else{
-    ofile = baseTreeFile + "labeled.nwk";
+    ofile = baseTreeFile + ".labeled.nwk";
   }
 
   writeTree(lTree, ofile);

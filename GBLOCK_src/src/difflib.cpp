@@ -202,9 +202,6 @@ void LabelMatcher::performBacktrace(stringVector A, stringVector B, float **subp
     * Perform backtrace to determine what alignment of A and B produced lowest penalty in subproblems
     */
 
-  
-  //printMatrix(subproblems, B.size(), A.size());
-  
   splitGroupVector splits;
   long j = A.size(); //j = n
   long aj = j - 1;
@@ -214,13 +211,6 @@ void LabelMatcher::performBacktrace(stringVector A, stringVector B, float **subp
     splitGroup currIntermediate;
     float pos = subproblems[i][j];
     
-    //float case1_match = subproblems[i-1][j-1] + MATCH_PENALTY;
-    //float case2_del_dup = subproblems[i-1][j] + DEL_DUP_PENALTY;
-    //float case2_del_split = subproblems[i-1][j] + DEL_SPLIT_PENALTY;
-    //float case2_del_gen = subproblems[i-1][j] + DEL_PENALTY;
-    //float case3_ins_dup = subproblems[i][j-1] + DUP_PENALTY;
-    //float case3_ins_split = subproblems[i][j-1] + SPLIT_PENALTY;
-    //float case3_ins_gen = subproblems[i][j-1] + INS_PENALTY;
     if (i > 0 && j > 0 & pos == subproblems[i-1][j-1] + MATCH_PENALTY){ //case1_match){
       currIntermediate.push_back(new splitGroupPiece(B[bi], MATCH_PENALTY));
       bi -= 1;
@@ -297,7 +287,6 @@ void LabelMatcher::performBacktrace(stringVector A, stringVector B, float **subp
     Intermediate* inter = new Intermediate(splitsV,score);
     intermediates.push_back(inter);
   }
-  //return intermediates;
 }
 
 
@@ -356,28 +345,33 @@ splitGroupVector LabelMatcher::crossProduct(splitGroupVector input){
   }
 }
 
+stringVector flattenAndAddDelim(ssVector target, std::string delim){
+  stringVector ret;
+  for(ssVector::iterator it = target.begin(); it != target.end(); ++it){
+    for(std::string s : (*it)){
+      ret.push_back(s);
+    }
+    ret.push_back(delim);
+  }
+  ret.pop_back();
+  return ret;
+}
 
 
-
-float LabelMatcher::getMinEditDistance(stringVector choice1, stringVector choice2, intermediatesVector &intermediates, bool backtrace){
+float LabelMatcher::getMinEditDistance(ssVector choice1, ssVector choice2, intermediatesVector &intermediates, bool backtrace){
   float currMin = std::numeric_limits<float>::max();
   std::pair<stringVector,stringVector> bestCombo;
   std::string escapedSplit ="\\" + SPLIT;
-  //printV(choice1, "\tChoice1:");
-  //printV(choice2, "\tChoice2:");
 
   std::vector<std::pair<float,float>> scores;
   
   do {
-    stringVector A = delimSplit(join<std::string>(choice1, SPLIT),escapedSplit, true); //"\\W+");
+    stringVector A = flattenAndAddDelim(choice1, SPLIT);//delimSplit(join<std::string>(choice1, SPLIT), escapedSplit, true); //"\\W+");
     A.erase(std::remove_if(A.begin(), A.end(), [](std::string s){ return s == "," || s == ""; }), A.end());
     do {
       std::pair<float,float> currScores;
-      //stringVector B = reSplit(join<std::string>(choice2, SPLIT), "\\W+");
-      stringVector B = delimSplit(join<std::string>(choice2, SPLIT),escapedSplit, true); //"\\W+");
+      stringVector B = flattenAndAddDelim(choice2, SPLIT);//delimSplit(join<std::string>(choice2, SPLIT), escapedSplit, true); //"\\W+");
       B.erase(std::remove_if(B.begin(), B.end(), [](std::string s){ return s == "," || s == ""; }), B.end());
-      //printV(A, "\t\tA");
-      //printV(B, "\t\tB");
       intermediatesVector currIntermediates;
       float score = getEditDistance(A, B, currIntermediates, false);
       currScores.first = score;
@@ -397,10 +391,8 @@ float LabelMatcher::getMinEditDistance(stringVector choice1, stringVector choice
     } while(std::next_permutation(choice2.begin(),choice2.end()));
   } while(std::next_permutation(choice1.begin(),choice1.end()));
 
-  //printScores(scores, "\tScores:");
   
   if (backtrace){
-    //intermediatesVector currIntermediates;
     getEditDistance(bestCombo.first, bestCombo.second, intermediates, true);
   }
   return currMin;
@@ -413,27 +405,23 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
   int i = 0;
   float prescore;
   if(L1 && L2){
-    std::cout << "Child label 1:\n" << *L1 << std::endl;
-    std::cout << "Child label 2:\n" << *L2 << std::endl;
-    
     for (ChoiceGroup* grp1 : L1->getChoiceGroups()){
       for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
         for (Choice* choice1 : grp1->getChoices()){
-          stringVector c1 = choice1->getStringGroups();
-          c1.erase(std::remove_if(c1.begin(), c1.end(), [](std::string s){ return s == ""; }), c1.end());
+          ssVector c1 = choice1->getGroups();
+          //c1.erase(std::remove_if(c1.begin(), c1.end(), [](std::string s){ return s == ""; }), c1.end());
         
           for (Choice* choice2 : grp2->getChoices()){
-            stringVector c2 = choice2->getStringGroups();
-            c2.erase(std::remove_if(c2.begin(), c2.end(), [](std::string s){ return s == ""; }), c2.end());
+            ssVector c2 = choice2->getGroups();
+            //c2.erase(std::remove_if(c2.begin(), c2.end(), [](std::string s){ return s == ""; }), c2.end());
             prescore = choice1->getScore() + choice2->getScore();
             intermediatesVector intermediates;
             float score = getMinEditDistance(c1, c2, intermediates, true);
             std::vector<Choice*> currChoices;
-            //std::transform(intermediates.begin(), intermediates.end(), currChoices.begin(), [prescore](Intermediate* i){return new Choice(i->splits, i->score + prescore);});
             currChoices.reserve(intermediates.size());
             std::for_each(intermediates.begin(),intermediates.end(),
                         [&currChoices, prescore](const Intermediate *i)
-                        { currChoices.push_back(new Choice(i->splits, i->score + prescore)); });
+                          { currChoices.push_back(new Choice((std::vector<std::vector<std::string>>)i->splits, i->score + prescore)); });
             for (Choice* c : currChoices){
               std::string choiceString = c->groupListString();
               if(!choiceMap.count(choiceString)){
@@ -456,16 +444,6 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
     return new Label(choiceGroups);
   }
   else if(L1 || L2){
-    if (L1){
-      std::cout << "Child label 1:\n" << *L1 << std::endl;
-      std::cout << "Child label 2:\nNULL" << std::endl;
-
-    }
-    else{
-      std::cout << "Child label 1:\nNULL" << std::endl;
-      std::cout << "Child label 2:\n" << *L2 << std::endl;
-    }
-    
     return L1 ? new Label(L1->getChoiceGroups()) : new Label(L2->getChoiceGroups());
   }
   else{

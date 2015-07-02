@@ -32,7 +32,7 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
   if (!labelMap.empty()) {
     for (LabeledNode* leaf : collectLeaves()){
       if(labelMap.count(leaf->getID())){
-        leaf->setLabel(new Label(labelMap[leaf->getID()],0,true));// Label::createLeafLabel((std::vector<std::string>){labelMap[leaf->getID()]}));
+        leaf->setLabel(new Label(labelMap[leaf->getID()],0,true));
       }
       else if(prune){
         toPrune.push_back(leaf);
@@ -68,7 +68,6 @@ std::string LabeledTree::newick() {
   std::stringstream ss;
   this->root->newick_helper(ss, true);
   return ss.str() + ";";
-  //return this->root->newick_helper() + ";";
 }
 
 

@@ -221,8 +221,7 @@ Tree<Node>* Tree<Node>::parse_tree(std::string s) {
     Node* root2 = new Node();
     root->setWeight(weight);
     root2->addChild(root, true);
-    t = new Tree<Node>(root2); //std::make_pair(t,weight), std::make_pair((Tree*)NULL,0), std::string(""));
-    //root->setWeight(stoi(next_token(s,p)));
+    t = new Tree<Node>(root2);
     token = next_token(s,p);
   }
 
@@ -235,10 +234,6 @@ Tree<Node>* Tree<Node>::read_newick_file(std::string file) {
   std::ifstream fin(file);
   std::string s((std::istreambuf_iterator<char>(fin)),
                   std::istreambuf_iterator<char>());
-  //std::stringstream strstream;
-  //strstream << fin.rdbuf();
-
-  //return parse_tree(strstream.str());
   return parse_tree(s);
 }
 

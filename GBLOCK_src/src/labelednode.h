@@ -90,18 +90,19 @@ class LabeledNode : public BaseNode<LabeledNode> {
       return BaseNode::newick_helper();
     }
     else{
-      std::string fLabel = label ? "|" + label->formatted() : "";
+      std::string joiner = (!name.empty() and label)? "|" : "";
+      std::string fLabel = label ? label->formatted() : "";
       if (isLeaf()){
-        return name + fLabel;
+        return name + joiner + fLabel;
       }
       std::string s = "(";
       if (hasChild(true))
-        s += getChild(true)->newick_helper() + getChild(true)->get_info_string();//":" + std::to_string(getChild(true)->getWeight());
+        s += getChild(true)->newick_helper() + getChild(true)->get_info_string();
       if (hasChild(true) && hasChild(false))
         s += ",";
       if (hasChild(false))
-        s += getChild(false)->newick_helper() + getChild(false)->get_info_string();//":" + std::to_string(getChild(false)->getWeight());
-      return s + ")" + name + fLabel;
+        s += getChild(false)->newick_helper() + getChild(false)->get_info_string();
+      return s + ")" + name + joiner + fLabel;
     }
   };
   
@@ -112,19 +113,20 @@ class LabeledNode : public BaseNode<LabeledNode> {
       BaseNode::newick_helper(ss);
     }
     else{
-      std::string fLabel = label ? "|" + label->formatted() : "";
+      std::string joiner = (!name.empty() and label)? "|" : "";
+      std::string fLabel = label ? label->formatted() : "";
       if (isLeaf()){
-        ss << name << fLabel;
+        ss << name << joiner << fLabel;
         return;
       }
       ss << "(";
       if (hasChild(true))
-        ss << getChild(true)->newick_helper() << getChild(true)->get_info_string();// ":" << std::to_string(getChild(true)->getWeight());
+        ss << getChild(true)->newick_helper() << getChild(true)->get_info_string();
       if (hasChild(true) && hasChild(false))
         ss << ",";
       if (hasChild(false))
-        ss << getChild(false)->newick_helper() << getChild(true)->get_info_string();//+ ":" + std::to_string(getChild(false)->getWeight());
-      ss << ")" << name << fLabel;
+        ss << getChild(false)->newick_helper() << getChild(true)->get_info_string();
+      ss << ")" << name << joiner << fLabel;
     }
   };
   
