@@ -2,6 +2,7 @@
 // Defined: A BaseNode with zero or more BaseNodes as children.
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 #ifndef BASE_NODE_H
 #define BASE_NODE_H
