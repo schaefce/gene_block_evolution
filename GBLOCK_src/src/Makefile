@@ -9,7 +9,7 @@ CPPINCLUDE = -I/usr/local/Cellar/boost/1.56.0/include/
 ###########################################################
 all: main
 
-main: main.o labeledtree.o difflib.o
+main: labeledtree.o difflib.o main.o
 	@echo compiling GBLOCK;
 		$(CC) $(LFLAGS) $^ -o ../../reconstruct_gblock
 

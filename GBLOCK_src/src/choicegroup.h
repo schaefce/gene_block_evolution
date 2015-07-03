@@ -15,7 +15,7 @@ public:
     score = score;
   }
 
-  ChoiceGroup(std::vector<Choice*> choices){
+  ChoiceGroup(std::vector<Choice*> choices, float score=MAX_SCORE){
     setChoices(choices);
   }
   

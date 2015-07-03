@@ -154,7 +154,6 @@ LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string 
   std::map<std::string, std::vector<std::string>> labelMap = getLabelMap(geneBlock, maxGap);
   std::map<std::string, std::string> idMap = getIdentifiers(idFile);
   LabeledTree* tree = (LabeledTree*)LabeledTree::read_newick_file(treeFile);
-  //TODO: figure out how to get this working
   tree->addIdsAndLabels(idMap, labelMap, !noPrune);
   return tree;
 }
@@ -170,10 +169,10 @@ void setPossibleLabelsHelper(LabeledNode* node) {
     setPossibleLabelsHelper(node->getChild(false));
     node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
     if (node->getLabel()){
-      //std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
+      std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
     }
     else{
-      //std::cout << "Parent assigned label: NULL" << std::endl;
+      std::cout << "Parent assigned label: NULL" << std::endl;
     }
   }
 }

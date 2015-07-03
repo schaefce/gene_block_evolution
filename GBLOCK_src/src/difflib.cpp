@@ -405,6 +405,9 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
   int i = 0;
   float prescore;
   if(L1 && L2){
+    std::cout << "Child1 label: " << *L1 << std::endl;
+    std::cout << "Child2 label: " << *L2 << std::endl;
+
     for (ChoiceGroup* grp1 : L1->getChoiceGroups()){
       for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
         for (Choice* choice1 : grp1->getChoices()){
@@ -444,9 +447,20 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
     return new Label(choiceGroups);
   }
   else if(L1 || L2){
+    if (L1){
+      std::cout << "Child1 label: " << *L1 << std::endl;
+      std::cout << "Child2 label: NULL" << std::endl;
+    }
+    else{
+      std::cout << "Child1 label: NULL" << std::endl;
+      std::cout << "Child2 label: " << *L2 << std::endl;
+    }
+    
     return L1 ? new Label(L1->getChoiceGroups()) : new Label(L2->getChoiceGroups());
   }
   else{
+    std::cout << "Child1 label: NULL" << std::endl;
+    std::cout << "Child2 label: NULL" << std::endl;
     return (Label*)NULL;
   }
 }
