@@ -45,20 +45,20 @@ inline std::string formatEnds(std::string s, std::string left, std::string right
 inline std::vector<std::string> reSplit(const std::string &s, std::string reString= "\\s+"){
   std::vector<std::string> elements;
   std::string delimRe = "^" + reString;
-  
-  std::regex re(reString);
-  
-  
-  
-  std::sregex_token_iterator iter(s.begin(), s.end(), re);//, -1);
-  std::sregex_token_iterator end;
-  while(iter != end){
-    elements.push_back(*iter);
-    ++iter;
-    //if (keepDelim && iter != end)
-    //  elements.push_back(reString);
+  try {
+    std::regex re(reString);
+    
+    std::sregex_token_iterator iter(s.begin(), s.end(), re);//, -1);
+    std::sregex_token_iterator end;
+    while(iter != end){
+      elements.push_back(*iter);
+      ++iter;
+      //if (keepDelim && iter != end)
+      //  elements.push_back(reString);
+    }
+  } catch (std::regex_error& e) {
+    std::cerr << e.what();
   }
-  
   return elements;
 }
 
@@ -67,19 +67,20 @@ inline std::vector<std::string> delimSplit(const std::string &s, std::string del
   std::string delimRe = delim + "+";
   std::string notDelimRe = "[^" + delim + "]+";
   std::string reString = keepDelim ? delimRe + "|" + notDelimRe : notDelimRe;
-  
-  std::regex re(reString);
-  
-  
-  
-  std::sregex_token_iterator iter(s.begin(), s.end(), re);//, -1);
-  std::sregex_token_iterator end;
-  while(iter != end){
-    elements.push_back(*iter);
-    ++iter;
-    //if (keepDelim && iter != end)
-    //  elements.push_back(reString);
+  try{ 
+    std::regex re(reString);
+    std::sregex_token_iterator iter(s.begin(), s.end(), re);//, -1);
+    std::sregex_token_iterator end;
+    while(iter != end){
+      elements.push_back(*iter);
+      ++iter;
+      //if (keepDelim && iter != end)
+      //  elements.push_back(reString);
+    }
+  } catch (std::regex_error& e) {
+    std::cerr << e.what();
   }
+
   
   return elements;
 }

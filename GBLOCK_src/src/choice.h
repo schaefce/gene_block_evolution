@@ -42,19 +42,23 @@ public:
 
   void setGroups(ssVector grps){
     splitGroups = grps;
-    std::regex re("\\s+");
+    //std::regex re("\\s+");
     //splitGroups.erase(std::remove_if(splitGroups.begin(), splitGroups.end(), [re](std::vector<std::string> sV){ return sV.size() == 1 && (std::regex_match (sV[0],re) || sV[0].empty()); }), splitGroups.end());
 
   }
 
   void setGroups(std::vector<std::string> grps){
-    std::regex re("\\s+");
-    for(std::string s : grps){
-      if (!std::regex_match (s,re)){
-        this->splitGroups.push_back({s});
+    try{
+      std::regex re("\\s+");
+      for(std::string s : grps){
+        if (!std::regex_match (s,re)){
+          this->splitGroups.push_back({s});
+        }
       }
+    } catch (std::regex_error& e) {
+      std::cerr << e.code();
     }
-  }
+  } 
   
   ssVector getGroups() const{
     return this->splitGroups;

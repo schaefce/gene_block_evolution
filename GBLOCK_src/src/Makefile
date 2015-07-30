@@ -1,8 +1,8 @@
 CC = g++ -std=c++11
-CXXFLAGS+=-Wall -W -O3 -DNDEBUG
+CXXFLAGS+=-Wall -W -g -DNDEBUG
 CFLAGS = -Wall -c -DNDEBUG
-LFLAGS = -Wall -L/usr/local/Cellar/boost/1.56.0/lib/ -lboost_filesystem -lboost_program_options -lboost_system -g
-CPPINCLUDE = -I/usr/local/Cellar/boost/1.56.0/include/
+LFLAGS = -Wall -L/software/boost/1_54_0/gnu-4.7.2/lib/ -lboost_filesystem -lboost_program_options -lboost_system -g
+CPPINCLUDE = -I/software/boost/1_54_0/gnu-4.7.2/include/
 
 ###########################################################
 # GBLOCK
