@@ -28,9 +28,9 @@ struct splitGroupPiece{
     this->score = score;
   }
 };
+
 typedef std::vector<splitGroupPiece*> splitGroup;
 typedef std::vector<splitGroup> splitGroupVector;
-
 
 struct Intermediate{
   ssVector splits;
@@ -48,24 +48,16 @@ struct Iters{
   splitGroup::const_iterator me;
 };
 
-
-class LabelMatcher { //:
-    /**
-     * Matches two choices as best as possible, where a choice is a list of
-     * 	lists, the outer list's order doesn't matter but the inner list's order matters
-     */
-
+// Matches two choices as best as possible, where a choice is a list of
+// lists, the outer list's order doesn't matter but the inner list's order matters
+class LabelMatcher {
+  
 public:
-  //LabelMatcher(Label* one, Label* two);
   static void initialize();
   static float getMinEditDistance(ssVector choice1, ssVector choice2, intermediatesVector &intermediates, bool backtrace);
   static Label* getAncestorLabel(Label *L1, Label *L2);
-
-  
-  
   
 private:
-  
   static float getDeletionPenalty(stringVector A, stringVector B, int j, int i);
   static float getInsertionPenalty(stringVector A, stringVector B, int j, int i);
   static float getMatchPenalty(stringVector A, stringVector B, int j, int i);
@@ -73,10 +65,7 @@ private:
   static splitGroupVector crossProduct(splitGroupVector input);
   static float getEditDistance(stringVector A, stringVector B, intermediatesVector &intermediates, bool backtrace);
   static void performBacktrace(stringVector A, stringVector B, float **subproblems, intermediatesVector &intermediates);
-
-
-
-
+  
 };
 
 

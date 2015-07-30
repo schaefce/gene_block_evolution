@@ -7,15 +7,13 @@
 //
 
 #pragma once
-#ifndef GeneBlock_utility_h
-#define GeneBlock_utility_h
+#ifndef GENEBLOCK_UTILITY_H
+#define GENEBLOCK_UTILITY_H
 
 #include <regex>
 #include <string>
 #include <vector>
 #include <sstream>
-
-
 
 template <typename T>
 std::string join(std::vector<T> groups, std::string C){
@@ -32,7 +30,6 @@ std::vector<std::string> joinNested(std::vector<std::vector<T>> groups, std::str
   return stringGroups;
 }
 
-
 inline std::string formatEnds(std::string s, std::string left, std::string right){
   std::ostringstream ss;
   ss << left;
@@ -40,7 +37,6 @@ inline std::string formatEnds(std::string s, std::string left, std::string right
   ss << right;
   return ss.str();
 }
-
 
 inline std::vector<std::string> reSplit(const std::string &s, std::string reString= "\\s+"){
   std::vector<std::string> elements;
@@ -53,8 +49,6 @@ inline std::vector<std::string> reSplit(const std::string &s, std::string reStri
     while(iter != end){
       elements.push_back(*iter);
       ++iter;
-      //if (keepDelim && iter != end)
-      //  elements.push_back(reString);
     }
   } catch (std::regex_error& e) {
     std::cerr << e.what();
@@ -67,26 +61,20 @@ inline std::vector<std::string> delimSplit(const std::string &s, std::string del
   std::string delimRe = delim + "+";
   std::string notDelimRe = "[^" + delim + "]+";
   std::string reString = keepDelim ? delimRe + "|" + notDelimRe : notDelimRe;
-  try{ 
+  try{
     std::regex re(reString);
     std::sregex_token_iterator iter(s.begin(), s.end(), re);//, -1);
     std::sregex_token_iterator end;
     while(iter != end){
       elements.push_back(*iter);
       ++iter;
-      //if (keepDelim && iter != end)
-      //  elements.push_back(reString);
     }
   } catch (std::regex_error& e) {
     std::cerr << e.what();
   }
-
   
   return elements;
 }
-
-
-
 
 template <typename T>
 std::vector<std::vector<T>> groupBy(std::vector<T> input, T item){
@@ -106,10 +94,5 @@ std::vector<std::vector<T>> groupBy(std::vector<T> input, T item){
   }
   return result;
 }
-
-
-
-
-
 
 #endif

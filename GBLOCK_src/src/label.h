@@ -18,7 +18,6 @@ public:
     isFinal = false;
   }
   
-  
   Label(std::vector<std::string> splitGroups, float score=MAX_SCORE, bool isLeaf=false){
     Choice* c = new Choice(splitGroups);
     if(isLeaf){
@@ -34,15 +33,12 @@ public:
     }
   }
   
-  
   Label(const Label &other){
     setChoiceGroups(other.copyChoiceGroups());
     if (other.isFinal){
       setFinalChoice(other.copyFinalChoice());
     }
   }
-  
-
   
   Label& operator= (const Label &other){
     setChoiceGroups(other.copyChoiceGroups());
@@ -90,7 +86,6 @@ public:
     choiceGroups.push_back(choicegroup);
     choicegroup->setLabel(this);
   }
-  
 
   std::vector<ChoiceGroup*> getChoiceGroups(){
     return this->choiceGroups;
@@ -118,13 +113,8 @@ public:
     return bestChoice;
   }
   
-  bool hasFinal() const{
-    return isFinal;
-  }
-  
-  float getFinalScore() const{
-    return finalScore;
-  }
+  bool hasFinal() const { return isFinal; }
+  float getFinalScore() const{ return finalScore; }
   
   void setFinalChoice(Choice* c){
     if (c) {
@@ -135,9 +125,7 @@ public:
     }
   }
   
-  Choice* copyFinalChoice() const{
-    return new Choice(*finalChoice);
-  }
+  Choice* copyFinalChoice() const{ return new Choice(*finalChoice); }
   
   void setFinalLabel(){
     if(finalChoice){
@@ -161,7 +149,6 @@ public:
     return "";
   }
   
-  
   std::vector<std::string> getStringChoiceGroups() const{
     std::vector<std::string> stringGroups;
     for(ChoiceGroup* cg : choiceGroups){
@@ -172,15 +159,12 @@ public:
     return stringGroups;
   }
   
-
-  
   friend std::ostream& operator<<(std::ostream &strm, const Label &l){
     if (l.hasFinal())
       return strm << "Final Label: " << l.getFinalLabel() << "," << l.getFinalScore();
     else
       return strm << "Label:\n" << join<std::string>(l.getStringChoiceGroups(), "\n");
   }
-
 
 private:
   void resetChoiceGroups(){

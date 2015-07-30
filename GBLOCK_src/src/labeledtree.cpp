@@ -20,10 +20,6 @@ void LabeledTree::addLeafIds(std::map <std::string, std::string> idMap, bool pru
         toPrune.push_back(leaf);
       }
     }
-    //for (LabeledNode* leaf : toPrune){
-    //  this->prune(leaf);
-    //}
-
   }
 }
 
@@ -38,10 +34,6 @@ void LabeledTree::addLeafLabels(std::map <std::string, std::vector<std::string>>
         toPrune.push_back(leaf);
       }
     }
-    //for (LabeledNode* leaf : toPrune){
-    //  this->prune(leaf);
-    //}
-    
   }
 }
 

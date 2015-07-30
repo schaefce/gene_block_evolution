@@ -7,83 +7,56 @@
 #define LABELED_NODE_H
 
 
+// BaseNode + labels
 class LabeledNode : public BaseNode<LabeledNode> {
- public:
-
-  LabeledNode() : BaseNode<LabeledNode>(){
-    this->label = (Label*)NULL;
-  };
-
+public:
+  
+  LabeledNode() : BaseNode<LabeledNode>(){ this->label = (Label*)NULL; };
+  
   LabeledNode(std::string name, double weight=0) : BaseNode<LabeledNode>(name, weight){
     this->label = (Label*)NULL;
   };
-
+  
   LabeledNode(LabeledNode* left, LabeledNode* right, std::string name, double weight=0) :
-    BaseNode<LabeledNode>(left, right, name, weight){
-      this->label = (Label*)NULL;
-      if(left){
-        left->setParent(this);
-      }
-      if(right){
-        right->setParent(this);
-      }
-
+  BaseNode<LabeledNode>(left, right, name, weight){
+    this->label = (Label*)NULL;
+    if(left){
+      left->setParent(this);
+    }
+    if(right){
+      right->setParent(this);
+    }
+    
   };
   
-  void setWeight(double weight){
-    this->weight = weight;
-  }
-
-  void setID(std::string id){
-    this->identity = id;
-  }
-  
-  std::string getID(){
-    return this->identity;
-  }
-  
-  bool hasID(){
-    return !this->identity.empty();
-  }
-  
-  void setName(std::string name){
-    BaseNode<LabeledNode>::setName(name);
-  }
-  
-  std::string getName(){
-    return BaseNode<LabeledNode>::getName();
-  }
-  
-  void setLabel(Label* label){
-    this->label = label;
-  }
-  
-  Label* getLabel(){
-    return label;
-  }
-
   ~LabeledNode(){
     if(this->label){
       delete this->label;
     }
   };
   
-  void setParent(LabeledNode* node){ this->parent = node; }
+  void setWeight(double weight){ this->weight = weight; }
+  
+  std::string getID() const { return this->identity; }
+  void setID(std::string id){ this->identity = id;   }
+  bool hasID() const { return !this->identity.empty(); }
+  
+  std::string getName()  { return BaseNode<LabeledNode>::getName(); }
+  void setName(std::string name){ BaseNode<LabeledNode>::setName(name); }
+  
+  Label* getLabel() { return label; }
+  void setLabel(Label* label){ this->label = label; }
   
   LabeledNode* getParent() { return this->parent; }
-  
-  bool hasParent() { return this->parent; }
-  
+  void setParent(LabeledNode* node){ this->parent = node; }
+  bool hasParent() const   { return this->parent; }
   
   void setChild(LabeledNode* node, bool left){
     BaseNode<LabeledNode>::setChild(node, left);
     node->setParent(this);
   }
   
-  std::string get_info_string() const{
-    return ":" + std::to_string(weight);
-  }
-  
+  std::string get_info_string() const{ return ":" + std::to_string(weight); }
   
   std::string newick_helper(bool withLabels=true) {
     if (!withLabels){
@@ -105,8 +78,6 @@ class LabeledNode : public BaseNode<LabeledNode> {
       return s + ")" + name + joiner + fLabel;
     }
   };
-  
-
   
   void newick_helper(std::stringstream &ss, bool withLabels=true){
     if (!withLabels){
@@ -130,33 +101,6 @@ class LabeledNode : public BaseNode<LabeledNode> {
     }
   };
   
-  
-  
-  
-  //LabeledNode* prune(LabeledNode* target){
-  //  if (this->left){
-  //    if(this->left== target){
-  //      delete getChild(true);
-  //      this->left = (LabeledNode*)NULL;
-  //    }
-  //    else{
-  //      this->left = left->prune(target);
-  //    }
-  //  }
-  //  if (this->right){
-  //    if(this->right == target){
-  //      delete getChild(false);
-  //      this->right = (LabeledNode*)NULL;
-  //    }
-  //    else{
-  //      this->right = right->prune(target);
-  //    }
-  //  }
-  //  return this;
-  //}
-  
-
-
 private:
   Label* label;
   LabeledNode* parent;

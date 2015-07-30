@@ -20,23 +20,15 @@ class Tree {
   Tree(Node* root);
   ~Tree();
   
-  
-  Node* getRoot(){
-    return root;
-  }
-
+  Node* getRoot(){ return root; }
   std::string getName() {return this->root->name;}
 
-  std::string newick();  // Return Newick string
-
   int num_leaves();
-
   bool prune(Node* target);
-
   std::vector<Node*> collectLeaves();
 
+  std::string newick();  // Return Newick string
   static Tree<Node>* read_newick_file(std::string file);
-
   static Tree<Node>* parse_tree(std::string s);
 
  protected:
