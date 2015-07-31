@@ -1,8 +1,17 @@
+UNAME := $(shell uname -s)
+
+ifeq ($(UNAME),Darwin)
+    BOOST_LIB = /usr/local/Cellar/boost/1.56.0/lib/
+    BOOST_INC = /usr/local/Cellar/boost/1.56.0/include/
+else
+    BOOST_LIB = /software/boost/1_54_0/gnu-4.7.2/lib/
+    BOOST_INC = /software/boost/1_54_0/gnu-4.7.2/include/
+endif
 CC = g++ -std=c++11
-CXXFLAGS+=-Wall -W -g -DNDEBUG
+CXXFLAGS += -Wall -W -g -DNDEBUG
 CFLAGS = -Wall -c -DNDEBUG
-LFLAGS = -Wall -L/software/boost/1_54_0/gnu-4.7.2/lib/ -lboost_filesystem -lboost_program_options -lboost_system -g
-CPPINCLUDE = -I/software/boost/1_54_0/gnu-4.7.2/include/
+LFLAGS = -Wall -L$(BOOST_LIB) -lboost_filesystem -lboost_program_options -lboost_system -g
+CPPINCLUDE = -I$(BOOST_INC)
 
 ###########################################################
 # GBLOCK

@@ -18,8 +18,8 @@
 template <typename T>
 std::string join(std::vector<T> groups, std::string C){
   std::ostringstream ss;
-  std::copy(groups.begin(), groups.end() - 1, std::ostream_iterator<T>(ss, C.c_str()));
-  ss << groups.back();
+  std::copy(groups.begin(), groups.end(), std::ostream_iterator<T>(ss, C.c_str()));
+  //ss << groups.back();
   return ss.str();
 }
 
