@@ -126,40 +126,50 @@ std::map<std::string,std::string> getIdentifiers(std::string fname){
 
 // Uses gene block (1) geneBlock organism data, (2) a mapping of common names to
 // IDs, and (3) an existing tree file to create a tree labeled with list of homologs.
-LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string treeFile, int maxGap, bool noPrune){
+LabeledTree* formatTree(std::string geneBlock, std::string idFile , std::string treeFile, int maxGap, bool noPrune, int verbosity){
   std::map<std::string, std::vector<std::string>> labelMap = getLabelMap(geneBlock, maxGap);
   std::map<std::string, std::string> idMap = getIdentifiers(idFile);
   LabeledTree* tree = (LabeledTree*)LabeledTree::read_newick_file(treeFile);
+  if (verbosity > 0){
+    std::cout << "--- ORIGINAL TREE ---" << std::endl;
+    std::cout << tree->newick() << std::endl << std::endl;
+  }
   tree->addIdsAndLabels(idMap, labelMap, !noPrune);
   return tree;
 }
 
 
 // Helps set all possible labels for the tree using preorder traversal
-void setPossibleLabelsHelper(LabeledNode* node) {
+void setPossibleLabelsHelper(LabeledNode* node, int verbosity) {
   if(node && node->getChild(true) && node->getChild(false) ){
-    setPossibleLabelsHelper(node->getChild(true));
-    setPossibleLabelsHelper(node->getChild(false));
-    node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel()));
-    if (node->getLabel()){
-      std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
-    }
-    else{
-      std::cout << "Parent assigned label: NULL" << std::endl;
+    setPossibleLabelsHelper(node->getChild(true), verbosity);
+    setPossibleLabelsHelper(node->getChild(false), verbosity);
+    node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel(), verbosity));
+    if (verbosity > 1){
+      if (node->getLabel()){
+        std::cout << "Parent assigned label: " << *node->getLabel() << std::endl;
+      }
+      else{
+        std::cout << "Parent assigned label: NULL" << std::endl;
+      }
     }
   }
 }
 
 
 // Sets all possible labels for the tree using preorder traversal
-void setPossibleLabels(LabeledTree* tree) {
+void setPossibleLabels(LabeledTree* tree, int verbosity) {
   LabelMatcher::initialize();
   if(tree && tree->getRoot()){
-    setPossibleLabelsHelper(tree->getRoot());
+    setPossibleLabelsHelper(tree->getRoot(), verbosity);
   }
 }
 
-void writeTree(LabeledTree* tree, std::string ofile){
+void writeTree(LabeledTree* tree, std::string ofile, int verbosity){
+  if (verbosity > 0){
+    std::cout << "--- LABELED TREE ---" << std::endl;
+    std::cout << tree->newick() << std::endl << std::endl;
+  }
   std::ofstream fstream;
   fstream.open(ofile);
   fstream << tree->newick();
@@ -180,6 +190,7 @@ int main(int argc, char **argv){
   ("noPrune,n", po::value<bool>()->default_value(false), "Do not prune unlabeled leaves")
   ("maxGap,g", po::value<int>()->default_value(5), "Maximum gap size")
   ("fname,f", po::value<std::string>(), "File to output tree to.")
+  ("verbosity,v", po::value<int>()->default_value(1), "Verbosity level.")
   ("geneBlock", po::value<std::string>(&geneblock)->required(), "Path to file with data about geneblock")
   ("treeFile", po::value<std::string>(&tree)->required(), "Path to file with tree data")
   ("idMap", po::value<std::string>(&ids)->required(), "Path to file mapping IDs to labels");
@@ -197,6 +208,7 @@ int main(int argc, char **argv){
     }
     
     po::notify(vm);
+
     
   }
   catch(std::exception& e){
@@ -207,15 +219,21 @@ int main(int argc, char **argv){
   
   boost::filesystem::path filePath(tree);
   std::string baseTreeFile = filePath.stem().string();
+  std::string ofile = vm.count("fname") ? vm["fname"].as<std::string>() : baseTreeFile + ".labeled.nwk";
   
+  if(vm["verbosity"].as<int>() > 1){
+    std::cout << "GBLOCK OPTIONS:" << std::endl << "GBLOCK FILE: " << geneblock << std::endl
+    << "TREE FILE: " << tree << std::endl << "IDS FILE: " << ids << std::endl
+    << "OUTPUT FILE: " << ofile << std::endl << "MAXGAP: " << vm["maxGap"].as<int>() << std::endl
+    << "PRUNING? " << !vm["noPrune"].as<bool>() << std::endl << std::endl;
+  }
   // Read in all information given as input, and set leaf labels
   LabeledTree* lTree = formatTree(geneblock, ids, tree, vm["maxGap"].as<int>(),
-                                  vm["noPrune"].as<bool>());
+                                  vm["noPrune"].as<bool>(),vm["verbosity"].as<int>());
   // Preorder traversal, setting each parent with all possible labels via children
-  setPossibleLabels(lTree);
+  setPossibleLabels(lTree, vm["verbosity"].as<int>());
   // Postorder traversal. Choose best label for root and pass decision down tree
   lTree->setLabelsFromRoot();
   
-  std::string ofile = vm.count("fname") ? vm["fname"].as<std::string>() : baseTreeFile + ".labeled.nwk";
-  writeTree(lTree, ofile);
+  writeTree(lTree, ofile, vm["verbosity"].as<int>());
 }

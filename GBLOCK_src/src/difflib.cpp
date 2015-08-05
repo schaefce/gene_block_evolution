@@ -385,12 +385,14 @@ float LabelMatcher::getMinEditDistance(ssVector choice1, ssVector choice2, inter
 }
 
 
-Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
+Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2, int verbosity){
   std::map<std::string, std::pair<float,int>> choiceMap;
   std::vector<ChoiceGroup*> choiceGroups;
+  if (verbosity > 1) std::cout << "---GET ANCESTOR LABEL---" << std::endl;
   int i = 0;
   float prescore;
   if(L1 && L2){
+    if (verbosity > 1) std::cout << "CHILD 1: " << *L1 << std::endl << "CHILD 2: " << *L2 << std::endl << std::endl;
     for (ChoiceGroup* grp1 : L1->getChoiceGroups()){
       for (ChoiceGroup* grp2 : L2->getChoiceGroups()){
         for (Choice* choice1 : grp1->getChoices()){
@@ -427,9 +429,16 @@ Label* LabelMatcher::getAncestorLabel(Label *L1, Label *L2){
     return new Label(choiceGroups);
   }
   else if(L1 || L2){
+    if (verbosity > 1) {
+      if (L1) 
+        std::cout << "CHILD 1: " << *L1 << std::endl << "CHILD 2: NULL" << std::endl << std::endl;
+      else
+        std::cout << "CHILD 1: NULL" << std::endl << "CHILD 2: " << *L2 << std::endl << std::endl;
+    }
     return L1 ? new Label(L1->getChoiceGroups()) : new Label(L2->getChoiceGroups());
   }
   else{
+    if (verbosity > 1) std::cout << "CHILD 1: NULL" << std::endl << "CHILD 2: NULL" << std::endl << std::endl;
     return (Label*)NULL;
   }
 }

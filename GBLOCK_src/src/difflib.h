@@ -55,7 +55,7 @@ class LabelMatcher {
 public:
   static void initialize();
   static float getMinEditDistance(ssVector choice1, ssVector choice2, intermediatesVector &intermediates, bool backtrace);
-  static Label* getAncestorLabel(Label *L1, Label *L2);
+  static Label* getAncestorLabel(Label *L1, Label *L2, int verbosity);
   
 private:
   static float getDeletionPenalty(stringVector A, stringVector B, int j, int i);
