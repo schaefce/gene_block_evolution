@@ -1,400 +1,412 @@
-==9417== Memcheck, a memory error detector
-==9417== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
-==9417== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
-==9417== Command: ./reconstruct_gblock -v 1 --geneBlock paaTest.txt --treeFile tree.nwk --idMap map.csv
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x4017376: index (strchr.S:56)
-==9417==    by 0x40061F7: expand_dynamic_string_token (dl-load.c:327)
-==9417==    by 0x40082B1: _dl_map_object (dl-load.c:2206)
-==9417==    by 0x40016DD: map_doit (rtld.c:630)
-==9417==    by 0x400E195: _dl_catch_error (dl-error.c:178)
-==9417==    by 0x40015F6: do_preload (rtld.c:814)
-==9417==    by 0x4003C0A: dl_main (rtld.c:1700)
-==9417==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
-==9417==    by 0x40014A3: _dl_start (rtld.c:335)
-==9417==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
-==9417==    by 0x8: ???
-==9417==    by 0x7FEFFE7EA: ???
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x401737B: index (strchr.S:59)
-==9417==    by 0x40061F7: expand_dynamic_string_token (dl-load.c:327)
-==9417==    by 0x40082B1: _dl_map_object (dl-load.c:2206)
-==9417==    by 0x40016DD: map_doit (rtld.c:630)
-==9417==    by 0x400E195: _dl_catch_error (dl-error.c:178)
-==9417==    by 0x40015F6: do_preload (rtld.c:814)
-==9417==    by 0x4003C0A: dl_main (rtld.c:1700)
-==9417==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
-==9417==    by 0x40014A3: _dl_start (rtld.c:335)
-==9417==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
-==9417==    by 0x8: ???
-==9417==    by 0x7FEFFE7EA: ???
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x400B4CA: _dl_relocate_object (do-rel.h:65)
-==9417==    by 0x4003876: dl_main (rtld.c:2257)
-==9417==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
-==9417==    by 0x40014A3: _dl_start (rtld.c:335)
-==9417==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
-==9417==    by 0x8: ???
-==9417==    by 0x7FEFFE7EA: ???
-==9417==    by 0x7FEFFE7FF: ???
-==9417==    by 0x7FEFFE802: ???
-==9417==    by 0x7FEFFE804: ???
-==9417==    by 0x7FEFFE810: ???
-==9417==    by 0x7FEFFE81C: ???
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x400B45B: _dl_relocate_object (do-rel.h:68)
-==9417==    by 0x4003876: dl_main (rtld.c:2257)
-==9417==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
-==9417==    by 0x40014A3: _dl_start (rtld.c:335)
-==9417==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
-==9417==    by 0x8: ???
-==9417==    by 0x7FEFFE7EA: ???
-==9417==    by 0x7FEFFE7FF: ???
-==9417==    by 0x7FEFFE802: ???
-==9417==    by 0x7FEFFE804: ???
-==9417==    by 0x7FEFFE810: ???
-==9417==    by 0x7FEFFE81C: ???
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x400B4CA: _dl_relocate_object (do-rel.h:65)
-==9417==    by 0x40039A9: dl_main (rtld.c:2320)
-==9417==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
-==9417==    by 0x40014A3: _dl_start (rtld.c:335)
-==9417==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
-==9417==    by 0x8: ???
-==9417==    by 0x7FEFFE7EA: ???
-==9417==    by 0x7FEFFE7FF: ???
-==9417==    by 0x7FEFFE802: ???
-==9417==    by 0x7FEFFE804: ???
-==9417==    by 0x7FEFFE810: ???
-==9417==    by 0x7FEFFE81C: ???
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x400B45B: _dl_relocate_object (do-rel.h:68)
-==9417==    by 0x40039A9: dl_main (rtld.c:2320)
-==9417==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
-==9417==    by 0x40014A3: _dl_start (rtld.c:335)
-==9417==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
-==9417==    by 0x8: ???
-==9417==    by 0x7FEFFE7EA: ???
-==9417==    by 0x7FEFFE7FF: ???
-==9417==    by 0x7FEFFE802: ???
-==9417==    by 0x7FEFFE804: ???
-==9417==    by 0x7FEFFE810: ???
-==9417==    by 0x7FEFFE81C: ???
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
-==9417==    by 0x5571E5F: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) (char_traits.h:261)
-==9417==    by 0x4E3CA65: boost::filesystem::path::filename() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7DE: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
-==9417==    by 0x5571E5F: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) (char_traits.h:261)
-==9417==    by 0x4E3CA65: boost::filesystem::path::filename() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7DE: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x640c970 is 32 bytes inside a block of size 33 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x5571D94: char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag) (basic_string.tcc:140)
-==9417==    by 0x5571E72: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) (basic_string.h:1722)
-==9417==    by 0x4419B7: std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > boost::program_options::detail::make_vector<char, char const* const*>(char const* const*, char const* const*) (parsers.hpp:24)
-==9417==    by 0x43EAB1: boost::program_options::basic_command_line_parser<char>::basic_command_line_parser(int, char const* const*) (parsers.hpp:43)
-==9417==    by 0x43C541: boost::program_options::basic_parsed_options<char> boost::program_options::parse_command_line<char>(int, char const* const*, boost::program_options::options_description const&, int, boost::function1<std::pair<std::string, std::string>, std::string const&>) (parsers.hpp:125)
-==9417==    by 0x43818B: main (main.cpp:228)
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
-==9417==    by 0x552580F: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:201)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
-==9417==    by 0x552580F: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:201)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
-==9417==    by 0x553A46E: std::__timepunct<char>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:61)
-==9417==    by 0x5525BDF: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:254)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
-==9417==    by 0x553A4AF: std::__timepunct<char>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
-==9417==    by 0x5525BDF: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:254)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
-==9417==    by 0x553A4AF: std::__timepunct<char>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
-==9417==    by 0x5525BDF: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:254)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
-==9417==    by 0x553ACF3: std::messages<char>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:55)
-==9417==    by 0x5525C74: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:257)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
-==9417==    by 0x553AD37: std::messages<char>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
-==9417==    by 0x5525C74: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:257)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
-==9417==    by 0x553AD37: std::messages<char>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
-==9417==    by 0x5525C74: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:257)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
-==9417==    by 0x55555FE: std::__timepunct<wchar_t>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:61)
-==9417==    by 0x5525EF8: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:270)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
-==9417==    by 0x555563F: std::__timepunct<wchar_t>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
-==9417==    by 0x5525EF8: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:270)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
-==9417==    by 0x555563F: std::__timepunct<wchar_t>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
-==9417==    by 0x5525EF8: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:270)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
-==9417==    by 0x5555E83: std::messages<wchar_t>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:55)
-==9417==    by 0x5525F8D: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:273)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Conditional jump or move depends on uninitialised value(s)
-==9417==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
-==9417==    by 0x5555EC7: std::messages<wchar_t>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
-==9417==    by 0x5525F8D: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:273)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
-==9417==    by 0x5555EC7: std::messages<wchar_t>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
-==9417==    by 0x5525F8D: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:273)
-==9417==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
-==9417==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
-==9417==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
-==9417==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
-==9417==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
-==9417==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
-==9417==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
-==9417==    by 0x4382A8: main (main.cpp:246)
-==9417== 
-==9417== Invalid read of size 8
-==9417==    at 0x4144E6: __gnu_cxx::__normal_iterator<ChoiceGroup**, std::vector<ChoiceGroup*, std::allocator<ChoiceGroup*> > >::__normal_iterator(ChoiceGroup** const&) (stl_iterator.h:726)
-==9417==    by 0x411020: std::vector<ChoiceGroup*, std::allocator<ChoiceGroup*> >::begin() (stl_vector.h:539)
-==9417==    by 0x40E5C6: Label::getBestChoice() (label.h:120)
-==9417==    by 0x40BC68: LabeledTree::setLabelsFromRoot() (labeledtree.cpp:71)
-==9417==    by 0x4388CD: main (main.cpp:261)
-==9417==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==9417== 
-==9417== 
-==9417== Process terminating with default action of signal 11 (SIGSEGV)
-==9417==  Access not within mapped region at address 0x0
-==9417==    at 0x4144E6: __gnu_cxx::__normal_iterator<ChoiceGroup**, std::vector<ChoiceGroup*, std::allocator<ChoiceGroup*> > >::__normal_iterator(ChoiceGroup** const&) (stl_iterator.h:726)
-==9417==    by 0x411020: std::vector<ChoiceGroup*, std::allocator<ChoiceGroup*> >::begin() (stl_vector.h:539)
-==9417==    by 0x40E5C6: Label::getBestChoice() (label.h:120)
-==9417==    by 0x40BC68: LabeledTree::setLabelsFromRoot() (labeledtree.cpp:71)
-==9417==    by 0x4388CD: main (main.cpp:261)
-==9417==  If you believe this happened as a result of a stack
-==9417==  overflow in your program's main thread (unlikely but
-==9417==  possible), you can try to increase the size of the
-==9417==  main thread stack using the --main-stacksize= flag.
-==9417==  The main thread stack size used in this run was 10485760.
-==9417== 
-==9417== HEAP SUMMARY:
-==9417==     in use at exit: 13,439 bytes in 181 blocks
-==9417==   total heap usage: 1,050 allocs, 869 frees, 76,514 bytes allocated
-==9417== 
-==9417== LEAK SUMMARY:
-==9417==    definitely lost: 0 bytes in 0 blocks
-==9417==    indirectly lost: 0 bytes in 0 blocks
-==9417==      possibly lost: 1,794 bytes in 49 blocks
-==9417==    still reachable: 11,645 bytes in 132 blocks
-==9417==         suppressed: 0 bytes in 0 blocks
-==9417== Rerun with --leak-check=full to see details of leaked memory
-==9417== 
-==9417== For counts of detected and suppressed errors, rerun with: -v
-==9417== Use --track-origins=yes to see where uninitialised values come from
-==9417== ERROR SUMMARY: 29 errors from 23 contexts (suppressed: 0 from 0)
+==10448== Memcheck, a memory error detector
+==10448== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==10448== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==10448== Command: ./reconstruct_gblock -v 1 --geneBlock paaTest.txt --treeFile tree3.nwk --idMap map.csv
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x4017376: index (strchr.S:56)
+==10448==    by 0x40061F7: expand_dynamic_string_token (dl-load.c:327)
+==10448==    by 0x40082B1: _dl_map_object (dl-load.c:2206)
+==10448==    by 0x40016DD: map_doit (rtld.c:630)
+==10448==    by 0x400E195: _dl_catch_error (dl-error.c:178)
+==10448==    by 0x40015F6: do_preload (rtld.c:814)
+==10448==    by 0x4003C0A: dl_main (rtld.c:1700)
+==10448==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
+==10448==    by 0x40014A3: _dl_start (rtld.c:335)
+==10448==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
+==10448==    by 0x8: ???
+==10448==    by 0x7FEFFE7E6: ???
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x401737B: index (strchr.S:59)
+==10448==    by 0x40061F7: expand_dynamic_string_token (dl-load.c:327)
+==10448==    by 0x40082B1: _dl_map_object (dl-load.c:2206)
+==10448==    by 0x40016DD: map_doit (rtld.c:630)
+==10448==    by 0x400E195: _dl_catch_error (dl-error.c:178)
+==10448==    by 0x40015F6: do_preload (rtld.c:814)
+==10448==    by 0x4003C0A: dl_main (rtld.c:1700)
+==10448==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
+==10448==    by 0x40014A3: _dl_start (rtld.c:335)
+==10448==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
+==10448==    by 0x8: ???
+==10448==    by 0x7FEFFE7E6: ???
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x400B4CA: _dl_relocate_object (do-rel.h:65)
+==10448==    by 0x4003876: dl_main (rtld.c:2257)
+==10448==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
+==10448==    by 0x40014A3: _dl_start (rtld.c:335)
+==10448==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
+==10448==    by 0x8: ???
+==10448==    by 0x7FEFFE7E6: ???
+==10448==    by 0x7FEFFE7FB: ???
+==10448==    by 0x7FEFFE7FE: ???
+==10448==    by 0x7FEFFE800: ???
+==10448==    by 0x7FEFFE80C: ???
+==10448==    by 0x7FEFFE818: ???
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x400B45B: _dl_relocate_object (do-rel.h:68)
+==10448==    by 0x4003876: dl_main (rtld.c:2257)
+==10448==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
+==10448==    by 0x40014A3: _dl_start (rtld.c:335)
+==10448==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
+==10448==    by 0x8: ???
+==10448==    by 0x7FEFFE7E6: ???
+==10448==    by 0x7FEFFE7FB: ???
+==10448==    by 0x7FEFFE7FE: ???
+==10448==    by 0x7FEFFE800: ???
+==10448==    by 0x7FEFFE80C: ???
+==10448==    by 0x7FEFFE818: ???
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x400B4CA: _dl_relocate_object (do-rel.h:65)
+==10448==    by 0x40039A9: dl_main (rtld.c:2320)
+==10448==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
+==10448==    by 0x40014A3: _dl_start (rtld.c:335)
+==10448==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
+==10448==    by 0x8: ???
+==10448==    by 0x7FEFFE7E6: ???
+==10448==    by 0x7FEFFE7FB: ???
+==10448==    by 0x7FEFFE7FE: ???
+==10448==    by 0x7FEFFE800: ???
+==10448==    by 0x7FEFFE80C: ???
+==10448==    by 0x7FEFFE818: ???
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x400B45B: _dl_relocate_object (do-rel.h:68)
+==10448==    by 0x40039A9: dl_main (rtld.c:2320)
+==10448==    by 0x401597D: _dl_sysdep_start (dl-sysdep.c:244)
+==10448==    by 0x40014A3: _dl_start (rtld.c:335)
+==10448==    by 0x4000B07: ??? (in /lib64/ld-2.12.so)
+==10448==    by 0x8: ???
+==10448==    by 0x7FEFFE7E6: ???
+==10448==    by 0x7FEFFE7FB: ???
+==10448==    by 0x7FEFFE7FE: ???
+==10448==    by 0x7FEFFE800: ???
+==10448==    by 0x7FEFFE80C: ???
+==10448==    by 0x7FEFFE818: ???
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
+==10448==    by 0x5571E5F: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) (char_traits.h:261)
+==10448==    by 0x4E3CA65: boost::filesystem::path::filename() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7DE: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
+==10448==    by 0x5571E5F: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) (char_traits.h:261)
+==10448==    by 0x4E3CA65: boost::filesystem::path::filename() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7DE: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x640c970 is 32 bytes inside a block of size 34 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x5571D94: char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag) (basic_string.tcc:140)
+==10448==    by 0x5571E72: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) (basic_string.h:1722)
+==10448==    by 0x4419B7: std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > boost::program_options::detail::make_vector<char, char const* const*>(char const* const*, char const* const*) (parsers.hpp:24)
+==10448==    by 0x43EAB1: boost::program_options::basic_command_line_parser<char>::basic_command_line_parser(int, char const* const*) (parsers.hpp:43)
+==10448==    by 0x43C541: boost::program_options::basic_parsed_options<char> boost::program_options::parse_command_line<char>(int, char const* const*, boost::program_options::options_description const&, int, boost::function1<std::pair<std::string, std::string>, std::string const&>) (parsers.hpp:125)
+==10448==    by 0x43818B: main (main.cpp:228)
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
+==10448==    by 0x552580F: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:201)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
+==10448==    by 0x552580F: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:201)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
+==10448==    by 0x553A46E: std::__timepunct<char>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:61)
+==10448==    by 0x5525BDF: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:254)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
+==10448==    by 0x553A4AF: std::__timepunct<char>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
+==10448==    by 0x5525BDF: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:254)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
+==10448==    by 0x553A4AF: std::__timepunct<char>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
+==10448==    by 0x5525BDF: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:254)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
+==10448==    by 0x553ACF3: std::messages<char>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:55)
+==10448==    by 0x5525C74: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:257)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
+==10448==    by 0x553AD37: std::messages<char>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
+==10448==    by 0x5525C74: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:257)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
+==10448==    by 0x553AD37: std::messages<char>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
+==10448==    by 0x5525C74: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:257)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
+==10448==    by 0x55555FE: std::__timepunct<wchar_t>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:61)
+==10448==    by 0x5525EF8: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:270)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
+==10448==    by 0x555563F: std::__timepunct<wchar_t>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
+==10448==    by 0x5525EF8: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:270)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
+==10448==    by 0x555563F: std::__timepunct<wchar_t>::__timepunct(__locale_struct*, char const*, unsigned long) (time_members.h:63)
+==10448==    by 0x5525EF8: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:270)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D792D6: __strcmp_sse42 (strcmp.S:259)
+==10448==    by 0x5555E83: std::messages<wchar_t>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:55)
+==10448==    by 0x5525F8D: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:273)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Conditional jump or move depends on uninitialised value(s)
+==10448==    at 0x5D845AD: __strlen_sse42 (strlen-sse4.S:37)
+==10448==    by 0x5555EC7: std::messages<wchar_t>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
+==10448==    by 0x5525F8D: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:273)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+==10448== Invalid read of size 8
+==10448==    at 0x5D845C0: __strlen_sse42 (strlen-sse4.S:42)
+==10448==    by 0x5555EC7: std::messages<wchar_t>::messages(__locale_struct*, char const*, unsigned long) (messages_members.h:57)
+==10448==    by 0x5525F8D: std::locale::_Impl::_Impl(char const*, unsigned long) (localename.cc:273)
+==10448==    by 0x55268B9: std::locale::locale(char const*) (localename.cc:137)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448==  Address 0x6412830 is 32 bytes inside a block of size 36 alloc'd
+==10448==    at 0x4C286EF: operator new(unsigned long) (vg_replace_malloc.c:298)
+==10448==    by 0x55703A8: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (new_allocator.h:94)
+==10448==    by 0x55705A2: std::string::_M_mutate(unsigned long, unsigned long, unsigned long) (basic_string.tcc:481)
+==10448==    by 0x557073B: std::string::_M_replace_safe(unsigned long, unsigned long, char const*, unsigned long) (basic_string.tcc:686)
+==10448==    by 0x552688D: std::locale::locale(char const*) (basic_string.h:1128)
+==10448==    by 0x4E3CC3E: boost::filesystem::path::codecvt() (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D0CE: boost::filesystem::path::begin() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3D857: boost::filesystem::path::compare(boost::filesystem::path const&) const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4E3E7EF: boost::filesystem::path::stem() const (in /software/boost/1_54_0/gnu-4.7.2/lib/libboost_filesystem.so.1.54.0)
+==10448==    by 0x4382A8: main (main.cpp:246)
+==10448== 
+22==10448== Invalid read of size 8
+==10448==    at 0x5570510: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string() (basic_string.h:536)
+==10448==    by 0x4203FB: void __gnu_cxx::new_allocator<std::string>::destroy<std::string>(std::string*) (new_allocator.h:124)
+==10448==    by 0x41E3E2: std::enable_if<std::allocator_traits<std::allocator<std::string> >::__destroy_helper<std::string>::value, void>::type std::allocator_traits<std::allocator<std::string> >::_S_destroy<std::string>(std::allocator<std::string>&, std::string*) (alloc_traits.h:281)
+==10448==    by 0x41B50B: void std::allocator_traits<std::allocator<std::string> >::destroy<std::string>(std::allocator<std::string>&, std::string*) (alloc_traits.h:405)
+==10448==    by 0x42E9F6: std::vector<std::string, std::allocator<std::string> >::pop_back() (stl_vector.h:940)
+==10448==    by 0x42962E: flattenAndAddDelim(std::vector<std::vector<std::string, std::allocator<std::string> >, std::allocator<std::vector<std::string, std::allocator<std::string> > > >, std::string) (difflib.cpp:366)
+==10448==    by 0x429836: LabelMatcher::getMinEditDistance(std::vector<std::vector<std::string, std::allocator<std::string> >, std::allocator<std::vector<std::string, std::allocator<std::string> > > >, std::vector<std::vector<std::string, std::allocator<std::string> >, std::allocator<std::vector<std::string, std::allocator<std::string> > > >, std::vector<Intermediate*, std::allocator<Intermediate*> >&, bool) (difflib.cpp:382)
+==10448==    by 0x42A2A0: LabelMatcher::getAncestorLabel(Label*, Label*, int) (difflib.cpp:435)
+==10448==    by 0x437C4A: setPossibleLabelsHelper(LabeledNode*, int) (main.cpp:172)
+==10448==    by 0x437D28: setPossibleLabels(LabeledTree*, int) (main.cpp:189)
+==10448==    by 0x4388A9: main (main.cpp:259)
+==10448==  Address 0xfffffffffffffff8 is not stack'd, malloc'd or (recently) free'd
+==10448== 
+==10448== 
+==10448== Process terminating with default action of signal 11 (SIGSEGV)
+==10448==  Access not within mapped region at address 0xFFFFFFFFFFFFFFF8
+==10448==    at 0x5570510: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::~basic_string() (basic_string.h:536)
+==10448==    by 0x4203FB: void __gnu_cxx::new_allocator<std::string>::destroy<std::string>(std::string*) (new_allocator.h:124)
+==10448==    by 0x41E3E2: std::enable_if<std::allocator_traits<std::allocator<std::string> >::__destroy_helper<std::string>::value, void>::type std::allocator_traits<std::allocator<std::string> >::_S_destroy<std::string>(std::allocator<std::string>&, std::string*) (alloc_traits.h:281)
+==10448==    by 0x41B50B: void std::allocator_traits<std::allocator<std::string> >::destroy<std::string>(std::allocator<std::string>&, std::string*) (alloc_traits.h:405)
+==10448==    by 0x42E9F6: std::vector<std::string, std::allocator<std::string> >::pop_back() (stl_vector.h:940)
+==10448==    by 0x42962E: flattenAndAddDelim(std::vector<std::vector<std::string, std::allocator<std::string> >, std::allocator<std::vector<std::string, std::allocator<std::string> > > >, std::string) (difflib.cpp:366)
+==10448==    by 0x429836: LabelMatcher::getMinEditDistance(std::vector<std::vector<std::string, std::allocator<std::string> >, std::allocator<std::vector<std::string, std::allocator<std::string> > > >, std::vector<std::vector<std::string, std::allocator<std::string> >, std::allocator<std::vector<std::string, std::allocator<std::string> > > >, std::vector<Intermediate*, std::allocator<Intermediate*> >&, bool) (difflib.cpp:382)
+==10448==    by 0x42A2A0: LabelMatcher::getAncestorLabel(Label*, Label*, int) (difflib.cpp:435)
+==10448==    by 0x437C4A: setPossibleLabelsHelper(LabeledNode*, int) (main.cpp:172)
+==10448==    by 0x437D28: setPossibleLabels(LabeledTree*, int) (main.cpp:189)
+==10448==    by 0x4388A9: main (main.cpp:259)
+==10448==  If you believe this happened as a result of a stack
+==10448==  overflow in your program's main thread (unlikely but
+==10448==  possible), you can try to increase the size of the
+==10448==  main thread stack using the --main-stacksize= flag.
+==10448==  The main thread stack size used in this run was 10485760.
+==10448== 
+==10448== HEAP SUMMARY:
+==10448==     in use at exit: 13,997 bytes in 199 blocks
+==10448==   total heap usage: 994 allocs, 795 frees, 77,553 bytes allocated
+==10448== 
+==10448== LEAK SUMMARY:
+==10448==    definitely lost: 0 bytes in 0 blocks
+==10448==    indirectly lost: 0 bytes in 0 blocks
+==10448==      possibly lost: 1,968 bytes in 55 blocks
+==10448==    still reachable: 12,029 bytes in 144 blocks
+==10448==         suppressed: 0 bytes in 0 blocks
+==10448== Rerun with --leak-check=full to see details of leaked memory
+==10448== 
+==10448== For counts of detected and suppressed errors, rerun with: -v
+==10448== Use --track-origins=yes to see where uninitialised values come from
+==10448== ERROR SUMMARY: 29 errors from 23 contexts (suppressed: 0 from 0)
