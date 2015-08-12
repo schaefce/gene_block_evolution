@@ -25,6 +25,7 @@
 
 
 using namespace boost;
+using namespace std;
 namespace po = boost::program_options;
 
 // HOMOLOG struct to easily contain the info needed for clustering
@@ -47,7 +48,7 @@ std::vector<std::vector<HOMOLOG>> homologListGroupingFunction(std::vector<HOMOLO
   neighborhood.push_back(homologs[0]);
   
   if(homologs.size() > 1){
-    for (int i = 1; i < homologs.size(); i++){
+    for (int i = 1; i < (int)homologs.size(); i++){
       int start = neighborhood.back().start;
       int stop = neighborhood.back().stop;
       
@@ -82,6 +83,9 @@ std::map<std::string, std::vector<std::string>> getLabelMap(std::string geneBloc
   
   while(getline(infile,line)){
     boost::trim(line); // line represents a homolog object- parse to get attributes
+    if (line[0] == '#' || line.size() == 0)
+      continue;
+    
     std::vector<std::string> homologV;
     boost::split(homologV, line, ::isspace);
     
@@ -91,7 +95,7 @@ std::map<std::string, std::vector<std::string>> getLabelMap(std::string geneBloc
     
     std::vector<std::string> queryLine;
     boost::split(queryLine, homologV[0], is_from_range('|','|'));
-    std::string annotation = subjLine[3];
+    std::string annotation = queryLine[3];
     
     HOMOLOG h ;
     h.accession = accession;
@@ -120,6 +124,9 @@ std::map<std::string, std::vector<std::string>> getLabelMap(std::string geneBloc
         neighbors.push_back(h.annotation);
       }
     }
+    for_each(neighbors.begin(), neighbors.end(), [](std::string s) {std::cout << s << "\t";});
+    cout << endl;
+    cout << it->first << endl;
     labelMap[it->first] = neighbors;
   }
   
@@ -161,6 +168,7 @@ void setPossibleLabelsHelper(LabeledNode* node, int verbosity) {
   if(node && node->getChild(true) && node->getChild(false) ){
     setPossibleLabelsHelper(node->getChild(true), verbosity);
     setPossibleLabelsHelper(node->getChild(false), verbosity);
+    cout << node->getChild(true)->getLabel() << endl;
     node->setLabel(LabelMatcher::getAncestorLabel(node->getChild(true)->getLabel(), node->getChild(false)->getLabel(), verbosity));
     if (verbosity > 1){
       if (node->getLabel()){

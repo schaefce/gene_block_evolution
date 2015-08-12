@@ -163,8 +163,8 @@ inline bool is_marker(std::string s) {
 }
 
 inline std::string next_token(const std::string& s, int& p) {
-  while (p < s.size() && std::isspace(s[p])) p++;
-  if (p >= s.size())
+  while (p < (int)s.size() && std::isspace(s[p])) p++;
+  if (p >= (int)s.size())
     return "";
 
   int p2 = p;
@@ -172,7 +172,7 @@ inline std::string next_token(const std::string& s, int& p) {
     p++;
 
   else {
-    while (p < s.size()) {
+    while (p < (int)s.size()) {
       if (std::isspace(s[p]) || is_marker(s[p]))
 	break;
       p++;
@@ -191,7 +191,7 @@ Node* parse_node(const std::string& s, int& p) {
     t = next_token(s,p);
     //double left_weight;
     if (t == ":") {
-      left->setWeight(std::stoi(next_token(s,p)));
+      left->setWeight(std::stof(next_token(s,p)));
       t = next_token(s,p);
     }
 
@@ -201,7 +201,7 @@ Node* parse_node(const std::string& s, int& p) {
     t = next_token(s,p);
     //double right_weight;
     if (t == ":") {
-      right->setWeight(std::stoi(next_token(s,p)));
+      right->setWeight(std::stof(next_token(s,p)));
       t = next_token(s,p);
     }
 
@@ -224,7 +224,7 @@ Tree<Node>* Tree<Node>::parse_tree(std::string s) {
   Tree* t = new Tree<Node>(root);
   std::string token = next_token(s,p);
   if (token == ":") { // String of format "(...)?:5" -- create a new root with a single (left) child).
-    double weight = stoi(next_token(s,p));
+    double weight = stof(next_token(s,p));
     Node* root2 = new Node();
     root->setWeight(weight);
     root2->addChild(root, true);

@@ -48,7 +48,7 @@ void printScores(std::vector<std::pair<float,float>> toPrint, std::string name="
   if (!name.empty()){
     std::cout << name << ": ";
   }
-  for(int i = 0; i < toPrint.size(); i++){
+  for(size_t i = 0; i < toPrint.size(); i++){
     std::cout << "(" << toPrint[i].first << ", " << toPrint[i].second << ") ";
   }
   std::cout << std::endl;
@@ -120,6 +120,11 @@ float LabelMatcher::getSpecialSplitPenalty(stringVector A, stringVector B, int j
 }
 
 float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediatesVector &intermediates, bool backtrace){
+  //for_each(A.begin(), A.end(), [](std::string s) {std::cout << s << " ";});
+  //std::cout << std::endl;
+  //for_each(B.begin(), B.end(), [](std::string s) {std::cout << s << " ";});
+  //std::cout << std::endl;
+  
   if (!intermediates.empty()){
     intermediates.clear();
   }
@@ -160,6 +165,17 @@ float LabelMatcher::getEditDistance(stringVector A, stringVector B, intermediate
       subproblems[i][j] = std::min(std::min(std::min(case1,case2),case3),case4);
     }
   }
+
+  //*** DEBUG
+  /*
+  for (int i=0; i < m; i++) {
+    for (int j=0; j < n; j++) 
+      std::cout << subproblems[i][j] << "\t";
+    std::cout << std::endl;
+  }
+  exit(1);
+  */
+  //***
   
   float penalty = subproblems[m][n];
   
@@ -204,7 +220,7 @@ void LabelMatcher::performBacktrace(stringVector A, stringVector B, float **subp
     splitGroup currIntermediate;
     float pos = subproblems[i][j];
     
-    if (i > 0 && j > 0 & pos == subproblems[i-1][j-1] + MATCH_PENALTY){ //case1_match){
+    if (i > 0 && j > 0 && pos == subproblems[i-1][j-1] + MATCH_PENALTY){ //case1_match){
       currIntermediate.push_back(new splitGroupPiece(B[bi], MATCH_PENALTY));
       bi -= 1;
       aj -= 1;
@@ -358,11 +374,16 @@ float LabelMatcher::getMinEditDistance(ssVector choice1, ssVector choice2, inter
   std::string escapedSplit ="\\" + SPLIT;
   
   std::vector<std::pair<float,float>> scores;
+
+  std::cout << "GMED: " << choice1.size() << " " << choice2.size() << std::endl;
   
+  int debug = 0;
   do {
     stringVector A = flattenAndAddDelim(choice1, SPLIT);
     A.erase(std::remove_if(A.begin(), A.end(), [](std::string s){ return s == "," || s == ""; }), A.end());
     do {
+      debug++;
+      
       std::pair<float,float> currScores;
       stringVector B = flattenAndAddDelim(choice2, SPLIT);
       B.erase(std::remove_if(B.begin(), B.end(), [](std::string s){ return s == "," || s == ""; }), B.end());
@@ -382,9 +403,11 @@ float LabelMatcher::getMinEditDistance(ssVector choice1, ssVector choice2, inter
         bestCombo.second = A;
       }
       scores.push_back(currScores);
+      if (debug % 10000 == 0)
+	std::cout << "Debug: " << debug << std::endl;
     } while(std::next_permutation(choice2.begin(),choice2.end()));
   } while(std::next_permutation(choice1.begin(),choice1.end()));
-  
+  std::cout << "DONE" << std::endl;
   
   if (backtrace){
     getEditDistance(bestCombo.first, bestCombo.second, intermediates, true);
