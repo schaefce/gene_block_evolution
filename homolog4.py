@@ -79,8 +79,7 @@ class Homolog:
         align_query_stop, align_subject_start, align_subject_stop, Eval, bits_score)
         '''
         try:
-            query_line, subject_line, percent_ident, aligned_length, number_mismatched, number_gaps, align_query_start, align_query_stop, align_subject_start, \
-            align_subject_stop, Eval, bits_score = line.strip().split('\t')
+            query_line, subject_line, percent_ident, aligned_length, number_mismatched, number_gaps, align_query_start, align_query_stop, align_subject_start, align_subject_stop, Eval, bits_score = line.strip().split('\t')
             #print "query_line.split('|')", query_line.split('|')
             a,b,c,d,e,f,g,h,i,j = query_line.split('|')
             k,l,m,n,o,p,q,r = subject_line.split('|')

@@ -137,7 +137,9 @@ class Label():
         min_score = float("inf")
         best_choice=None
         for cg in self.choice_groups:
+            print("cg:", cg)
             for c in cg.choices:
+                print("C:" , c, type(c))
                 if c.score < min_score:
                     min_score = c.score
                     best_choice = c
@@ -255,6 +257,7 @@ class Labeled_Tree(Newick.Tree):
                     leaf.label = Label.for_leaf(clade=leaf, group_list=label_map[leaf.ident])
                 elif prune_unlabeled:
                     prune_list.append(leaf)
+
         for leaf in prune_list:
             self.prune(leaf)
 

@@ -35,7 +35,7 @@ def get_label_map(gene_block_fname, max_gap=500):
     # gene_block = os.path.basename(fname).split('.')[0]
     d = {}
     org_dict = {}
-    for line in [i.strip() for i in open(gene_block_fname).readlines()]:
+    for line in [i.strip() for i in open(gene_block_fname).readlines() if i.strip()]:
     # catch some errors if they occur and report a useful message as a result.
         try:
             hlog = Homolog.from_blast(line)
@@ -45,7 +45,7 @@ def get_label_map(gene_block_fname, max_gap=500):
             accession = hlog.accession()
         except:
             print(line)
-        predicted_gene = hlog.blast_annatation()
+        predicted_gene = hlog.blast_annotation()
 
         # store the homolog where it belongs
         if accession in org_dict.keys():
@@ -59,7 +59,7 @@ def get_label_map(gene_block_fname, max_gap=500):
         groups = homolog_list_grouping_function(h_list, max_gap)
         d[accession] = []
         for neighborhood in groups:
-            d[accession].append([i.blast_annatation() for i in neighborhood])
+            d[accession].append([i.blast_annotation() for i in neighborhood])
     return d
 
 def homolog_list_grouping_function(list_homologs, max_gap):
@@ -140,8 +140,8 @@ def format_tree(gene_block, map_fname, tree_fname, max_gap = 500, prune_unlabele
     #gblock_fname = gene_block if infolder is None else '{folder}/{block}.txt'.format(folder=infolder, block=gene_block)
     label_map = get_label_map(gene_block, max_gap)#get_labelings(gene_block, infolder, filter)
     id_map = get_identifiers(map_fname)
-    #print(id_map)
     tree = read_tree(tree_fname)
+    #print(tree)
     logger.debug("Created phylogenetic tree:\n" + str(tree))
     #print(tree)
     tree = Labeled_Tree.from_tree_and_maps(tree, id_map, label_map)
