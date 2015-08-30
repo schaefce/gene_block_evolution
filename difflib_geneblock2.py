@@ -364,7 +364,7 @@ class LabelMatcher:
                                 choice_map[c3] = (c.score, i)
                             #self.logger.debug("\t\t\tPrevious score: " +  str(prescore + self.get_min_edit_distance(c3, c1, backtrace=False)[0] + self.get_min_edit_distance(c3, c2, backtrace=False)[0]))
                             self.logger.debug("\t\t\t" + str(c))
-                        choice_grps.append(Choice_Group(choices=curr_choices, children=[choice1, choice2], overall_score=score + prescore))
+                        choice_grps.append(Choice_Group(choices=curr_choices, children=[grp1.choices[choice1], grp2.choices[choice2]], overall_score=score + prescore))
                         i += 1
         return Label(choice_groups = choice_grps)
 

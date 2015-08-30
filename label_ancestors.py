@@ -45,7 +45,7 @@ def get_label_map(gene_block_fname, max_gap=500):
             accession = hlog.accession()
         except:
             print(line)
-        predicted_gene = hlog.blast_annatation()
+        predicted_gene = hlog.blast_annotation()
 
         # store the homolog where it belongs
         if accession in org_dict.keys():
@@ -59,7 +59,7 @@ def get_label_map(gene_block_fname, max_gap=500):
         groups = homolog_list_grouping_function(h_list, max_gap)
         d[accession] = []
         for neighborhood in groups:
-            d[accession].append([i.blast_annatation() for i in neighborhood])
+            d[accession].append([i.blast_annotation() for i in neighborhood])
     return d
 
 def homolog_list_grouping_function(list_homologs, max_gap):

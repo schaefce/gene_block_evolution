@@ -138,9 +138,10 @@ class Label():
         best_choice=None
         for cg in self.choice_groups:
             for c in cg.choices:
-                if c.score < min_score:
-                    min_score = c.score
-                    best_choice = c
+                choice = cg.choices[c]
+                if choice.score < min_score:
+                    min_score = choice.score
+                    best_choice = choice
         return best_choice
 
     #def set_best_choice_as_final(self):
@@ -259,14 +260,17 @@ class Labeled_Tree(Newick.Tree):
             self.prune(leaf)
 
     def set_labels_from_root(self):
+        print("Setting labels")
         self.logger.info("Setting labels from root")
         root_choice = self.root.label.get_best_choice()
+        print("Root choice: " + str(root_choice))
         self.logger.debug("Set root choice as: " + str(root_choice))
         self.set_labels_from_choice(root_choice)
 
     def set_labels_from_choice(self, choice=None):
         if choice is None:
             return
+        print("Choice: " + str(choice))
         
         l = choice.get_label()
         self.logger.debug("Set clade with name " + str(l.clade.name) + " with choice " + str(choice))
